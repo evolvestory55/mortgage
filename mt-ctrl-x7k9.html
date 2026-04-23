@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Panel — Mortgage & Loans</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+<style>
+:root{
+  --bg:#060E1A;--bg2:#0A1628;--card:rgba(15,35,71,.65);
+  --accent:#2D7EFF;--accent-g:rgba(45,126,255,.15);
+  --gold:#F5A623;--success:#10B981;--danger:#EF4444;--warning:#F59E0B;
+  --txt:#EEF2FF;--txt2:#8B9DC3;--muted:#4A5980;
+  --glass:rgba(255,255,255,.05);--border:rgba(255,255,255,.09);
+  --r:14px;--font:'DM Sans',sans-serif;--mono:'JetBrains Mono',mono;--display:'Syne',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);color:var(--txt);background:var(--bg);min-height:100vh;
+  background:radial-gradient(ellipse at 15% 40%,#0F2347 0%,#0A1628 45%,#060E1A 100%)}
+body::before{content:'';position:fixed;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:5px 5px;opacity:.04;pointer-events:none;z-index:0}
+body>*{position:relative;z-index:1}
+a{color:var(--accent);text-decoration:none}
+input,select,textarea,button{font-family:var(--font);font-size:.9rem}
+
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:48px 40px;backdrop-filter:blur(20px);box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.login-card h1{font-family:var(--display);font-size:1.6rem;margin-bottom:6px;
+  background:linear-gradient(135deg,var(--accent),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.login-card p{font-size:.82rem;color:var(--muted);margin-bottom:2rem}
+.login-card .field{margin-bottom:1.25rem}
+.login-card label{display:block;font-size:.78rem;font-weight:600;color:var(--txt2);margin-bottom:6px}
+.login-card input[type="password"]{width:100%;padding:14px 16px;font-family:var(--mono);font-size:.95rem;
+  color:var(--txt);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);outline:none;transition:.3s}
+.login-card input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-g)}
+.login-card .btn{width:100%;padding:14px;border:none;border-radius:50px;font-weight:600;font-size:.95rem;
+  cursor:pointer;transition:.3s;color:#fff;background:linear-gradient(135deg,var(--accent),#1A5FCC);
+  box-shadow:0 4px 20px rgba(45,126,255,.3)}
+.login-card .btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(45,126,255,.45)}
+.login-err{color:var(--danger);font-size:.8rem;margin-top:8px;display:none;text-align:center}
+.login-hint{font-size:.72rem;color:var(--muted);text-align:center;margin-top:16px;line-height:1.6}
+
+#admin-panel{display:none}
+.admin-topbar{position:sticky;top:0;z-index:100;background:rgba(6,14,26,.88);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.admin-topbar h2{font-family:var(--display);font-size:1rem;
+  background:linear-gradient(135deg,var(--accent),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.topbar-actions{display:flex;align-items:center;gap:12px}
+.topbar-actions .badge{font-size:.7rem;background:var(--accent-g);color:var(--accent);padding:4px 10px;border-radius:20px;font-weight:600}
+.btn-logout{background:none;border:1px solid rgba(239,68,68,.4);color:var(--danger);padding:6px 16px;border-radius:20px;
+  font-size:.78rem;cursor:pointer;transition:.3s}
+.btn-logout:hover{background:rgba(239,68,68,.12)}
+
+.admin-body{display:flex;min-height:calc(100vh - 60px)}
+.admin-sidebar{width:220px;background:rgba(10,22,40,.6);border-right:1px solid var(--border);padding:20px 0;flex-shrink:0}
+.sidebar-nav{list-style:none}
+.sidebar-nav li a{display:flex;align-items:center;gap:10px;padding:12px 24px;font-size:.85rem;color:var(--txt2);
+  transition:.2s;border-left:3px solid transparent}
+.sidebar-nav li a:hover{color:var(--txt);background:var(--glass)}
+.sidebar-nav li a.active{color:var(--accent);background:var(--accent-g);border-left-color:var(--accent);font-weight:600}
+.admin-main{flex:1;padding:28px 32px;overflow-y:auto}
+
+.tab{display:none}.tab.active{display:block}
+.tab-title{font-family:var(--display);font-size:1.3rem;margin-bottom:1.5rem;
+  background:linear-gradient(135deg,var(--accent),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;
+  backdrop-filter:blur(12px);transition:.3s}
+.stat-card:hover{border-color:rgba(45,126,255,.2);box-shadow:0 0 20px rgba(45,126,255,.08)}
+.stat-card .sc-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:8px}
+.stat-card .sc-value{font-family:var(--mono);font-size:1.8rem;font-weight:600;color:var(--txt)}
+.stat-card .sc-sub{font-size:.75rem;color:var(--muted);margin-top:4px}
+.stat-card.accent{border-left:3px solid var(--accent)}.stat-card.accent .sc-value{color:var(--accent)}
+.stat-card.gold{border-left:3px solid var(--gold)}.stat-card.gold .sc-value{color:var(--gold)}
+.stat-card.success{border-left:3px solid var(--success)}.stat-card.success .sc-value{color:var(--success)}
+
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:28px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;backdrop-filter:blur(12px)}
+.chart-card h4{font-size:.85rem;color:var(--txt2);margin-bottom:16px;font-weight:600}
+
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;overflow-x:auto;margin-bottom:28px}
+.tbl-wrap h4{font-size:.85rem;color:var(--txt2);margin-bottom:14px;font-weight:600}
+table.dt{width:100%;border-collapse:collapse;font-size:.82rem}
+table.dt th{background:rgba(45,126,255,.08);color:var(--txt2);padding:10px 14px;text-align:left;font-weight:600;
+  font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+table.dt td{padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--txt2);font-family:var(--mono);font-size:.82rem}
+table.dt td:first-child{color:var(--accent);font-weight:600}
+table.dt tr:hover td{background:rgba(255,255,255,.03)}
+
+.ad-mgmt{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.ad-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px}
+.ad-card h4{font-size:.85rem;color:var(--txt2);margin-bottom:14px;font-weight:600}
+.ad-card .row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.ad-card .row:last-child{border-bottom:none}
+.ad-card .row span{font-size:.85rem;color:var(--txt2)}
+
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle .slider{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:12px;cursor:pointer;transition:.3s}
+.toggle .slider::before{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.3s}
+.toggle input:checked+.slider{background:var(--accent)}
+.toggle input:checked+.slider::before{transform:translateX(20px)}
+
+.s-form{max-width:560px}
+.s-form .field{margin-bottom:1.25rem}
+.s-form label{display:block;font-size:.78rem;font-weight:600;color:var(--txt2);margin-bottom:6px}
+.s-form input[type="text"],.s-form input[type="password"],.s-form textarea{width:100%;padding:12px 14px;
+  font-family:var(--mono);font-size:.9rem;color:var(--txt);background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:var(--r);outline:none;transition:.3s}
+.s-form input:focus,.s-form textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-g)}
+.s-form textarea{min-height:80px;resize:vertical}
+.s-form .hint{font-size:.72rem;color:var(--muted);margin-top:4px;line-height:1.6}
+.btn-sm{padding:10px 22px;border:none;border-radius:50px;font-weight:600;font-size:.85rem;cursor:pointer;transition:.3s;color:#fff}
+.btn-blue{background:linear-gradient(135deg,var(--accent),#1A5FCC);box-shadow:0 4px 16px rgba(45,126,255,.25)}
+.btn-blue:hover{transform:translateY(-2px)}
+.btn-red{background:linear-gradient(135deg,var(--danger),#B91C1C);box-shadow:0 4px 16px rgba(239,68,68,.25)}
+.btn-red:hover{transform:translateY(-2px)}
+.btn-green{background:linear-gradient(135deg,var(--success),#059669);box-shadow:0 4px 16px rgba(16,185,129,.25)}
+.btn-green:hover{transform:translateY(-2px)}
+.btn-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.toast{position:fixed;top:80px;right:28px;z-index:9999;padding:14px 22px;border-radius:var(--r);
+  font-size:.85rem;font-weight:600;transform:translateX(120%);transition:transform .4s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.toast.show{transform:translateX(0)}
+.toast.success{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--success)}
+.toast.error{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:var(--danger)}
+.toast.info{background:rgba(45,126,255,.15);border:1px solid rgba(45,126,255,.3);color:var(--accent)}
+
+.env-badge{font-size:.68rem;padding:3px 10px;border-radius:10px;font-weight:600;margin-left:8px}
+.env-php{background:rgba(16,185,129,.15);color:var(--success)}
+.env-local{background:rgba(245,166,35,.15);color:var(--gold)}
+
+@media(max-width:768px){
+  .admin-body{flex-direction:column}
+  .admin-sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);padding:12px 0}
+  .sidebar-nav{display:flex;overflow-x:auto;gap:0}
+  .sidebar-nav li a{border-left:none;border-bottom:3px solid transparent;padding:10px 16px;white-space:nowrap;font-size:.78rem}
+  .sidebar-nav li a.active{border-bottom-color:var(--accent);border-left:none}
+  .admin-main{padding:20px 16px}
+  .charts-row,.ad-mgmt{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .login-card{padding:32px 24px}
+}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-card">
+    <h1>Admin Panel</h1>
+    <p>Mortgage & Loans — Dashboard</p>
+    <div class="field">
+      <label for="pwd">Password</label>
+      <input type="password" id="pwd" placeholder="Enter admin password" autocomplete="current-password">
+    </div>
+    <button class="btn" id="login-btn">Sign In</button>
+    <div class="login-err" id="login-err"></div>
+    <div class="login-hint">
+      Please <strong>Login</strong><br>
+    </div>
+  </div>
+</div>
+
+<div id="admin-panel">
+  <div class="admin-topbar">
+    <h2>Mortgage & Loans — Admin <span id="env-label"></span></h2>
+    <div class="topbar-actions">
+      <span class="badge" id="topbar-status">● Live</span>
+      <button class="btn-logout" id="logout-btn">Logout</button>
+    </div>
+  </div>
+  <div class="admin-body">
+    <aside class="admin-sidebar">
+      <ul class="sidebar-nav">
+        <li><a href="#" data-tab="dashboard" class="active">📊 Dashboard</a></li>
+        <li><a href="#" data-tab="analytics">📈 Analytics</a></li>
+        <li><a href="#" data-tab="ads">📢 Ad Management</a></li>
+        <li><a href="#" data-tab="settings">⚙️ Settings</a></li>
+      </ul>
+    </aside>
+    <main class="admin-main">
+
+      <div class="tab active" id="tab-dashboard">
+        <div class="tab-title">Dashboard Overview</div>
+        <div class="stats-grid" id="dash-stats"></div>
+        <div class="charts-row">
+          <div class="chart-card"><h4>Page Views — Last 30 Days</h4><canvas id="ch-views"></canvas></div>
+          <div class="chart-card"><h4>Top Pages</h4><canvas id="ch-pages"></canvas></div>
+        </div>
+        <div class="tbl-wrap"><h4>Recent Sessions</h4><table class="dt" id="tbl-sessions"><thead><tr><th>Session</th><th>Visitor</th><th>Pages</th><th>Last Active</th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="tab" id="tab-analytics">
+        <div class="tab-title">Detailed Analytics</div>
+        <div class="tbl-wrap"><h4>Page Views by Day</h4><table class="dt" id="tbl-daily"><thead><tr><th>Date</th><th>Views</th><th>Unique Visitors</th></tr></thead><tbody></tbody></table></div>
+        <div class="tbl-wrap"><h4>All Visitors</h4><table class="dt" id="tbl-visitors"><thead><tr><th>Visitor ID</th><th>First Visit</th><th>Last Visit</th><th>Total Hits</th><th>Pages</th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="tab" id="tab-ads">
+        <div class="tab-title">Ad Management</div>
+        <div class="ad-mgmt">
+          <div class="ad-card">
+            <h4>Global Settings</h4>
+            <div class="row"><span>Enable Ads</span><label class="toggle"><input type="checkbox" id="ad-enabled" checked><span class="slider"></span></label></div>
+            <div class="row"><span>Show Counter Widget</span><label class="toggle"><input type="checkbox" id="counter-enabled" checked><span class="slider"></span></label></div>
+            <div class="row"><span>Analytics Tracking</span><label class="toggle"><input type="checkbox" id="analytics-enabled" checked><span class="slider"></span></label></div>
+          </div>
+          <div class="ad-card">
+            <h4>Ad Slots</h4>
+            <div class="row"><span>After Hero Section</span><label class="toggle"><input type="checkbox" id="slot-hero" checked><span class="slider"></span></label></div>
+            <div class="row"><span>In Content Area</span><label class="toggle"><input type="checkbox" id="slot-content" checked><span class="slider"></span></label></div>
+            <div class="row"><span>Before Footer</span><label class="toggle"><input type="checkbox" id="slot-footer" checked><span class="slider"></span></label></div>
+          </div>
+        </div>
+        <div class="s-form">
+          <div class="field">
+            <label>Google AdSense Publisher ID</label>
+            <input type="text" id="adsense-id" placeholder="ca-pub-XXXXXXXXXXXXXXXX">
+            <div class="hint">Leave blank if not using AdSense yet.</div>
+          </div>
+          <div class="btn-row"><button class="btn-sm btn-blue" id="save-ads">Save Ad Settings</button></div>
+        </div>
+      </div>
+
+      <div class="tab" id="tab-settings">
+        <div class="tab-title">Settings</div>
+        <div class="s-form">
+          <div class="field">
+            <label>Change Admin Password</label>
+            <input type="password" id="new-pwd" placeholder="New password">
+            <input type="password" id="new-pwd2" placeholder="Confirm new password" style="margin-top:8px">
+            <div class="hint" id="pwd-hint"></div>
+          </div>
+          <div class="btn-row"><button class="btn-sm btn-green" id="change-pwd">Update Password</button></div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:28px 0">
+        <div class="s-form">
+          <div class="field">
+            <label>Data Management</label>
+            <div class="hint">Export or reset all analytics data.</div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-sm btn-blue" id="export-data">Export JSON</button>
+            <button class="btn-sm btn-red" id="reset-data">Reset All Data</button>
+          </div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:28px 0">
+        <div class="s-form">
+          <div class="field">
+            <label>Forgot Password?</label>
+            <div class="hint" style="padding:14px;background:rgba(45,126,255,.06);border-radius:8px;border:1px solid rgba(45,126,255,.15)">
+              <strong style="color:var(--accent)">Method 1 — Browser Console (works everywhere):</strong><br>
+              1. Press F12 → Console tab<br>
+              2. Type: <code style="color:var(--gold)">localStorage.removeItem('mt_pwd')</code><br>
+              3. Press Enter, refresh page<br>
+              4. Login with <strong>Password</strong><br><br>
+              <strong style="color:var(--accent)">Method 2 — cPanel (PHP hosting only):</strong><br>
+              1. File Manager → data/ folder<br>
+              2. Edit <strong>password.txt</strong><br>
+              3. Replace with new password, save
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const API = 'api.php';
+  let USE_PHP = false;
+
+  /* ── Toast ──────────────────────────────────────── */
+  function toast(msg, type){
+    const t=$('toast');t.textContent=msg;t.className='toast '+(type||'success');
+    t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
+  }
+
+  /* ── Detect PHP availability ────────────────────── */
+  async function detectPHP(){
+    try{
+      const r = await fetch(API+'?action=ping',{signal:AbortSignal.timeout(3000)});
+      const d = await r.json();
+      USE_PHP = d.success === true;
+    }catch(e){
+      USE_PHP = false;
+    }
+    const lbl = $('env-label');
+    if(USE_PHP){
+      lbl.innerHTML='<span class="env-badge env-php">PHP Backend</span>';
+      $('pwd-hint').textContent='Password is saved to data/password.txt. You can also edit via cPanel.';
+    }else{
+      lbl.innerHTML='<span class="env-badge env-local">Local Storage</span>';
+      $('pwd-hint').textContent='Password is saved in browser localStorage. To reset: F12 → Console → localStorage.removeItem("mt_pwd")';
+    }
+  }
+
+  /* ── API helpers ────────────────────────────────── */
+  async function phpApi(action, data={}){
+    const fd = new FormData();
+    fd.append('action', action);
+    for(const[k,v] of Object.entries(data)) fd.append(k, v);
+    const r = await fetch(API, {method:'POST', body:fd, credentials:'same-origin'});
+    return r.json();
+  }
+  async function phpApiGet(action){
+    const r = await fetch(API+'?action='+action, {credentials:'same-origin'});
+    return r.json();
+  }
+
+  /* ── Password storage ───────────────────────────── */
+  function getLocalPwd(){
+    return localStorage.getItem('mt_pwd') || 'Emr.4108078';
+  }
+  function setLocalPwd(pwd){
+    localStorage.setItem('mt_pwd', pwd);
+  }
+
+  /* ── Analytics storage (local) ──────────────────── */
+  function getLocalAnalytics(){
+    try{
+      const d = localStorage.getItem('mt_analytics');
+      return d ? JSON.parse(d) : {visitors:{},pageViews:{},sessions:[],daily:{}};
+    }catch{return {visitors:{},pageViews:{},sessions:[],daily:{}}}
+  }
+  function setLocalAnalytics(data){
+    try{localStorage.setItem('mt_analytics', JSON.stringify(data))}catch{}
+  }
+
+  /* ── Auth ───────────────────────────────────────── */
+  async function checkAuth(){
+    /* Try session first */
+    if(sessionStorage.getItem('mt_authed')==='1'){
+      const ts = parseInt(sessionStorage.getItem('mt_authed_t')||'0');
+      if(Date.now()-ts < 3600000){showPanel();return}
+    }
+    showLogin();
+  }
+
+  function showLogin(){
+    $('login-screen').style.display='flex';
+    $('admin-panel').style.display='none';
+  }
+  function showPanel(){
+    $('login-screen').style.display='none';
+    $('admin-panel').style.display='block';
+    loadDashboard();
+  }
+
+  /* ── Login ──────────────────────────────────────── */
+  $('login-btn').onclick = async function(){
+    const pw = $('pwd').value.trim();
+    if(!pw){
+      $('login-err').textContent='Please enter a password.';
+      $('login-err').style.display='block';return;
+    }
+
+    let ok = false;
+    if(USE_PHP){
+      try{
+        const d = await phpApi('login',{password:pw});
+        ok = d.success === true;
+        if(!ok) $('login-err').textContent = d.error || 'Wrong password.';
+      }catch(e){
+        $('login-err').textContent='PHP error: '+e.message;
+        $('login-err').style.display='block';return;
+      }
+    }else{
+      if(pw === getLocalPwd()){
+        ok = true;
+      }else{
+        $('login-err').textContent='Wrong password.';
+      }
+    }
+
+    if(ok){
+      sessionStorage.setItem('mt_authed','1');
+      sessionStorage.setItem('mt_authed_t', Date.now().toString());
+      $('login-err').style.display='none';
+      $('pwd').value='';
+      showPanel();
+    }else{
+      $('login-err').style.display='block';
+    }
+  };
+  $('pwd').onkeydown = e => {if(e.key==='Enter')$('login-btn').click()};
+
+  /* ── Logout ─────────────────────────────────────── */
+  $('logout-btn').onclick = async function(){
+    sessionStorage.removeItem('mt_authed');
+    sessionStorage.removeItem('mt_authed_t');
+    if(USE_PHP) try{await phpApi('logout')}catch{}
+    showLogin();
+    toast('Logged out','info');
+  };
+
+  /* ── Sidebar ────────────────────────────────────── */
+  document.querySelectorAll('.sidebar-nav a').forEach(a=>{
+    a.onclick=e=>{
+      e.preventDefault();
+      document.querySelectorAll('.sidebar-nav a').forEach(x=>x.classList.remove('active'));
+      a.classList.add('active');
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      const tab=$('tab-'+a.dataset.tab);
+      if(tab){
+        tab.classList.add('active');
+        if(a.dataset.tab==='analytics')loadAnalytics();
+        if(a.dataset.tab==='dashboard')loadDashboard();
+      }
+    };
+  });
+
+  /* ── Dashboard ──────────────────────────────────── */
+  let chViews=null, chPages=null;
+
+  async function loadDashboard(){
+    let stats, data;
+    if(USE_PHP){
+      try{
+        const d = await phpApiGet('get_data');
+        if(!d.success)return;
+        stats=d.stats; data=d.data;
+      }catch{return}
+    }else{
+      data = getLocalAnalytics();
+      const now=Date.now(), today=new Date().toISOString().slice(0,10);
+      const td=data.daily[today]||{views:0,uniq:[]};
+      let totalViews=0;
+      Object.values(data.pageViews).forEach(day=>{totalViews+=Object.values(day).reduce((a,b)=>a+b,0)});
+      const online=Object.values(data.visitors).filter(v=>now-v.last<300000).length;
+      stats={
+        totalViews:totalViews,
+        totalVisitors:Object.keys(data.visitors).length,
+        todayViews:td.views,
+        todayVisitors:td.uniq?td.uniq.length:0,
+        onlineNow:online,
+        totalSessions:data.sessions?data.sessions.length:0
+      };
+    }
+
+    const today=new Date().toISOString().slice(0,10);
+    $('dash-stats').innerHTML=[
+      sc('Total Page Views',fmt(stats.totalViews),'All time','accent'),
+      sc('Unique Visitors',fmt(stats.totalVisitors),'All time','gold'),
+      sc('Today Views',fmt(stats.todayViews),today,'success'),
+      sc('Today Visitors',fmt(stats.todayVisitors),today,'accent'),
+      sc('Online Now',fmt(stats.onlineNow),'Active < 5 min','success'),
+      sc('Sessions',fmt(stats.totalSessions),'All time','gold')
+    ].join('');
+
+    /* Views chart */
+    const labels=[],vals=[];
+    for(let i=29;i>=0;i--){
+      const dt=new Date();dt.setDate(dt.getDate()-i);
+      const key=dt.toISOString().slice(0,10);
+      labels.push(key.slice(5));
+      const day=data.daily[key];
+      vals.push(day?day.views:0);
+    }
+    if(chViews)chViews.destroy();
+    const ctx1=$('ch-views').getContext('2d');
+    const g=ctx1.createLinearGradient(0,0,0,260);
+    g.addColorStop(0,'rgba(45,126,255,0.25)');g.addColorStop(1,'rgba(45,126,255,0)');
+    chViews=new Chart(ctx1,{type:'line',data:{labels,datasets:[{label:'Page Views',data:vals,borderColor:'#2D7EFF',backgroundColor:g,fill:true,tension:.35,pointRadius:2,pointBackgroundColor:'#2D7EFF'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#4A5980'}},x:{grid:{display:false},ticks:{color:'#4A5980',font:{size:10}}}}}});
+
+    /* Pages doughnut */
+    const pageTotals={};
+    Object.values(data.pageViews||{}).forEach(day=>{for(const[p,c]of Object.entries(day))pageTotals[p]=(pageTotals[p]||0)+c});
+    const pLabels=Object.keys(pageTotals),pVals=Object.values(pageTotals);
+    const colors=['#2D7EFF','#10B981','#F5A623','#EF4444','#8B5CF6','#EC4899','#06B6D4'];
+    if(chPages)chPages.destroy();
+    chPages=new Chart($('ch-pages').getContext('2d'),{type:'doughnut',data:{labels:pLabels,datasets:[{data:pVals,backgroundColor:colors.slice(0,pLabels.length),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{color:'#8B9DC3',font:{size:11},padding:10}}}}});
+
+    /* Sessions table */
+    const tb=$('tbl-sessions').querySelector('tbody');tb.innerHTML='';
+    (data.sessions||[]).slice(-15).reverse().forEach(ses=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML='<td>'+ses.id.slice(0,12)+'</td><td>'+ses.vid.slice(0,10)+'</td><td>'+(ses.pages?ses.pages.length:0)+'</td><td>'+ago(ses.last)+'</td>';
+      tb.appendChild(tr);
+    });
+  }
+
+  function sc(label,value,sub,cls){
+    return '<div class="stat-card '+cls+'"><div class="sc-label">'+label+'</div><div class="sc-value">'+value+'</div><div class="sc-sub">'+sub+'</div></div>';
+  }
+
+  /* ── Analytics ──────────────────────────────────── */
+  async function loadAnalytics(){
+    let data;
+    if(USE_PHP){
+      try{const d=await phpApiGet('get_data');if(!d.success)return;data=d.data}catch{return}
+    }else{
+      data=getLocalAnalytics();
+    }
+
+    const tb1=$('tbl-daily').querySelector('tbody');tb1.innerHTML='';
+    Object.keys(data.daily||{}).sort().reverse().slice(0,60).forEach(dt=>{
+      const day=data.daily[dt];
+      const tr=document.createElement('tr');
+      tr.innerHTML='<td>'+dt+'</td><td>'+day.views+'</td><td>'+(day.uniq?day.uniq.length:0)+'</td>';
+      tb1.appendChild(tr);
+    });
+
+    const tb2=$('tbl-visitors').querySelector('tbody');tb2.innerHTML='';
+    Object.entries(data.visitors||{}).sort((a,b)=>b[1].last-a[1].last).slice(0,50).forEach(([id,v])=>{
+      const pages=Object.entries(v.pages||{}).map(([p,c])=>p+'('+c+')').join(', ');
+      const tr=document.createElement('tr');
+      tr.innerHTML='<td>'+id.slice(0,14)+'</td><td>'+new Date(v.first*1000).toLocaleDateString()+'</td><td>'+ago(v.last)+'</td><td>'+v.hits+'</td><td style="font-family:var(--font);font-size:.78rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+pages+'</td>';
+      tb2.appendChild(tr);
+    });
+  }
+
+  /* ── Change Password ────────────────────────────── */
+  $('change-pwd').onclick = async function(){
+    const p1=$('new-pwd').value, p2=$('new-pwd2').value;
+    if(!p1||p1.length<4){toast('Password must be at least 4 characters.','error');return}
+    if(p1!==p2){toast('Passwords do not match.','error');return}
+
+    if(USE_PHP){
+      try{
+        const d=await phpApi('change_password',{new_password:p1,confirm:p2});
+        if(d.success){$('new-pwd').value='';$('new-pwd2').value='';toast('Password updated! Saved to data/password.txt','success')}
+        else toast(d.error||'Error','error');
+      }catch(e){toast('PHP error: '+e.message,'error')}
+    }else{
+      setLocalPwd(p1);
+      $('new-pwd').value='';$('new-pwd2').value='';
+      toast('Password updated! Saved in browser localStorage.','success');
+    }
+  };
+
+  /* ── Export / Reset ─────────────────────────────── */
+  $('export-data').onclick = async function(){
+    let data;
+    if(USE_PHP){
+      try{const d=await phpApiGet('export_data');if(!d.success){toast('Not authenticated','error');return}data=d.data}catch{toast('Error','error');return}
+    }else{
+      data=getLocalAnalytics();
+    }
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='analytics-'+new Date().toISOString().slice(0,10)+'.json';
+    a.click();URL.revokeObjectURL(url);
+    toast('Data exported!','success');
+  };
+
+  $('reset-data').onclick = async function(){
+    if(!confirm('Delete ALL analytics data?'))return;
+    if(USE_PHP){
+      try{await phpApi('reset_data')}catch{}
+    }else{
+      setLocalAnalytics({visitors:{},pageViews:{},sessions:[],daily:{}});
+    }
+    toast('Analytics data reset.','success');
+    loadDashboard();
+  };
+
+  /* ── Utils ──────────────────────────────────────── */
+  function fmt(n){return new Intl.NumberFormat('en-US').format(n)}
+  function ago(ts){
+    const s=Math.floor(Date.now()/1000-ts);
+    if(s<0)return'just now';
+    if(s<60)return s+'s ago';
+    if(s<3600)return Math.floor(s/60)+'m ago';
+    if(s<86400)return Math.floor(s/3600)+'h ago';
+    return Math.floor(s/86400)+'d ago';
+  }
+
+  /* ── Auto refresh ───────────────────────────────── */
+  setInterval(()=>{
+    if($('tab-dashboard').classList.contains('active'))loadDashboard();
+    if($('tab-analytics').classList.contains('active'))loadAnalytics();
+  },30000);
+
+  /* ── Init ───────────────────────────────────────── */
+  (async function(){
+    await detectPHP();
+    await checkAuth();
+  })();
+})();
+</script>
+</body>
+</html>

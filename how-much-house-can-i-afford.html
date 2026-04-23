@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Affordability Calculator — Mortgage & Loans</title>
+  <meta name="description" content="Find your maximum home price based on income, debts, and DTI limits.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  <script src="shared.js" defer></script>
+  <style>
+    .calc-layout{display:grid;grid-template-columns:45% 55%;gap:24px;align-items:start}
+    @media(max-width:960px){.calc-layout{grid-template-columns:1fr}}
+    .range-row{display:flex;align-items:center;gap:12px}
+    .range-row input[type="range"]{flex:1}
+    .range-val{font-family:var(--font-mono);font-size:0.95rem;color:var(--accent);min-width:50px;text-align:right}
+
+    /* ═══ Card Glow System ═══ */
+    .card,.loan-type-card,.result-hero{position:relative;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,0.06);transition:box-shadow .4s ease}
+    .card::before,.loan-type-card::before,.result-hero::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(650px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.18) 0%,rgba(90,154,255,.08) 20%,rgba(245,166,35,.04) 35%,transparent 50%);opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:0}
+    .card:hover::before,.loan-type-card:hover::before,.result-hero:hover::before{opacity:1}
+    .card::after,.loan-type-card::after,.result-hero::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:radial-gradient(450px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.7) 0%,rgba(90,154,255,.3) 20%,rgba(245,166,35,.1) 40%,transparent 55%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:2}
+    .card:hover::after,.loan-type-card:hover::after,.result-hero:hover::after{opacity:1}
+    .card:hover,.loan-type-card:hover,.result-hero:hover{box-shadow:0 0 1px 1px rgba(45,126,255,.35),0 0 40px rgba(45,126,255,.12),0 25px 60px rgba(0,0,0,.35)}
+    .card>*,.loan-type-card>*,.result-hero>*{position:relative;z-index:3}
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" role="navigation">
+    <a href="index.html" class="navbar-brand">
+      <span class="logo-3d">
+        <svg width="38" height="38" viewBox="0 0 48 48" fill="none"><defs><linearGradient id="houseGrad" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#2D7EFF"/><stop offset="50%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#F5A623"/></linearGradient><linearGradient id="roofGrad" x1="8" y1="8" x2="40" y2="24"><stop offset="0%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#2D7EFF"/></linearGradient><linearGradient id="bodyGrad" x1="12" y1="22" x2="36" y2="44"><stop offset="0%" stop-color="rgba(45,126,255,0.25)"/><stop offset="100%" stop-color="rgba(45,126,255,0.08)"/></linearGradient><filter id="glow3d"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><ellipse cx="24" cy="43" rx="14" ry="3" fill="rgba(0,0,0,0.2)" class="house-body"/><g class="house-body" filter="url(#glow3d)"><rect x="10" y="22" width="28" height="20" rx="2" fill="url(#bodyGrad)" stroke="url(#houseGrad)" stroke-width="1.5"/><path d="M6 24L24 8L42 24" stroke="url(#roofGrad)" stroke-width="2.5" fill="rgba(45,126,255,0.1)" stroke-linejoin="round"/><path d="M14 20L24 10L28 14" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-linecap="round" class="roof-shine"/><rect x="20" y="30" width="8" height="12" rx="1" fill="rgba(245,166,35,0.2)" stroke="#F5A623" stroke-width="1" class="door-glow"/><circle cx="26" cy="36" r="1" fill="#F5A623" opacity="0.8"/><rect x="13" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/><line x1="15.5" y1="26" x2="15.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><line x1="13" y1="28.5" x2="18" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><rect x="13.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint"/><rect x="30" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/><line x1="32.5" y1="26" x2="32.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><line x1="30" y1="28.5" x2="35" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><rect x="30.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint" style="animation-delay:1s"/><rect x="32" y="12" width="5" height="12" rx="1" fill="rgba(45,126,255,0.1)" stroke="url(#houseGrad)" stroke-width="1"/><circle cx="34.5" cy="10" r="2" fill="rgba(139,157,195,0.2)" class="dollar-float"/><circle cx="36" cy="7" r="1.5" fill="rgba(139,157,195,0.15)" class="dollar-float" style="animation-delay:0.5s"/></g><text x="4" y="18" font-family="JetBrains Mono" font-size="10" fill="#10B981" class="dollar-float" style="animation-delay:0.3s">$</text><text x="40" y="38" font-family="JetBrains Mono" font-size="8" fill="#F5A623" class="dollar-float" style="animation-delay:1.2s">$</text></svg>
+      </span>
+      Mortgage &amp; Loans
+    </a>
+    <button class="navbar-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="mortgage-calculator.html" class="nav-link">Mortgage</a></li>
+      <li><a href="how-much-house-can-i-afford.html" class="nav-link active">Affordability</a></li>
+      <li><a href="refinance-calculator.html" class="nav-link">Refinance</a></li>
+      <li><a href="rent-vs-buy-calculator.html" class="nav-link">Rent vs Buy</a></li>
+      <li><a href="loan-comparison.html" class="nav-link">Compare</a></li>
+      <li><a href="debt-to-income-calculator.html" class="nav-link">DTI</a></li>
+      <li><a href="extra-payment-calculator.html" class="nav-link">Extra Payment</a></li>
+      <li><a href="biweekly-payment-calculator.html" class="nav-link">Biweekly</a></li>
+      <li><a href="interest-rate-impact.html" class="nav-link">Rates</a></li>
+      <li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li>
+    </ul>
+  </nav>
+
+  <div id="rates-fallback-banner" class="alert-banner warning" style="display:none" role="alert">⚠️ Live rates unavailable. <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Check rates →</a></div>
+
+  <main class="page-content">
+    <div class="container">
+      <section class="page-hero" data-animate="fadeInUp">
+        <div class="hero-text">
+          <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span>Affordability</span></div>
+          <h1 class="gradient-text">How Much House Can I Afford?</h1>
+          <p class="hero-desc">Find your maximum home price based on income, debts, and loan type. Includes student loan IDR treatment.</p>
+        </div>
+        <div class="hero-visual">
+          <img src="images/image3.png" alt="Mortgage Calculator" style="width:100%;max-width:280px;height:auto;border-radius:14px;box-shadow:0 8px 40px rgba(45,126,255,0.2);animation:float 6s ease-in-out infinite;">
+        </div>
+      </section>
+
+      <div class="alert-banner info" role="note">This calculator assumes a fixed-rate mortgage. ARMs have different initial payments.</div>
+
+      <div class="calc-layout">
+        <div class="card card-accent" data-animate="fadeInLeft">
+          <h3 style="margin-bottom:1.25rem">Your Financial Profile</h3>
+          <div class="form-group"><label class="form-label">Loan Type</label><div class="radio-pills" role="radiogroup"><input type="radio" name="loanType" id="lt-conv" value="conventional" checked><label for="lt-conv">Conventional</label><input type="radio" name="loanType" id="lt-fha" value="fha"><label for="lt-fha">FHA</label><input type="radio" name="loanType" id="lt-va" value="va"><label for="lt-va">VA</label><input type="radio" name="loanType" id="lt-usda" value="usda"><label for="lt-usda">USDA</label></div></div>
+          <div id="va-warn" class="alert-banner warning" style="display:none" role="alert">VA loans require eligible military service.</div>
+          <div id="usda-warn" class="alert-banner warning" style="display:none" role="alert">USDA loans are only available in eligible rural/suburban areas.</div>
+          <div class="form-group"><label class="form-label" for="income">Annual Gross Income</label><div class="input-group"><span class="prefix">$</span><input type="number" id="income" value="85000" min="0"></div></div>
+          <div class="form-group"><label class="form-label" for="coborrower">Co-Borrower Income (optional)</label><div class="input-group"><span class="prefix">$</span><input type="number" id="coborrower" value="0" min="0"></div></div>
+          <div class="form-group"><label class="form-label" for="debts">Monthly Debt Payments</label><div class="input-group"><span class="prefix">$</span><input type="number" id="debts" value="500" min="0"></div><span class="form-hint">Car loans, credit cards, student loans. For IDR: FHA uses 0.5% of balance; Fannie/VA use actual payment.</span></div>
+          <div class="form-group"><label class="form-label" for="rate">Interest Rate</label><div class="input-group has-suffix"><input type="number" id="rate" value="6.75" min="0" max="30" step="0.01"><span class="suffix">%</span></div></div>
+          <div class="form-group"><label class="form-label" for="term">Loan Term</label><select id="term"><option value="30" selected>30 Years</option><option value="15">15 Years</option></select></div>
+          <div class="form-group"><label class="form-label">Down Payment: <span id="dp-display">20%</span></label><div class="range-row"><input type="range" id="down-pct" min="0" max="50" step="1" value="20"><span class="range-val" id="dp-val">20%</span></div></div>
+          <div class="form-group"><label class="form-label">Property Tax Rate: <span id="tax-display">1.0%</span></label><div class="range-row"><input type="range" id="prop-tax" min="0" max="5" step="0.1" value="1.0"><span class="range-val" id="tax-val">1.0%</span></div></div>
+          <div class="form-group"><label class="form-label">Insurance Rate: <span id="ins-display">0.5%</span></label><div class="range-row"><input type="range" id="ins-rate" min="0" max="5" step="0.1" value="0.5"><span class="range-val" id="ins-val">0.5%</span></div></div>
+          <button class="btn btn-primary btn-block" id="calc-btn" style="margin-top:1rem">Calculate Affordability</button>
+        </div>
+
+        <div data-animate="fadeInRight">
+          <div class="result-hero" style="margin-bottom:16px"><div class="result-label">Maximum Home Price</div><div class="result-big" id="r-max-price">—</div></div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+            <div class="card card-stat card-success"><div class="stat-label">Conservative</div><div class="stat-value" id="r-conservative">—</div></div>
+            <div class="card card-stat card-accent"><div class="stat-label">Recommended</div><div class="stat-value" id="r-recommended">—</div></div>
+            <div class="card card-stat card-gold"><div class="stat-label">Maximum</div><div class="stat-value" id="r-maximum">—</div></div>
+          </div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="result-row"><span class="result-label">Maximum Loan</span><span class="result-value" id="r-loan">—</span></div>
+            <div class="result-row"><span class="result-label">Down Payment</span><span class="result-value" id="r-dp">—</span></div>
+            <div class="result-row"><span class="result-label">Monthly Payment</span><span class="result-value" id="r-monthly">—</span></div>
+            <div class="result-row"><span class="result-label">Front-End DTI</span><span class="result-value" id="r-front">—</span></div>
+            <div class="result-row"><span class="result-label">Back-End DTI</span><span class="result-value" id="r-back">—</span></div>
+            <div class="result-row"><span class="result-label">Max Allowed DTI</span><span class="result-value" id="r-max-dti">—</span></div>
+          </div>
+          <div id="jumbo-warn" class="alert-banner warning" style="display:none" role="alert"></div>
+          <div class="disclaimer"><strong>Disclaimer:</strong> This tool provides estimates only and is NOT financial advice. Consult a licensed mortgage professional.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo"><div class="footer-inner"><div class="footer-grid"><div class="footer-section"><h4>Mortgage &amp; Loans</h4><p>Free, professional-grade mortgage calculators.</p></div><div class="footer-section"><h4>Calculators</h4><a href="mortgage-calculator.html">Mortgage</a><a href="how-much-house-can-i-afford.html">Affordability</a><a href="refinance-calculator.html">Refinance</a><a href="rent-vs-buy-calculator.html">Rent vs Buy</a><a href="loan-comparison.html">Compare</a><a href="debt-to-income-calculator.html">DTI</a></div><div class="footer-section"><h4>More Tools</h4><a href="extra-payment-calculator.html">Extra Payments</a><a href="biweekly-payment-calculator.html">Biweekly</a><a href="interest-rate-impact.html">Rate Impact</a><a href="construction-loan-calculator.html">Construction</a></div><div class="footer-section"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">NMLS# 000000</a></div></div><div class="footer-bottom"><p>&copy; 2026 Mortgage &amp; Loans. All rights reserved.</p><div class="footer-legal"><p><strong>NMLS:</strong> Educational calculators only. <strong>NOT financial advice.</strong></p></div></div></div></footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const $ = id => document.getElementById(id);
+  function getLoanType() { return document.querySelector('input[name="loanType"]:checked').value; }
+  function getMaxDTI(lt) { switch(lt){case'conventional':return{front:28,back:45};case'fha':return{front:31,back:50};case'va':return{front:29,back:41};case'usda':return{front:29,back:41};default:return{front:28,back:45};} }
+
+  ['down-pct','prop-tax','ins-rate'].forEach(id => { const el=$(id);const valEl=$(id.replace('down-pct','dp-val').replace('prop-tax','tax-val').replace('ins-rate','ins-val'));const dispEl=$(id.replace('down-pct','dp-display').replace('prop-tax','tax-display').replace('ins-rate','ins-display'));el.addEventListener('input',()=>{const v=parseFloat(el.value);valEl.textContent=v+'%';dispEl.textContent=v+'%';debouncedCompute();}); });
+
+  function updateUI() { const lt=getLoanType();$('va-warn').style.display=lt==='va'?'':'none';$('usda-warn').style.display=lt==='usda'?'':'none'; }
+
+  function compute() {
+    const income=safeParamNumber($('income').value,0,10000000)||0;const coborrower=safeParamNumber($('coborrower').value,0)||0;const monthlyIncome=(income+coborrower)/12;const debts=safeParamNumber($('debts').value,0)||0;const rate=safeParamNumber($('rate').value,0,30)||0;const termYears=parseInt($('term').value)||30;const downPct=parseFloat($('down-pct').value)||20;const propTaxRate=parseFloat($('prop-tax').value)||1;const insRate=parseFloat($('ins-rate').value)||0.5;const lt=getLoanType();const maxDTI=getMaxDTI(lt);
+    const maxTotalDebt=monthlyIncome*(maxDTI.back/100);const maxHousing=maxTotalDebt-debts;
+    if(maxHousing<=0){$('r-max-price').textContent='N/A';$('r-conservative').textContent='$0';$('r-recommended').textContent='$0';$('r-maximum').textContent='$0';$('r-loan').textContent='$0';$('r-dp').textContent='$0';$('r-monthly').textContent='$0';$('r-front').textContent='0%';$('r-back').textContent=(debts/monthlyIncome*100).toFixed(1)+'%';$('r-max-dti').textContent=maxDTI.back+'%';return;}
+    const monthlyRate=rate/100/12;const numPayments=termYears*12;let maxPrice=0;
+    for(let test=100000;test<=10000000;test+=1000){const loanAmt=test*(1-downPct/100);const mTax=test*(propTaxRate/100)/12;const mIns=test*(insRate/100)/12;let pi=monthlyRate===0?loanAmt/numPayments:loanAmt*(monthlyRate*Math.pow(1+monthlyRate,numPayments))/(Math.pow(1+monthlyRate,numPayments)-1);let pmi=0;if(lt==='conventional'&&(loanAmt/test*100)>80)pmi=loanAmt*0.005/12;else if(lt==='fha')pmi=loanAmt*0.007/12;else if(lt==='usda')pmi=loanAmt*0.0035/12;if(pi+mTax+mIns+pmi>maxHousing)break;maxPrice=test;}
+    const maxLoan=maxPrice*(1-downPct/100);const dpAmt=maxPrice*(downPct/100);const mortgage=calculateMortgage(maxLoan,rate,termYears);const mTax=maxPrice*(propTaxRate/100)/12;const mIns=maxPrice*(insRate/100)/12;const totalMonthly=mortgage.monthlyPayment+mTax+mIns;
+    $('r-max-price').textContent=formatCurrency(maxPrice);$('r-conservative').textContent=formatCurrency(Math.round(maxPrice*0.85/1000)*1000);$('r-recommended').textContent=formatCurrency(maxPrice);$('r-maximum').textContent=formatCurrency(Math.round(maxPrice*1.1/1000)*1000);$('r-loan').textContent=formatCurrency(maxLoan);$('r-dp').textContent=formatCurrency(dpAmt);$('r-monthly').textContent=formatCurrencyDecimal(totalMonthly);$('r-front').textContent=(totalMonthly/monthlyIncome*100).toFixed(1)+'%';$('r-back').textContent=((totalMonthly+debts)/monthlyIncome*100).toFixed(1)+'%';$('r-max-dti').textContent=maxDTI.back+'%';
+    const jw=$('jumbo-warn');if(maxLoan>MT_CONFIG.conformingLimit){jw.style.display='';jw.innerHTML='⚠️ Max loan ('+formatCurrency(maxLoan)+') is jumbo territory.';}else{jw.style.display='none';}
+    track('calculator_used',{tool:'affordability',loanType:lt});
+  }
+
+  const debouncedCompute=debounce(compute,300);['income','coborrower','debts','rate'].forEach(id=>$(id).addEventListener('input',debouncedCompute));$('term').addEventListener('change',compute);document.querySelectorAll('input[name="loanType"]').forEach(r=>r.addEventListener('change',()=>{updateUI();compute();}));$('calc-btn').addEventListener('click',compute);updateUI();compute();
+
+  // ═══ Card Glow Effect ═══
+  document.querySelectorAll('.card, .loan-type-card, .result-hero').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left, y = e.clientY - rect.top;
+      card.style.setProperty('--mx', x + 'px');
+      card.style.setProperty('--my', y + 'px');
+    });
+  });
+});
+</script>
+<script src="analytics.js" defer></script>
+</body>
+</html>

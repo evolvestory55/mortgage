@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mortgage & Loans — Smart Mortgage Calculators</title>
+  <meta name="description" content="Professional mortgage and loan calculators. Standard formulas, free forever, no signup.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <script src="shared.js" defer></script>
+  <style>
+    /* ===== 3D Card System ===== */
+    :root{
+      --accent-1:#6C5CE7;--accent-2:#00CEC9;--accent-3:#FD79A8;--accent-4:#FDCB6E;
+      --accent-5:#55EFC4;--accent-6:#A29BFE;--accent-7:#FF7675;--accent-8:#E17055;
+      --accent-9:#74B9FF;--accent-10:#DFE6E9;
+      --card-radius:20px;--glow-spread:80px;
+    }
+
+    /* Grain overlay */
+    body::after{
+      content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity:.03;
+    }
+
+    /* Floating orbs */
+    .orb{position:fixed;border-radius:50%;filter:blur(80px);z-index:0;pointer-events:none;animation:orbFloat 20s ease-in-out infinite}
+    .orb-1{width:300px;height:300px;background:rgba(108,92,231,.12);top:-100px;left:-50px;animation-delay:0s}
+    .orb-2{width:250px;height:250px;background:rgba(0,206,201,.08);bottom:-80px;right:-60px;animation-delay:-7s}
+    .orb-3{width:200px;height:200px;background:rgba(253,121,168,.06);top:40%;left:60%;animation-delay:-14s}
+    @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,15px) scale(.95)}}
+
+    /* Hero */
+    .hero-section{display:flex;align-items:center;justify-content:space-between;gap:3rem;padding:80px 0 60px;min-height:520px}
+    .hero-left{flex:1;max-width:600px}
+    .hero-left h1{margin-bottom:1.5rem}
+    .hero-left p{font-size:1.15rem;line-height:1.8;color:var(--text-secondary);margin-bottom:2rem;max-width:520px}
+    .hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+    .hero-right{flex:0 0 380px;display:flex;align-items:center;justify-content:center}
+    .hero-right svg{width:100%;max-width:400px;height:auto}
+    .hero-stats{display:flex;gap:32px;margin-top:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.06)}
+    .hero-stat{text-align:center}
+    .hero-stat .num{font-family:var(--font-mono);font-size:1.6rem;font-weight:600;color:var(--accent)}
+    .hero-stat .lbl{font-size:0.78rem;color:var(--text-muted);margin-top:2px}
+
+    /* Section headers */
+    .section-header{text-align:center;margin-bottom:2.5rem}
+    .section-header h2{margin-bottom:0.75rem}
+    .section-header p{color:var(--text-muted);max-width:560px;margin:0 auto}
+
+    /* 3D Tools Grid */
+    .tools-grid-3d{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:28px;margin:3rem 0}
+    .card-wrapper{perspective:1000px;animation:cardReveal .7s ease forwards;opacity:0}
+    .card-wrapper:nth-child(1){animation-delay:.05s}
+    .card-wrapper:nth-child(2){animation-delay:.1s}
+    .card-wrapper:nth-child(3){animation-delay:.15s}
+    .card-wrapper:nth-child(4){animation-delay:.2s}
+    .card-wrapper:nth-child(5){animation-delay:.25s}
+    .card-wrapper:nth-child(6){animation-delay:.3s}
+    .card-wrapper:nth-child(7){animation-delay:.35s}
+    .card-wrapper:nth-child(8){animation-delay:.4s}
+    .card-wrapper:nth-child(9){animation-delay:.45s}
+    .card-wrapper:nth-child(10){animation-delay:.5s}
+    @keyframes cardReveal{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+    .tool-card-3d{
+      position:relative;background:var(--surface,#111118);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--card-radius);padding:36px 30px 30px;transform-style:preserve-3d;
+      transition:transform .15s ease, box-shadow .15s ease;cursor:pointer;overflow:hidden;
+      will-change:transform;text-decoration:none;color:inherit;display:block;
+    }
+    .tool-card-3d::before{
+      content:'';position:absolute;inset:0;border-radius:var(--card-radius);
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.1) 0%, transparent 60%);
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .tool-card-3d:hover::before{opacity:1}
+    .tool-card-3d::after{
+      content:'';position:absolute;inset:-1px;border-radius:var(--card-radius);padding:1px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--card-accent) 0%, transparent 60%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .tool-card-3d:hover::after{opacity:.7}
+    .tool-card-3d .card-icon{position:relative;width:72px;height:72px;margin-bottom:20px;transform:translateZ(30px)}
+    .tool-card-3d .card-icon svg{width:100%;height:100%;transition:filter .3s ease}
+    .tool-card-3d:hover .card-icon svg{filter:drop-shadow(0 0 12px var(--card-accent))}
+    .tool-card-3d .card-title{font-size:1.15rem;font-weight:600;margin-bottom:8px;transform:translateZ(20px);position:relative;z-index:1}
+    .tool-card-3d .card-desc{font-size:.85rem;color:var(--text-muted,#6b6880);line-height:1.55;margin-bottom:22px;transform:translateZ(10px);position:relative;z-index:1}
+    .tool-card-3d .card-cta{
+      display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;
+      color:var(--card-accent);text-decoration:none;transform:translateZ(25px);position:relative;z-index:1;transition:gap .2s ease;
+    }
+    .tool-card-3d:hover .card-cta{gap:10px}
+    .tool-card-3d .card-cta .arrow{display:inline-block;transition:transform .2s ease}
+    .tool-card-3d:hover .card-cta .arrow{transform:translateX(3px)}
+    .card-bg-pattern{position:absolute;top:-20px;right:-20px;width:140px;height:140px;opacity:.04;transform:translateZ(5px);pointer-events:none}
+    .card-shadow{position:absolute;bottom:-8px;left:10%;right:10%;height:20px;background:var(--card-accent);filter:blur(var(--glow-spread));opacity:0;transition:opacity .3s ease;border-radius:50%;z-index:-1}
+    .tool-card-3d:hover .card-shadow{opacity:.15}
+
+    /* Accent colors */
+    .tool-card-3d[data-accent="1"],.why-card-3d[data-accent="1"],.step-card-3d[data-accent="1"],.cta-card-3d{--card-accent:var(--accent-1)}
+    .tool-card-3d[data-accent="2"],.why-card-3d[data-accent="2"],.step-card-3d[data-accent="2"]{--card-accent:var(--accent-2)}
+    .tool-card-3d[data-accent="3"],.why-card-3d[data-accent="3"],.step-card-3d[data-accent="3"]{--card-accent:var(--accent-3)}
+    .tool-card-3d[data-accent="4"],.why-card-3d[data-accent="4"],.step-card-3d[data-accent="4"]{--card-accent:var(--accent-4)}
+    .tool-card-3d[data-accent="5"],.why-card-3d[data-accent="5"],.step-card-3d[data-accent="5"]{--card-accent:var(--accent-5)}
+    .tool-card-3d[data-accent="6"],.why-card-3d[data-accent="6"],.step-card-3d[data-accent="6"]{--card-accent:var(--accent-6)}
+    .tool-card-3d[data-accent="7"]{--card-accent:var(--accent-7)}
+    .tool-card-3d[data-accent="8"]{--card-accent:var(--accent-8)}
+    .tool-card-3d[data-accent="9"]{--card-accent:var(--accent-9)}
+    .tool-card-3d[data-accent="10"]{--card-accent:var(--accent-10)}
+
+    /* ===== CTA 3D Card ===== */
+    .cta-card-wrapper{
+      perspective:1000px;max-width:1100px;margin:3rem auto;
+      animation:cardReveal .8s ease forwards;opacity:0;animation-delay:.1s;
+    }
+    .cta-card-3d{
+      position:relative;background:var(--surface,#111118);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--card-radius,20px);padding:56px 48px;text-align:center;
+      transform-style:preserve-3d;transition:transform .15s ease, box-shadow .15s ease;
+      cursor:default;overflow:hidden;will-change:transform;
+    }
+    .cta-card-3d::before{
+      content:'';position:absolute;inset:0;border-radius:var(--card-radius,20px);
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.12) 0%, transparent 55%);
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .cta-card-3d:hover::before{opacity:1}
+    .cta-card-3d::after{
+      content:'';position:absolute;inset:-1px;border-radius:var(--card-radius,20px);padding:1px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--card-accent) 0%, transparent 55%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .cta-card-3d:hover::after{opacity:.8}
+    .cta-card-3d .cta-title{font-size:1.8rem;font-weight:800;margin-bottom:1rem;transform:translateZ(30px);position:relative;z-index:1}
+    .cta-card-3d .cta-desc{font-size:1rem;color:var(--text-secondary,#a0a0b0);max-width:480px;margin:0 auto 2rem;line-height:1.7;transform:translateZ(15px);position:relative;z-index:1}
+    .cta-card-3d .cta-btn{transform:translateZ(35px);position:relative;z-index:1}
+    .cta-card-3d .card-shadow{position:absolute;bottom:-10px;left:15%;right:15%;height:24px;background:var(--card-accent);filter:blur(var(--glow-spread,80px));opacity:0;transition:opacity .3s ease;border-radius:50%;z-index:-1}
+    .cta-card-3d:hover .card-shadow{opacity:.2}
+    .cta-card-3d .card-bg-pattern{position:absolute;top:-30px;right:-30px;width:180px;height:180px;opacity:.03;transform:translateZ(5px);pointer-events:none}
+    .cta-card-3d .cta-dots{position:absolute;bottom:20px;left:20px;display:flex;gap:6px;transform:translateZ(5px);pointer-events:none;z-index:1}
+    .cta-card-3d .cta-dots span{width:4px;height:4px;border-radius:50%;background:var(--card-accent);opacity:.25}
+    .cta-card-3d .cta-dots span:nth-child(2){opacity:.15}
+    .cta-card-3d .cta-dots span:nth-child(3){opacity:.08}
+
+    /* ===== Why 3D Cards ===== */
+    .why-grid-3d{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;margin:2.5rem 0}
+    .why-card-wrapper{perspective:1000px;animation:cardReveal .7s ease forwards;opacity:0}
+    .why-card-wrapper:nth-child(1){animation-delay:.05s}
+    .why-card-wrapper:nth-child(2){animation-delay:.12s}
+    .why-card-wrapper:nth-child(3){animation-delay:.19s}
+    .why-card-wrapper:nth-child(4){animation-delay:.26s}
+    .why-card-3d{
+      position:relative;background:var(--surface,#111118);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--card-radius);padding:36px 28px 30px;transform-style:preserve-3d;
+      transition:transform .15s ease, box-shadow .15s ease;cursor:default;overflow:hidden;
+      will-change:transform;text-align:center;
+    }
+    .why-card-3d::before{
+      content:'';position:absolute;inset:0;border-radius:var(--card-radius);
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.1) 0%, transparent 60%);
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .why-card-3d:hover::before{opacity:1}
+    .why-card-3d::after{
+      content:'';position:absolute;inset:-1px;border-radius:var(--card-radius);padding:1px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--card-accent) 0%, transparent 60%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .why-card-3d:hover::after{opacity:.7}
+    .why-card-3d .card-icon{position:relative;width:72px;height:72px;margin:0 auto 20px;transform:translateZ(30px)}
+    .why-card-3d .card-icon svg{width:100%;height:100%;transition:filter .3s ease}
+    .why-card-3d:hover .card-icon svg{filter:drop-shadow(0 0 12px var(--card-accent))}
+    .why-card-3d .card-title{font-size:1.1rem;font-weight:600;margin-bottom:8px;transform:translateZ(20px);position:relative;z-index:1}
+    .why-card-3d .card-desc{font-size:.82rem;color:var(--text-muted,#6b6880);line-height:1.6;margin:0;transform:translateZ(10px);position:relative;z-index:1}
+    .why-card-3d .card-shadow{position:absolute;bottom:-8px;left:15%;right:15%;height:20px;background:var(--card-accent);filter:blur(var(--glow-spread));opacity:0;transition:opacity .3s ease;border-radius:50%;z-index:-1}
+    .why-card-3d:hover .card-shadow{opacity:.15}
+    .why-card-3d .card-bg-pattern{position:absolute;top:-20px;right:-20px;width:140px;height:140px;opacity:.04;transform:translateZ(5px);pointer-events:none}
+
+    /* ===== How Steps 3D Cards ===== */
+    .how-steps-3d{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:2.5rem 0}
+    .step-card-wrapper{perspective:1000px;animation:cardReveal .7s ease forwards;opacity:0}
+    .step-card-wrapper:nth-child(1){animation-delay:.08s}
+    .step-card-wrapper:nth-child(2){animation-delay:.18s}
+    .step-card-wrapper:nth-child(3){animation-delay:.28s}
+    .step-card-3d{
+      position:relative;background:var(--surface,#111118);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--card-radius);padding:36px 24px 30px;transform-style:preserve-3d;
+      transition:transform .15s ease, box-shadow .15s ease;cursor:default;overflow:hidden;
+      will-change:transform;text-align:center;
+    }
+    .step-card-3d::before{
+      content:'';position:absolute;inset:0;border-radius:var(--card-radius);
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.1) 0%, transparent 60%);
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .step-card-3d:hover::before{opacity:1}
+    .step-card-3d::after{
+      content:'';position:absolute;inset:-1px;border-radius:var(--card-radius);padding:1px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--card-accent) 0%, transparent 60%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .step-card-3d:hover::after{opacity:.7}
+    .step-card-3d .step-num{width:72px;height:72px;margin:0 auto 20px;transform:translateZ(30px)}
+    .step-card-3d .step-num svg{width:100%;height:100%;transition:filter .3s ease}
+    .step-card-3d:hover .step-num svg{filter:drop-shadow(0 0 14px var(--card-accent))}
+    .step-card-3d .card-title{font-size:1.05rem;font-weight:600;margin-bottom:8px;transform:translateZ(20px);position:relative;z-index:1}
+    .step-card-3d .card-desc{font-size:.82rem;color:var(--text-muted,#6b6880);line-height:1.5;margin:0;transform:translateZ(10px);position:relative;z-index:1}
+    .step-card-3d .card-shadow{position:absolute;bottom:-8px;left:15%;right:15%;height:20px;background:var(--card-accent);filter:blur(var(--glow-spread));opacity:0;transition:opacity .3s ease;border-radius:50%;z-index:-1}
+    .step-card-3d:hover .card-shadow{opacity:.15}
+    .step-card-3d .card-bg-pattern{position:absolute;top:-20px;right:-20px;width:140px;height:140px;opacity:.04;transform:translateZ(5px);pointer-events:none}
+
+    /* ===== FAQ Accordion — Sliding Menu ===== */
+    .faq-accordion{max-width:860px;margin:0 auto;perspective:1000px}
+
+    .faq-item{
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--card-radius,20px);
+      margin-bottom:16px;
+      background:var(--surface,#111118);
+      overflow:hidden;
+      transition:border-color .3s ease, box-shadow .3s ease;
+      animation:cardReveal .6s ease forwards;
+      opacity:0;
+    }
+    .faq-item:nth-child(1){animation-delay:.05s}
+    .faq-item:nth-child(2){animation-delay:.1s}
+    .faq-item:nth-child(3){animation-delay:.15s}
+    .faq-item:nth-child(4){animation-delay:.2s}
+    .faq-item:nth-child(5){animation-delay:.25s}
+
+    .faq-item:hover{
+      border-color:rgba(255,255,255,.12);
+    }
+    .faq-item.active{
+      border-color:rgba(108,92,231,.3);
+      box-shadow:0 0 40px rgba(108,92,231,.08), 0 4px 20px rgba(0,0,0,.2);
+    }
+
+    .faq-q{
+      padding:22px 28px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:1.05rem;
+      color:var(--text-primary,#f0ece4);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      user-select:none;
+      transition:color .3s ease, padding .3s ease;
+      position:relative;
+    }
+    .faq-q:hover{color:#A29BFE}
+    .faq-item.active .faq-q{color:#6C5CE7;padding-bottom:8px}
+
+    /* Animated chevron */
+    .faq-q .faq-chevron{
+      width:28px;height:28px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;
+      border-radius:50%;
+      background:rgba(108,92,231,.08);
+      transition:transform .4s cubic-bezier(.34,1.56,.64,1), background .3s ease;
+    }
+    .faq-q .faq-chevron svg{width:14px;height:14px;transition:stroke .3s ease}
+    .faq-item.active .faq-q .faq-chevron{
+      transform:rotate(180deg);
+      background:rgba(108,92,231,.2);
+    }
+
+    /* Number badge */
+    .faq-q .faq-num{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:32px;height:32px;flex-shrink:0;
+      border-radius:10px;
+      background:rgba(108,92,231,.1);
+      font-family:'JetBrains Mono',monospace;
+      font-size:.75rem;font-weight:600;
+      color:#A29BFE;
+      margin-right:16px;
+      transition:background .3s ease, color .3s ease;
+    }
+    .faq-item.active .faq-q .faq-num{
+      background:rgba(108,92,231,.25);
+      color:#6C5CE7;
+    }
+
+    .faq-q-text{flex:1;display:flex;align-items:center}
+
+    /* Sliding answer panel */
+    .faq-a{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height .5s cubic-bezier(.4,0,.2,1), padding .4s ease, opacity .4s ease;
+      padding:0 28px;
+      font-size:.9rem;
+      color:var(--text-secondary,#a0a0b0);
+      line-height:1.8;
+      opacity:0;
+    }
+    .faq-item.active .faq-a{
+      max-height:400px;
+      padding:0 28px 24px 76px;
+      opacity:1;
+    }
+
+    /* Accent line inside answer */
+    .faq-a .faq-accent-line{
+      width:40px;height:3px;border-radius:2px;
+      background:linear-gradient(90deg,#6C5CE7,#A29BFE);
+      margin-bottom:14px;
+      animation:lineGrow .4s ease forwards;
+      transform-origin:left;
+    }
+    @keyframes lineGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+    @media(max-width:600px){
+      .faq-q{padding:18px 20px;font-size:.95rem}
+      .faq-q .faq-num{width:28px;height:28px;font-size:.7rem;margin-right:12px}
+      .faq-item.active .faq-a{padding:0 20px 20px 60px}
+      .faq-q .faq-chevron{width:24px;height:24px}
+      .faq-q .faq-chevron svg{width:12px;height:12px}
+    }
+
+    @media(max-width:960px){
+      .hero-section{flex-direction:column;text-align:center;padding:50px 0 30px}
+      .hero-left{max-width:100%}.hero-left p{margin:0 auto 2rem}
+      .hero-buttons{justify-content:center}
+      .hero-right{flex:none;max-width:280px}
+      .hero-stats{justify-content:center}
+      .how-steps-3d{grid-template-columns:1fr}
+    }
+    @media(max-width:600px){
+      .hero-stats{flex-direction:column;gap:16px}
+      .tools-grid-3d,.why-grid-3d{grid-template-columns:1fr}
+      .cta-card-3d{padding:40px 24px}
+      .cta-card-3d .cta-title{font-size:1.4rem}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <nav class="navbar" role="navigation">
+    <a href="index.html" class="navbar-brand">
+      <span class="logo-3d">
+        <svg width="38" height="38" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="houseGrad" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#2D7EFF"/><stop offset="50%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#F5A623"/></linearGradient>
+            <linearGradient id="roofGrad" x1="8" y1="8" x2="40" y2="24"><stop offset="0%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#2D7EFF"/></linearGradient>
+            <linearGradient id="bodyGrad" x1="12" y1="22" x2="36" y2="44"><stop offset="0%" stop-color="rgba(45,126,255,0.25)"/><stop offset="100%" stop-color="rgba(45,126,255,0.08)"/></linearGradient>
+            <filter id="glow3d"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <ellipse cx="24" cy="43" rx="14" ry="3" fill="rgba(0,0,0,0.2)" class="house-body"/>
+          <g class="house-body" filter="url(#glow3d)">
+            <rect x="10" y="22" width="28" height="20" rx="2" fill="url(#bodyGrad)" stroke="url(#houseGrad)" stroke-width="1.5"/>
+            <path d="M6 24L24 8L42 24" stroke="url(#roofGrad)" stroke-width="2.5" fill="rgba(45,126,255,0.1)" stroke-linejoin="round"/>
+            <path d="M14 20L24 10L28 14" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-linecap="round" class="roof-shine"/>
+            <rect x="20" y="30" width="8" height="12" rx="1" fill="rgba(245,166,35,0.2)" stroke="#F5A623" stroke-width="1" class="door-glow"/>
+            <circle cx="26" cy="36" r="1" fill="#F5A623" opacity="0.8"/>
+            <rect x="13" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/>
+            <line x1="15.5" y1="26" x2="15.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <line x1="13" y1="28.5" x2="18" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <rect x="13.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint"/>
+            <rect x="30" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/>
+            <line x1="32.5" y1="26" x2="32.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <line x1="30" y1="28.5" x2="35" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <rect x="30.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint" style="animation-delay:1s"/>
+            <rect x="32" y="12" width="5" height="12" rx="1" fill="rgba(45,126,255,0.1)" stroke="url(#houseGrad)" stroke-width="1"/>
+            <circle cx="34.5" cy="10" r="2" fill="rgba(139,157,195,0.2)" class="dollar-float"/>
+            <circle cx="36" cy="7" r="1.5" fill="rgba(139,157,195,0.15)" class="dollar-float" style="animation-delay:0.5s"/>
+          </g>
+          <text x="4" y="18" font-family="JetBrains Mono" font-size="10" fill="#10B981" class="dollar-float" style="animation-delay:0.3s">$</text>
+          <text x="40" y="38" font-family="JetBrains Mono" font-size="8" fill="#F5A623" class="dollar-float" style="animation-delay:1.2s">$</text>
+        </svg>
+      </span>
+      Mortgage &amp; Loans
+    </a>
+    <button class="navbar-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="nav-link active">Home</a></li>
+      <li><a href="mortgage-calculator.html" class="nav-link">Mortgage</a></li>
+      <li><a href="how-much-house-can-i-afford.html" class="nav-link">Affordability</a></li>
+      <li><a href="refinance-calculator.html" class="nav-link">Refinance</a></li>
+      <li><a href="rent-vs-buy-calculator.html" class="nav-link">Rent vs Buy</a></li>
+      <li><a href="loan-comparison.html" class="nav-link">Compare</a></li>
+      <li><a href="debt-to-income-calculator.html" class="nav-link">DTI</a></li>
+      <li><a href="extra-payment-calculator.html" class="nav-link">Extra Payment</a></li>
+      <li><a href="biweekly-payment-calculator.html" class="nav-link">Biweekly</a></li>
+      <li><a href="interest-rate-impact.html" class="nav-link">Rates</a></li>
+      <li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+    <div class="container">
+
+      <!-- HERO -->
+      <section class="hero-section" data-animate="fadeInUp">
+        <div class="hero-left">
+          <h1 class="gradient-text">Your Smart Mortgage &amp; Loan Journey Starts Here</h1>
+          <p>Take the guesswork out of home financing with our professional-grade mortgage calculator. Instantly calculate monthly payments, compare fixed vs. adjustable rates, and explore full amortization schedules. Whether you're buying your first home or refinancing for a lower interest rate, get accurate, real-time results. No account required, no paywalls completely free.</p>
+          <div class="hero-buttons">
+            <a href="mortgage-calculator.html" class="btn btn-primary">Calculate Payment</a>
+            <a href="how-much-house-can-i-afford.html" class="btn btn-secondary">Check Affordability</a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat"><div class="num">10</div><div class="lbl">Calculators</div></div>
+            <div class="hero-stat"><div class="num">100%</div><div class="lbl">Free</div></div>
+            <div class="hero-stat"><div class="num">0</div><div class="lbl">Signups</div></div>
+          </div>
+        </div>
+        <div class="hero-right" data-animate="fadeInRight">
+          <img src="images/image1.png" alt="Mortgage & Loans" style="width:100%;max-width:400px;height:auto;border-radius:14px;box-shadow:0 8px 40px rgba(45,126,255,0.2);animation:float 6s ease-in-out infinite;">
+        </div>
+      </section>
+
+      <!-- 3D TOOLS GRID -->
+      <section data-animate="fadeInUp">
+        <div class="section-header"><h2 class="gradient-text">Calculators &amp; Tools</h2><p>10 professional calculators to guide every step of your mortgage journey.</p></div>
+        <div class="tools-grid-3d">
+          <div class="card-wrapper"><a href="mortgage-calculator.html" class="tool-card-3d" data-accent="1"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><rect x="10" y="50" width="50" height="80" rx="4" stroke="currentColor" stroke-width="1.5"/><rect x="80" y="30" width="50" height="100" rx="4" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#6C5CE7"/><stop offset="1" stop-color="#A29BFE"/></linearGradient><linearGradient id="g1b" x1="36" y1="0" x2="36" y2="72"><stop stop-color="#A29BFE" stop-opacity=".3"/><stop offset="1" stop-color="#6C5CE7" stop-opacity=".1"/></linearGradient></defs><path d="M36 8L6 32h8v32h44V32h8L36 8z" fill="url(#g1a)" opacity=".15"/><path d="M36 8L6 32h8v32h44V32h8L36 8z" stroke="url(#g1a)" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M36 8L12 28" stroke="#A29BFE" stroke-width="1" opacity=".4"/><path d="M36 8L60 28" stroke="#A29BFE" stroke-width="1" opacity=".4"/><rect x="30" y="42" width="12" height="22" rx="2" fill="url(#g1a)" opacity=".3"/><circle cx="39" cy="54" r="1.2" fill="#A29BFE"/><rect x="18" y="36" width="9" height="9" rx="1.5" fill="url(#g1b)" stroke="#A29BFE" stroke-width="1"/><rect x="45" y="36" width="9" height="9" rx="1.5" fill="url(#g1b)" stroke="#A29BFE" stroke-width="1"/><rect x="48" y="14" width="6" height="14" rx="1" fill="#6C5CE7" opacity=".2" stroke="#A29BFE" stroke-width="1"/><circle cx="51" cy="10" r="2" fill="#A29BFE" opacity=".2"/><circle cx="54" cy="6" r="1.5" fill="#A29BFE" opacity=".15"/><text x="58" y="22" font-size="10" fill="#A29BFE" opacity=".5" font-family="sans-serif" font-weight="bold">$</text></svg></div><div class="card-title">Mortgage Calculator</div><div class="card-desc">Monthly P&amp;I, taxes, insurance, PMI, amortization schedule.</div><span class="card-cta">Calculate <span class="arrow">&rarr;</span></span></a></div>
+
+          <div class="card-wrapper"><a href="how-much-house-can-i-afford.html" class="tool-card-3d" data-accent="2"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><circle cx="70" cy="70" r="50" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#00CEC9"/><stop offset="1" stop-color="#55EFC4"/></linearGradient></defs><path d="M36 6L10 18v18c0 16 11 28 26 32 15-4 26-16 26-32V18L36 6z" fill="url(#g2a)" opacity=".12"/><path d="M36 6L10 18v18c0 16 11 28 26 32 15-4 26-16 26-32V18L36 6z" stroke="url(#g2a)" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M26 36l7 7 14-16" stroke="#55EFC4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="36" cy="62" rx="12" ry="3.5" fill="#00CEC9" opacity=".2"/><ellipse cx="36" cy="59" rx="12" ry="3.5" fill="#00CEC9" opacity=".15"/><text x="36" y="28" text-anchor="middle" font-size="10" fill="#55EFC4" opacity=".35" font-family="sans-serif" font-weight="bold">$</text></svg></div><div class="card-title">Affordability Calculator</div><div class="card-desc">Max home price by income, debts, DTI limits. FHA/VA/USDA/Conventional.</div><span class="card-cta">Check <span class="arrow">&rarr;</span></span></a></div>
+
+          <div class="card-wrapper"><a href="refinance-calculator.html" class="tool-card-3d" data-accent="3"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><path d="M20 70 Q70 10 120 70 Q70 130 20 70Z" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#FD79A8"/><stop offset="1" stop-color="#E84393"/></linearGradient></defs><path d="M36 10a26 26 0 0122.5 13" stroke="url(#g3a)" stroke-width="3" stroke-linecap="round" fill="none"/><polygon points="61,19 63,26 56,24" fill="#FD79A8"/><path d="M36 62a26 26 0 01-22.5-13" stroke="url(#g3a)" stroke-width="3" stroke-linecap="round" fill="none"/><polygon points="11,53 9,46 16,48" fill="#E84393"/><circle cx="36" cy="36" r="14" fill="url(#g3a)" opacity=".1" stroke="url(#g3a)" stroke-width="1.5"/><text x="36" y="41" text-anchor="middle" font-size="14" fill="#FD79A8" font-family="sans-serif" font-weight="bold">%</text><circle cx="18" cy="18" r="1.5" fill="#FD79A8" opacity=".3"/><circle cx="56" cy="52" r="1.5" fill="#E84393" opacity=".3"/><circle cx="10" cy="42" r="1" fill="#FD79A8" opacity=".2"/></svg></div><div class="card-title">Refinance Calculator</div><div class="card-desc">Break-even point, monthly savings, lifetime impact.</div><span class="card-cta">Compare <span class="arrow">&rarr;</span></span></a></div>
+
+          <div class="card-wrapper"><a href="rent-vs-buy-calculator.html" class="tool-card-3d" data-accent="4"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><line x1="70" y1="10" x2="70" y2="130" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g4a" x1="0" y1="0" x2="36" y2="72"><stop stop-color="#FDCB6E"/><stop offset="1" stop-color="#F39C12"/></linearGradient><linearGradient id="g4b" x1="36" y1="0" x2="72" y2="72"><stop stop-color="#74B9FF"/><stop offset="1" stop-color="#0984E3"/></linearGradient></defs><path d="M4 60V28L20 12v48H4z" fill="url(#g4a)" opacity=".12"/><path d="M4 60V28L20 12v48H4z" stroke="#FDCB6E" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 38l4-4v8l-4 0z" fill="#FDCB6E" opacity=".3"/><path d="M68 60V28L52 12v48h16z" fill="url(#g4b)" opacity=".12"/><path d="M68 60V28L52 12v48h16z" stroke="#74B9FF" stroke-width="1.5" stroke-linejoin="round"/><circle cx="60" cy="28" r="5" fill="none" stroke="#74B9FF" stroke-width="1.5"/><line x1="60" y1="33" x2="60" y2="44" stroke="#74B9FF" stroke-width="1.5"/><line x1="60" y1="38" x2="63" y2="38" stroke="#74B9FF" stroke-width="1.5"/><line x1="36" y1="10" x2="36" y2="62" stroke="#fff" stroke-width=".8" opacity=".15" stroke-dasharray="3 3"/><circle cx="36" cy="36" r="8" fill="#111118" stroke="#fff" stroke-width=".8" opacity=".3"/><text x="36" y="40" text-anchor="middle" font-size="7" fill="#fff" opacity=".5" font-family="sans-serif" font-weight="bold">VS</text><text x="12" y="68" text-anchor="middle" font-size="5.5" fill="#FDCB6E" opacity=".5" font-family="sans-serif">BUY</text><text x="60" y="68" text-anchor="middle" font-size="5.5" fill="#74B9FF" opacity=".5" font-family="sans-serif">RENT</text></svg></div><div class="card-title">Rent vs Buy</div><div class="card-desc">Full comparison with appreciation, investment returns, capital gains.</div><span class="card-cta">Analyze <span class="arrow">&rarr;</span></span></a></div>
+
+          <div class="card-wrapper"><a href="loan-comparison.html" class="tool-card-3d" data-accent="5"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><rect x="20" y="20" width="40" height="100" rx="4" stroke="currentColor" stroke-width="1.5"/><rect x="80" y="40" width="40" height="80" rx="4" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g5a" x1="0" y1="72" x2="0" y2="0"><stop stop-color="#6C5CE7"/><stop offset="1" stop-color="#A29BFE"/></linearGradient><linearGradient id="g5b" x1="0" y1="72" x2="0" y2="0"><stop stop-color="#FD79A8"/><stop offset="1" stop-color="#FDCB6E"/></linearGradient><linearGradient id="g5c" x1="0" y1="72" x2="0" y2="0"><stop stop-color="#00CEC9"/><stop offset="1" stop-color="#55EFC4"/></linearGradient></defs><rect x="6" y="26" width="16" height="40" rx="3" fill="url(#g5a)" opacity=".25"/><rect x="6" y="26" width="16" height="40" rx="3" stroke="url(#g5a)" stroke-width="1.5" fill="none"/><rect x="28" y="14" width="16" height="52" rx="3" fill="url(#g5b)" opacity=".25"/><rect x="28" y="14" width="16" height="52" rx="3" stroke="url(#g5b)" stroke-width="1.5" fill="none"/><rect x="50" y="32" width="16" height="34" rx="3" fill="url(#g5c)" opacity=".25"/><rect x="50" y="32" width="16" height="34" rx="3" stroke="url(#g5c)" stroke-width="1.5" fill="none"/><polygon points="36,8 37.5,11 41,11.5 38.5,13.5 39,17 36,15.5 33,17 33.5,13.5 31,11.5 34.5,11" fill="#FDCB6E" opacity=".7"/><line x1="4" y1="68" x2="68" y2="68" stroke="#fff" stroke-width=".8" opacity=".15"/><text x="14" y="71" text-anchor="middle" font-size="5" fill="#A29BFE" opacity=".4" font-family="sans-serif">A</text><text x="36" y="71" text-anchor="middle" font-size="5" fill="#FD79A8" opacity=".4" font-family="sans-serif">B</text><text x="58" y="71" text-anchor="middle" font-size="5" fill="#55EFC4" opacity=".4" font-family="sans-serif">C</text></svg></div><div class="card-title">Loan Comparison</div><div class="card-desc">Side-by-side: up to 3 loans with points, fees, total cost.</div><span class="card-cta">Compare <span class="arrow">&rarr;</span></span></a></div>
+
+          <div class="card-wrapper"><a href="debt-to-income-calculator.html" class="tool-card-3d" data-accent="6"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><path d="M20 70h100" stroke="currentColor" stroke-width="1.5"/><circle cx="40" cy="70" r="20" stroke="currentColor" stroke-width="1.5"/><circle cx="100" cy="70" r="20" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#A29BFE"/><stop offset="1" stop-color="#6C5CE7"/></linearGradient></defs><line x1="8" y1="24" x2="64" y2="24" stroke="url(#g6a)" stroke-width="2.5" stroke-linecap="round"/><line x1="36" y1="12" x2="36" y2="58" stroke="url(#g6a)" stroke-width="2.5" stroke-linecap="round"/><path d="M26 58h20l4 8H22l4-8z" fill="url(#g6a)" opacity=".3"/><path d="M4 24l6 18h12l6-18" stroke="#55EFC4" stroke-width="1.5" fill="#55EFC4" fill-opacity=".1" stroke-linejoin="round"/><text x="13" y="37" text-anchor="middle" font-size="8" fill="#55EFC4" font-family="sans-serif" font-weight="bold">$</text><path d="M44 24l6 18h12l6-18" stroke="#FF7675" stroke-width="1.5" fill="#FF7675" fill-opacity=".1" stroke-linejoin="round"/><text x="53" y="37" text-anchor="middle" font-size="8" fill="#FF7675" font-family="sans-serif" font-weight="bold">%</text><polygon points="36,12 32,18 40,18" fill="url(#g6a)" opacity=".5"/></svg></div><div class="card-title">DTI Calculator</div><div class="card-desc">Front-end and back-end DTI for all loan types. Student loan IDR rules.</div><span class="card-cta">Calculate <span class="arrow">&rarr;</span></span></a></div>
+
+          <div class="card-wrapper"><a href="extra-payment-calculator.html" class="tool-card-3d" data-accent="7"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><path d="M20 120 L60 60 L100 80 L130 20" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#FF7675"/><stop offset="1" stop-color="#E17055"/></linearGradient></defs><circle cx="30" cy="28" r="18" fill="url(#g7a)" opacity=".1"/><circle cx="30" cy="28" r="18" stroke="url(#g7a)" stroke-width="2" fill="none"/><text x="30" y="34" text-anchor="middle" font-size="16" fill="#FF7675" font-family="sans-serif" font-weight="bold">$</text><circle cx="48" cy="12" r="9" fill="#FDCB6E"/><line x1="48" y1="7" x2="48" y2="17" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><line x1="43" y1="12" x2="53" y2="12" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><polyline points="10,62 22,56 34,52 46,44 58,36" stroke="url(#g7a)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polygon points="58,32 60,38 54,36" fill="#E17055"/><circle cx="10" cy="62" r="1.5" fill="#FF7675" opacity=".3"/><circle cx="22" cy="56" r="1.5" fill="#FF7675" opacity=".3"/><circle cx="34" cy="52" r="1.5" fill="#FF7675" opacity=".3"/><circle cx="46" cy="44" r="1.5" fill="#FF7675" opacity=".3"/><circle cx="58" cy="36" r="1.5" fill="#E17055" opacity=".5"/></svg></div><div class="card-title">Extra Payment Calculator</div><div class="card-desc">How extra payments reduce term and save thousands in interest.</div><span class="card-cta">See Savings <span class="arrow">&rarr;</span></span></a></div>
+
+          <div class="card-wrapper"><a href="biweekly-payment-calculator.html" class="tool-card-3d" data-accent="8"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><circle cx="40" cy="70" r="30" stroke="currentColor" stroke-width="1.5"/><circle cx="100" cy="70" r="30" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g8a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#E17055"/><stop offset="1" stop-color="#D63031"/></linearGradient></defs><rect x="12" y="16" width="48" height="46" rx="6" fill="url(#g8a)" opacity=".1"/><rect x="12" y="16" width="48" height="46" rx="6" stroke="url(#g8a)" stroke-width="2" fill="none"/><line x1="12" y1="28" x2="60" y2="28" stroke="#E17055" stroke-width="1.5" opacity=".3"/><line x1="24" y1="10" x2="24" y2="22" stroke="url(#g8a)" stroke-width="2.5" stroke-linecap="round"/><line x1="48" y1="10" x2="48" y2="22" stroke="url(#g8a)" stroke-width="2.5" stroke-linecap="round"/><text x="36" y="50" text-anchor="middle" font-size="20" fill="#E17055" font-family="sans-serif" font-weight="bold">14</text><text x="36" y="58" text-anchor="middle" font-size="5" fill="#E17055" opacity=".5" font-family="sans-serif">DAYS</text><path d="M20 34a5 5 0 0110 0" stroke="#E17055" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".4"/><polygon points="30,34 28.5,31 27,34" fill="#E17055" opacity=".4"/><path d="M42 38a5 5 0 01-10 0" stroke="#D63031" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".4"/><polygon points="32,38 33.5,41 35,38" fill="#D63031" opacity=".4"/></svg></div><div class="card-title">Biweekly Payments</div><div class="card-desc">True biweekly vs DIY extra monthly. Free alternative included.</div><span class="card-cta">Compare <span class="arrow">&rarr;</span></span></a></div>
+
+          <div class="card-wrapper"><a href="interest-rate-impact.html" class="tool-card-3d" data-accent="9"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><path d="M10 100 Q50 20 90 80 Q110 100 130 30" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g9a" x1="0" y1="0" x2="72" y2="0"><stop stop-color="#FF7675"/><stop offset=".5" stop-color="#FDCB6E"/><stop offset="1" stop-color="#55EFC4"/></linearGradient></defs><path d="M6 52 Q18 24 32 36 Q46 48 58 18" stroke="url(#g9a)" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="6" cy="52" r="3.5" fill="#FF7675"/><circle cx="18" cy="34" r="2.5" fill="#E17055" opacity=".5"/><circle cx="32" cy="36" r="3" fill="#FDCB6E"/><circle cx="46" cy="40" r="2.5" fill="#55EFC4" opacity=".5"/><circle cx="58" cy="18" r="3.5" fill="#55EFC4"/><circle cx="32" cy="36" r="10" fill="#FDCB6E" opacity=".1"/><text x="32" y="40" text-anchor="middle" font-size="10" fill="#FDCB6E" font-family="sans-serif" font-weight="bold">%</text><polygon points="58,14 60,20 54,18" fill="#55EFC4"/><polygon points="6,48 8,54 2,52" fill="#FF7675"/><line x1="6" y1="60" x2="66" y2="60" stroke="#fff" stroke-width=".5" opacity=".1"/><text x="6" y="67" font-size="5" fill="#FF7675" opacity=".3" font-family="sans-serif">LOW</text><text x="54" y="67" font-size="5" fill="#55EFC4" opacity=".3" font-family="sans-serif">HIGH</text></svg></div><div class="card-title">Rate Impact</div><div class="card-desc">See how rate changes affect monthly payment and total interest.</div><span class="card-cta">Analyze <span class="arrow">&rarr;</span></span></a></div>
+
+          <div class="card-wrapper"><a href="construction-loan-calculator.html" class="tool-card-3d" data-accent="10"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><rect x="30" y="40" width="30" height="80" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="80" y="60" width="30" height="60" rx="2" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g10a" x1="0" y1="72" x2="72" y2="0"><stop stop-color="#636E72"/><stop offset="1" stop-color="#B2BEC3"/></linearGradient><linearGradient id="g10b" x1="0" y1="72" x2="0" y2="0"><stop stop-color="#DFE6E9" stop-opacity=".2"/><stop offset="1" stop-color="#B2BEC3" stop-opacity=".1"/></linearGradient></defs><rect x="10" y="38" width="52" height="5" rx="2.5" fill="url(#g10a)"/><path d="M16 38c0-12 8-22 20-22s20 10 20 22" fill="url(#g10b)" stroke="url(#g10a)" stroke-width="2"/><line x1="36" y1="16" x2="36" y2="38" stroke="#B2BEC3" stroke-width="1" opacity=".3"/><rect x="18" y="8" width="10" height="22" rx="1.5" fill="#636E72" opacity=".15" stroke="#B2BEC3" stroke-width="1"/><rect x="31" y="14" width="10" height="16" rx="1.5" fill="#636E72" opacity=".12" stroke="#B2BEC3" stroke-width="1"/><rect x="44" y="4" width="10" height="26" rx="1.5" fill="#636E72" opacity=".18" stroke="#B2BEC3" stroke-width="1"/><line x1="49" y1="4" x2="49" y2="0" stroke="#B2BEC3" stroke-width="1.2" stroke-linecap="round"/><line x1="49" y1="0" x2="62" y2="0" stroke="#B2BEC3" stroke-width="1.2" stroke-linecap="round"/><line x1="62" y1="0" x2="62" y2="8" stroke="#B2BEC3" stroke-width="1" stroke-dasharray="2 2"/><rect x="59" y="8" width="6" height="4" rx="1" fill="#DFE6E9" opacity=".3"/><line x1="18" y1="18" x2="28" y2="18" stroke="#B2BEC3" stroke-width=".5" opacity=".3"/><line x1="18" y1="24" x2="28" y2="24" stroke="#B2BEC3" stroke-width=".5" opacity=".3"/><line x1="44" y1="14" x2="54" y2="14" stroke="#B2BEC3" stroke-width=".5" opacity=".3"/><line x1="44" y1="20" x2="54" y2="20" stroke="#B2BEC3" stroke-width=".5" opacity=".3"/><text x="36" y="56" text-anchor="middle" font-size="5" fill="#B2BEC3" opacity=".4" font-family="sans-serif" letter-spacing="2">BUILD</text></svg></div><div class="card-title">Construction Loan</div><div class="card-desc">Construction-to-permanent costs with draw schedules and timeline.</div><span class="card-cta">Estimate <span class="arrow">&rarr;</span></span></a></div>
+        </div>
+      </section>
+
+      <!-- WHY — 3D Cards -->
+      <section data-animate="fadeInUp">
+        <div class="section-header"><h2>Why Mortgage &amp; Loans?</h2><p>Professional tools without the professional price tag.</p></div>
+        <div class="why-grid-3d">
+          <div class="why-card-wrapper"><div class="why-card-3d" data-accent="2"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><circle cx="70" cy="70" r="40" stroke="currentColor" stroke-width="1.5"/><circle cx="70" cy="70" r="20" stroke="currentColor" stroke-width="1"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="w1a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#10B981"/><stop offset="1" stop-color="#34D399"/></linearGradient><filter id="w1s"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#10B981" flood-opacity="0.4"/></filter></defs><g filter="url(#w1s)"><circle cx="36" cy="36" r="28" fill="url(#w1a)" opacity="0.08"/><circle cx="36" cy="36" r="28" stroke="url(#w1a)" stroke-width="2" fill="none"/><circle cx="36" cy="36" r="22" stroke="#34D399" stroke-width="0.5" fill="none" opacity="0.2"/><text x="36" y="44" text-anchor="middle" font-size="26" fill="#10B981" font-family="sans-serif" font-weight="bold">$</text><circle cx="52" cy="14" r="8" fill="#FBBF24"/><text x="52" y="18" text-anchor="middle" font-size="10" fill="#fff" font-family="sans-serif" font-weight="bold">0</text><circle cx="14" cy="54" r="4" fill="#10B981" opacity="0.3"/><circle cx="58" cy="48" r="3" fill="#34D399" opacity="0.2"/><path d="M20 18a24 24 0 0132 0" stroke="#fff" stroke-width="0.8" fill="none" opacity="0.1" stroke-linecap="round"/></g></svg></div><div class="card-title">100% Free</div><div class="card-desc">No hidden fees, no premium tiers. Every calculator is completely free to use.</div></div></div>
+
+          <div class="why-card-wrapper"><div class="why-card-3d" data-accent="1"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><rect x="30" y="30" width="80" height="80" rx="12" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="w2a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#2D7EFF"/><stop offset="1" stop-color="#5A9AFF"/></linearGradient><filter id="w2s"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#2D7EFF" flood-opacity="0.4"/></filter></defs><g filter="url(#w2s)"><circle cx="36" cy="36" r="28" fill="url(#w2a)" opacity="0.08"/><circle cx="36" cy="36" r="28" stroke="url(#w2a)" stroke-width="2" fill="none"/><circle cx="36" cy="36" r="22" stroke="#5A9AFF" stroke-width="0.5" fill="none" opacity="0.2"/><rect x="22" y="30" width="28" height="22" rx="4" fill="url(#w2a)" opacity="0.15" stroke="#5A9AFF" stroke-width="1.5"/><path d="M28 30v-7a8 8 0 0116 0v7" stroke="#5A9AFF" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="36" cy="40" r="3" fill="#5A9AFF" opacity="0.5"/><rect x="34.8" y="42" width="2.4" height="5" rx="1.2" fill="#5A9AFF" opacity="0.5"/><line x1="52" y1="12" x2="62" y2="22" stroke="#10B981" stroke-width="2" stroke-linecap="round"/><line x1="62" y1="12" x2="52" y2="22" stroke="#10B981" stroke-width="2" stroke-linecap="round"/><path d="M20 18a24 24 0 0132 0" stroke="#fff" stroke-width="0.8" fill="none" opacity="0.1" stroke-linecap="round"/></g></svg></div><div class="card-title">No Signup</div><div class="card-desc">No email, no account, no tracking. Just open and calculate.</div></div></div>
+
+          <div class="why-card-wrapper"><div class="why-card-3d" data-accent="4"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><rect x="20" y="50" width="20" height="60" rx="3" stroke="currentColor" stroke-width="1.5"/><rect x="50" y="30" width="20" height="80" rx="3" stroke="currentColor" stroke-width="1.5"/><rect x="80" y="45" width="20" height="65" rx="3" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="w3a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#F59E0B"/><stop offset="1" stop-color="#FBBF24"/></linearGradient><filter id="w3s"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#F59E0B" flood-opacity="0.4"/></filter></defs><g filter="url(#w3s)"><circle cx="36" cy="36" r="28" fill="url(#w3a)" opacity="0.08"/><circle cx="36" cy="36" r="28" stroke="url(#w3a)" stroke-width="2" fill="none"/><circle cx="36" cy="36" r="22" stroke="#FBBF24" stroke-width="0.5" fill="none" opacity="0.2"/><rect x="14" y="40" width="9" height="16" rx="2" fill="#F59E0B" opacity="0.25" stroke="#FBBF24" stroke-width="1"/><rect x="25" y="30" width="9" height="26" rx="2" fill="#F59E0B" opacity="0.2" stroke="#FBBF24" stroke-width="1"/><rect x="36" y="22" width="9" height="34" rx="2" fill="#F59E0B" opacity="0.15" stroke="#FBBF24" stroke-width="1"/><rect x="47" y="34" width="9" height="22" rx="2" fill="#F59E0B" opacity="0.12" stroke="#FBBF24" stroke-width="1"/><polyline points="18.5,37 29.5,27 40.5,19 51.5,31" stroke="#FBBF24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="18.5" cy="37" r="2" fill="#FBBF24" opacity="0.5"/><circle cx="29.5" cy="27" r="2" fill="#FBBF24" opacity="0.5"/><circle cx="40.5" cy="19" r="2" fill="#FBBF24" opacity="0.7"/><circle cx="51.5" cy="31" r="2" fill="#FBBF24" opacity="0.5"/><path d="M20 18a24 24 0 0132 0" stroke="#fff" stroke-width="0.8" fill="none" opacity="0.1" stroke-linecap="round"/></g></svg></div><div class="card-title">Standard Formulas</div><div class="card-desc">Industry-standard calculations. FHA MIP, VA funding fees, PMI tables &mdash; all included.</div></div></div>
+
+          <div class="why-card-wrapper"><div class="why-card-3d" data-accent="6"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><rect x="45" y="15" width="50" height="90" rx="8" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="card-icon"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="w4a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#8B5CF6"/><stop offset="1" stop-color="#A78BFA"/></linearGradient><filter id="w4s"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#8B5CF6" flood-opacity="0.4"/></filter></defs><g filter="url(#w4s)"><circle cx="36" cy="36" r="28" fill="url(#w4a)" opacity="0.08"/><circle cx="36" cy="36" r="28" stroke="url(#w4a)" stroke-width="2" fill="none"/><circle cx="36" cy="36" r="22" stroke="#A78BFA" stroke-width="0.5" fill="none" opacity="0.2"/><rect x="20" y="10" width="32" height="52" rx="5" fill="url(#w4a)" opacity="0.12" stroke="#A78BFA" stroke-width="1.5"/><rect x="24" y="16" width="24" height="36" rx="2" fill="#A78BFA" opacity="0.08"/><line x1="32" y1="60" x2="40" y2="60" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round"/><rect x="27" y="20" width="18" height="3" rx="1" fill="#A78BFA" opacity="0.3"/><rect x="27" y="26" width="12" height="2.5" rx="1" fill="#A78BFA" opacity="0.2"/><rect x="27" y="31" width="14" height="2.5" rx="1" fill="#A78BFA" opacity="0.2"/><path d="M30 40l4 4 8-8" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="58" cy="16" r="4" fill="#A78BFA" opacity="0.3"/><circle cx="64" cy="10" r="2.5" fill="#A78BFA" opacity="0.2"/><path d="M20 18a24 24 0 0132 0" stroke="#fff" stroke-width="0.8" fill="none" opacity="0.1" stroke-linecap="round"/></g></svg></div><div class="card-title">Mobile Friendly</div><div class="card-desc">Works perfectly on any device. Responsive design, touch-friendly controls.</div></div></div>
+        </div>
+      </section>
+
+      <!-- HOW — 3D Step Cards -->
+      <section data-animate="fadeInUp">
+        <div class="section-header"><h2>How It Works</h2><p>Three simple steps to mortgage clarity.</p></div>
+        <div class="how-steps-3d">
+          <div class="step-card-wrapper"><div class="step-card-3d" data-accent="1"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><circle cx="70" cy="70" r="50" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/></svg></div><div class="step-num"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="st1a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#2D7EFF"/><stop offset="1" stop-color="#5A9AFF"/></linearGradient><radialGradient id="st1r" cx="50%" cy="30%" r="70%"><stop stop-color="#5A9AFF" stop-opacity="0.3"/><stop offset="1" stop-color="#2D7EFF" stop-opacity="0.05"/></radialGradient><filter id="st1f"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2D7EFF" flood-opacity="0.5"/></filter></defs><g filter="url(#st1f)"><circle cx="36" cy="36" r="34" fill="url(#st1r)"/><circle cx="36" cy="36" r="34" stroke="url(#st1a)" stroke-width="2.5" fill="none"/><circle cx="36" cy="36" r="28" stroke="#5A9AFF" stroke-width="0.6" fill="none" opacity="0.2"/><circle cx="36" cy="36" r="22" stroke="#5A9AFF" stroke-width="0.3" fill="none" opacity="0.1"/><path d="M16 20a28 28 0 0140 0" stroke="#fff" stroke-width="1.2" fill="none" opacity="0.15" stroke-linecap="round"/><text x="36" y="44" text-anchor="middle" font-size="28" fill="#5A9AFF" font-family="JetBrains Mono, monospace" font-weight="600">1</text></g></svg></div><div class="card-title">Choose a Calculator</div><div class="card-desc">Pick the tool that matches your question &mdash; affordability, refinance, comparison, or more.</div></div></div>
+
+          <div class="step-card-wrapper"><div class="step-card-3d" data-accent="2"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><circle cx="70" cy="70" r="50" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/></svg></div><div class="step-num"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="st2a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#10B981"/><stop offset="1" stop-color="#34D399"/></linearGradient><radialGradient id="st2r" cx="50%" cy="30%" r="70%"><stop stop-color="#34D399" stop-opacity="0.3"/><stop offset="1" stop-color="#10B981" stop-opacity="0.05"/></radialGradient><filter id="st2f"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#10B981" flood-opacity="0.5"/></filter></defs><g filter="url(#st2f)"><circle cx="36" cy="36" r="34" fill="url(#st2r)"/><circle cx="36" cy="36" r="34" stroke="url(#st2a)" stroke-width="2.5" fill="none"/><circle cx="36" cy="36" r="28" stroke="#34D399" stroke-width="0.6" fill="none" opacity="0.2"/><circle cx="36" cy="36" r="22" stroke="#34D399" stroke-width="0.3" fill="none" opacity="0.1"/><path d="M16 20a28 28 0 0140 0" stroke="#fff" stroke-width="1.2" fill="none" opacity="0.15" stroke-linecap="round"/><text x="36" y="44" text-anchor="middle" font-size="28" fill="#34D399" font-family="JetBrains Mono, monospace" font-weight="600">2</text></g></svg></div><div class="card-title">Enter Your Details</div><div class="card-desc">Fill in your loan amount, rate, income, or other details. Adjust with sliders and presets.</div></div></div>
+
+          <div class="step-card-wrapper"><div class="step-card-3d" data-accent="4"><div class="card-shadow"></div><div class="card-bg-pattern"><svg viewBox="0 0 140 140" fill="none"><circle cx="70" cy="70" r="50" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/></svg></div><div class="step-num"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="st3a" x1="0" y1="0" x2="72" y2="72"><stop stop-color="#F59E0B"/><stop offset="1" stop-color="#FBBF24"/></linearGradient><radialGradient id="st3r" cx="50%" cy="30%" r="70%"><stop stop-color="#FBBF24" stop-opacity="0.3"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0.05"/></radialGradient><filter id="st3f"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#F59E0B" flood-opacity="0.5"/></filter></defs><g filter="url(#st3f)"><circle cx="36" cy="36" r="34" fill="url(#st3r)"/><circle cx="36" cy="36" r="34" stroke="url(#st3a)" stroke-width="2.5" fill="none"/><circle cx="36" cy="36" r="28" stroke="#FBBF24" stroke-width="0.6" fill="none" opacity="0.2"/><circle cx="36" cy="36" r="22" stroke="#FBBF24" stroke-width="0.3" fill="none" opacity="0.1"/><path d="M16 20a28 28 0 0140 0" stroke="#fff" stroke-width="1.2" fill="none" opacity="0.15" stroke-linecap="round"/><text x="36" y="44" text-anchor="middle" font-size="28" fill="#FBBF24" font-family="JetBrains Mono, monospace" font-weight="600">3</text></g></svg></div><div class="card-title">Get Results</div><div class="card-desc">Instant results with charts, amortization schedules, and actionable insights.</div></div></div>
+        </div>
+      </section>
+
+      <!-- FAQ — Sliding Accordion -->
+      <section data-animate="fadeInUp">
+        <div class="section-header"><h2>Frequently Asked Questions</h2><p>Everything you need to know about our calculators.</p></div>
+        <div class="faq-accordion">
+
+          <div class="faq-item">
+            <div class="faq-q" tabindex="0">
+              <div class="faq-q-text"><span class="faq-num">01</span>Are these calculators really free?</div>
+              <div class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="#A29BFE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
+            <div class="faq-a"><div class="faq-accent-line"></div>Yes &mdash; every calculator on our platform is 100% free to use. No sign-up, no subscription, and no hidden fees. Whether you're calculating mortgage payments, auto loan installments, or personal loan costs, you can run unlimited simulations without spending a cent. We believe smart financial planning should be accessible to everyone.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" tabindex="0">
+              <div class="faq-q-text"><span class="faq-num">02</span>What formulas do you use?</div>
+              <div class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="#A29BFE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
+            <div class="faq-a"><div class="faq-accent-line"></div>Our calculators use the industry-standard amortization formula trusted by banks and financial institutions worldwide. Monthly payments are calculated using the PMT formula: <strong>M = P &times; [r(1+r)^n] / [(1+r)^n &minus; 1]</strong>, where P = principal, r = monthly interest rate, and n = number of payments. All results are aligned with current market interest rates to ensure accuracy you can actually rely on.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" tabindex="0">
+              <div class="faq-q-text"><span class="faq-num">03</span>Is this financial advice?</div>
+              <div class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="#A29BFE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
+            <div class="faq-a"><div class="faq-accent-line"></div>No. All results generated by our tools are for informational and educational purposes only and do not constitute professional financial advice. Before committing to any loan or financial product, we strongly recommend consulting with a licensed financial advisor or your bank. Our calculators are designed to help you explore scenarios, compare options, and walk into any conversation with your lender fully informed.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" tabindex="0">
+              <div class="faq-q-text"><span class="faq-num">04</span>Do you store my data?</div>
+              <div class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="#A29BFE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
+            <div class="faq-a"><div class="faq-accent-line"></div>Never. Every figure you enter &mdash; loan amount, interest rate, income, or repayment term &mdash; is processed entirely within your browser and is never sent to or stored on our servers. We don't collect, sell, or share your personal information with any third party. You don't even need to create an account. Your privacy is fully protected every time you use our tools.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" tabindex="0">
+              <div class="faq-q-text"><span class="faq-num">05</span>Which loan types do you support?</div>
+              <div class="faq-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="#A29BFE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+            </div>
+            <div class="faq-a"><div class="faq-accent-line"></div>We currently support the following loan types, with more being added regularly:<br><br>&#127968; <strong>Mortgage / Home Loan</strong> &mdash; Full amortization schedules, total interest cost, and monthly payment breakdown<br>&#128663; <strong>Auto Loan</strong> &mdash; New and used vehicle financing calculations<br>&#128179; <strong>Personal Loan</strong> &mdash; Consumer credit installment planning<br>&#127970; <strong>Business / SME Loan</strong> &mdash; Corporate financing simulations<br>&#128202; <strong>Loan Comparison Tool</strong> &mdash; Side-by-side analysis of multiple loan offers<br><br>Each calculator is built to give you a clear, accurate picture of your true borrowing cost.</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- CTA — 3D Dynamic Card -->
+      <div class="cta-card-wrapper" data-animate="fadeInUp">
+        <div class="cta-card-3d">
+          <div class="card-shadow"></div>
+          <div class="card-bg-pattern">
+            <svg viewBox="0 0 180 180" fill="none">
+              <circle cx="90" cy="90" r="60" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>
+              <circle cx="90" cy="90" r="35" stroke="currentColor" stroke-width=".8" stroke-dasharray="2 6"/>
+            </svg>
+          </div>
+          <div class="cta-dots"><span></span><span></span><span></span></div>
+          <h2 class="gradient-text cta-title">Ready to Calculate?</h2>
+          <p class="cta-desc">Start with our most popular calculator &mdash; find your monthly payment in seconds.</p>
+          <a href="mortgage-calculator.html" class="btn btn-primary cta-btn">Start Calculating</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>Mortgage &amp; Loans</h4>
+          <p>Free, professional-grade mortgage calculators. Standard formulas, transparent methodology.</p>
+          <div class="equal-housing"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Equal Housing Opportunity</div>
+        </div>
+        <div class="footer-section">
+          <h4>Calculators</h4>
+          <a href="mortgage-calculator.html">Mortgage Calculator</a>
+          <a href="how-much-house-can-i-afford.html">Affordability</a>
+          <a href="refinance-calculator.html">Refinance</a>
+          <a href="rent-vs-buy-calculator.html">Rent vs Buy</a>
+          <a href="loan-comparison.html">Loan Comparison</a>
+          <a href="debt-to-income-calculator.html">DTI Calculator</a>
+        </div>
+        <div class="footer-section">
+          <h4>More Tools</h4>
+          <a href="extra-payment-calculator.html">Extra Payments</a>
+          <a href="biweekly-payment-calculator.html">Biweekly Payments</a>
+          <a href="interest-rate-impact.html">Rate Impact</a>
+          <a href="construction-loan-calculator.html">Construction Loan</a>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">NMLS# 000000</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mortgage &amp; Loans. All rights reserved.</p>
+        <div class="footer-legal">
+          <p><strong>NMLS:</strong> This website does not originate mortgage loans. Educational calculators only.</p>
+          <p><strong>Fair Housing Act:</strong> We comply with 42 USC 3601. <strong>ECOA:</strong> We comply with 15 USC 1691.</p>
+          <p>All results are estimates only and are <strong>NOT financial advice</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    // 3D tilt for all interactive cards (including CTA card)
+    document.querySelectorAll('.tool-card-3d, .why-card-3d, .step-card-3d, .cta-card-3d').forEach(card => {
+      let rect, centerX, centerY;
+      function updateRect(){ rect = card.getBoundingClientRect(); centerX = rect.left + rect.width / 2; centerY = rect.top + rect.height / 2; }
+      card.addEventListener('mouseenter', () => { updateRect(); card.style.transition = 'transform 0.1s ease, box-shadow 0.1s ease'; });
+      card.addEventListener('mousemove', (e) => {
+        const rotateX = ((e.clientY - centerY) / (rect.height / 2)) * -8;
+        const rotateY = ((e.clientX - centerX) / (rect.width / 2)) * 8;
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03,1.03,1.03)`;
+        const mx = ((e.clientX - rect.left) / rect.width) * 100;
+        const my = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mx', mx + '%');
+        card.style.setProperty('--my', my + '%');
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.5s cubic-bezier(.23,1,.32,1), box-shadow 0.5s ease';
+        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+        card.style.setProperty('--mx', '50%');
+        card.style.setProperty('--my', '50%');
+      });
+      card.addEventListener('touchmove', (e) => {
+        e.preventDefault(); updateRect();
+        const touch = e.touches[0];
+        const rotateX = ((touch.clientY - centerY) / (rect.height / 2)) * -6;
+        const rotateY = ((touch.clientX - centerX) / (rect.width / 2)) * 6;
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02,1.02,1.02)`;
+      }, {passive:false});
+      card.addEventListener('touchend', () => {
+        card.style.transition = 'transform 0.5s cubic-bezier(.23,1,.32,1)';
+        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+      });
+    });
+
+    // FAQ Accordion — only one open at a time
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.addEventListener('click', function(){
+        const item = this.parentElement;
+        const isActive = item.classList.contains('active');
+
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+        // Toggle clicked
+        if(!isActive) item.classList.add('active');
+      });
+    });
+
+    // Parallax orbs
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      document.querySelectorAll('.orb').forEach((orb, i) => {
+        const speed = (i + 1) * 8;
+        orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+      });
+    });
+  })();
+  </script>
+  <script src="analytics.js" defer></script>
+</body>
+</html>

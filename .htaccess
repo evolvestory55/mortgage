@@ -1,0 +1,77 @@
+# ===========================================
+# MORTGAGE & LOANS — ANA GÜVENLÝK
+# Konum: public_html/.htaccess
+# ===========================================
+
+# RewriteEngine aç
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
+
+# ¦¦ 1) Admin paneli HTTP þifre korumasý ¦¦
+<Files "mt-ctrl-x7k9.html">
+    AuthType Basic
+    AuthName "Admin Area — Restricted"
+    AuthUserFile /home/KULLANICIADI/.htpasswd
+    Require valid-user
+</Files>
+
+# ¦¦ 2) Eski admin.html adresini tamamen engelle ¦¦
+<Files "admin.html">
+    Require all denied
+</Files>
+
+# ¦¦ 3) data klasörüne doðrudan eriþimi engelle ¦¦
+<IfModule mod_rewrite.c>
+    RewriteRule ^data/ - [F,L]
+</IfModule>
+
+# ¦¦ 4) api.php'ye sadece site içinden eriþim ¦¦
+# (Ýstersen bu kýsmý aktif et, yorum satýrýndan çýkar)
+# <Files "api.php">
+#     <IfModule mod_rewrite.c>
+#         RewriteCond %{HTTP_REFERER} !seninsiten\.com [NC]
+#         RewriteRule ^ - [F,L]
+#     </IfModule>
+# </Files>
+
+# ¦¦ 5) Hassas dosya uzantýlarýný engelle ¦¦
+<FilesMatch "\.(json|log|sql|bak|env|htpasswd|htaccess)$">
+    Require all denied
+</FilesMatch>
+
+# ¦¦ 6) Gizli dosyalarý engelle (.git, .env vb.) ¦¦
+<IfModule mod_rewrite.c>
+    RewriteRule (^\.|/\.) - [F,L]
+</IfModule>
+
+# ¦¦ 7) Güvenlik baþlýklarý ¦¦
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Admin sayfasýný arama motorlarýndan gizle
+    <Files "mt-ctrl-x7k9.html">
+        Header set X-Robots-Tag "noindex, nofollow"
+    </Files>
+</IfModule>
+
+# ¦¦ 8) Dosya sýkýþtýrma ¦¦
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+</IfModule>
+
+# ¦¦ 9) Önbellek ayarlarý ¦¦
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>

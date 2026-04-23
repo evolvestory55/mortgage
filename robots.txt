@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /mt-ctrl-x7k9.html
+Disallow: /api.php
+Disallow: /data/

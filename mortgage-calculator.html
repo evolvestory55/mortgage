@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mortgage Calculator — Mortgage & Loans</title>
+  <meta name="description" content="Calculate your monthly mortgage payment with taxes, insurance, PMI, and amortization schedule.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  <script src="shared.js" defer></script>
+  <style>
+    .calc-layout{display:grid;grid-template-columns:45% 55%;gap:24px;align-items:start}
+    @media(max-width:960px){.calc-layout{grid-template-columns:1fr}}
+    .result-hero .result-big{font-size:3rem}
+    .range-row{display:flex;align-items:center;gap:12px}
+    .range-row input[type="range"]{flex:1}
+    .range-val{font-family:var(--font-mono);font-size:0.95rem;color:var(--accent);min-width:50px;text-align:right}
+    .breakdown-chart{display:flex;justify-content:center;padding:16px 0}
+    .chart-legend{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:12px}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--text-secondary)}
+    .legend-dot{width:10px;height:10px;border-radius:50%}
+    .amort-toggle{display:flex;gap:8px;margin:1rem 0}
+
+    /* ═══ Card Glow System ═══ */
+    .card,.loan-type-card,.result-hero{position:relative;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,0.06);transition:box-shadow .4s ease}
+    .card::before,.loan-type-card::before,.result-hero::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(650px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.18) 0%,rgba(90,154,255,.08) 20%,rgba(245,166,35,.04) 35%,transparent 50%);opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:0}
+    .card:hover::before,.loan-type-card:hover::before,.result-hero:hover::before{opacity:1}
+    .card::after,.loan-type-card::after,.result-hero::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:radial-gradient(450px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.7) 0%,rgba(90,154,255,.3) 20%,rgba(245,166,35,.1) 40%,transparent 55%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:2}
+    .card:hover::after,.loan-type-card:hover::after,.result-hero:hover::after{opacity:1}
+    .card:hover,.loan-type-card:hover,.result-hero:hover{box-shadow:0 0 1px 1px rgba(45,126,255,.35),0 0 40px rgba(45,126,255,.12),0 25px 60px rgba(0,0,0,.35)}
+    .card>*,.loan-type-card>*,.result-hero>*{position:relative;z-index:3}
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" role="navigation">
+    <a href="index.html" class="navbar-brand">
+      <span class="logo-3d">
+        <svg width="38" height="38" viewBox="0 0 48 48" fill="none"><defs><linearGradient id="houseGrad" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#2D7EFF"/><stop offset="50%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#F5A623"/></linearGradient><linearGradient id="roofGrad" x1="8" y1="8" x2="40" y2="24"><stop offset="0%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#2D7EFF"/></linearGradient><linearGradient id="bodyGrad" x1="12" y1="22" x2="36" y2="44"><stop offset="0%" stop-color="rgba(45,126,255,0.25)"/><stop offset="100%" stop-color="rgba(45,126,255,0.08)"/></linearGradient><filter id="glow3d"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><ellipse cx="24" cy="43" rx="14" ry="3" fill="rgba(0,0,0,0.2)" class="house-body"/><g class="house-body" filter="url(#glow3d)"><rect x="10" y="22" width="28" height="20" rx="2" fill="url(#bodyGrad)" stroke="url(#houseGrad)" stroke-width="1.5"/><path d="M6 24L24 8L42 24" stroke="url(#roofGrad)" stroke-width="2.5" fill="rgba(45,126,255,0.1)" stroke-linejoin="round"/><path d="M14 20L24 10L28 14" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-linecap="round" class="roof-shine"/><rect x="20" y="30" width="8" height="12" rx="1" fill="rgba(245,166,35,0.2)" stroke="#F5A623" stroke-width="1" class="door-glow"/><circle cx="26" cy="36" r="1" fill="#F5A623" opacity="0.8"/><rect x="13" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/><line x1="15.5" y1="26" x2="15.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><line x1="13" y1="28.5" x2="18" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><rect x="13.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint"/><rect x="30" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/><line x1="32.5" y1="26" x2="32.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><line x1="30" y1="28.5" x2="35" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><rect x="30.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint" style="animation-delay:1s"/><rect x="32" y="12" width="5" height="12" rx="1" fill="rgba(45,126,255,0.1)" stroke="url(#houseGrad)" stroke-width="1"/><circle cx="34.5" cy="10" r="2" fill="rgba(139,157,195,0.2)" class="dollar-float"/><circle cx="36" cy="7" r="1.5" fill="rgba(139,157,195,0.15)" class="dollar-float" style="animation-delay:0.5s"/></g><text x="4" y="18" font-family="JetBrains Mono" font-size="10" fill="#10B981" class="dollar-float" style="animation-delay:0.3s">$</text><text x="40" y="38" font-family="JetBrains Mono" font-size="8" fill="#F5A623" class="dollar-float" style="animation-delay:1.2s">$</text></svg>
+      </span>
+      Mortgage &amp; Loans
+    </a>
+    <button class="navbar-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="mortgage-calculator.html" class="nav-link active">Mortgage</a></li>
+      <li><a href="how-much-house-can-i-afford.html" class="nav-link">Affordability</a></li>
+      <li><a href="refinance-calculator.html" class="nav-link">Refinance</a></li>
+      <li><a href="rent-vs-buy-calculator.html" class="nav-link">Rent vs Buy</a></li>
+      <li><a href="loan-comparison.html" class="nav-link">Compare</a></li>
+      <li><a href="debt-to-income-calculator.html" class="nav-link">DTI</a></li>
+      <li><a href="extra-payment-calculator.html" class="nav-link">Extra Payment</a></li>
+      <li><a href="biweekly-payment-calculator.html" class="nav-link">Biweekly</a></li>
+      <li><a href="interest-rate-impact.html" class="nav-link">Rates</a></li>
+      <li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+    <div class="container">
+      <section class="page-hero" data-animate="fadeInUp">
+        <div class="hero-text">
+          <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span>Mortgage</span></div>
+          <h1 class="gradient-text">Mortgage Calculator</h1>
+          <p class="hero-desc">Calculate your monthly payment with taxes, insurance, PMI, and amortization schedule.</p>
+        </div>
+        <div class="hero-visual">
+          <img src="images/image1.png" alt="Mortgage Calculator" style="width:100%;max-width:280px;height:auto;border-radius:14px;box-shadow:0 8px 40px rgba(45,126,255,0.2);animation:float 6s ease-in-out infinite;">
+        </div>
+      </section>
+
+      <div class="alert-banner info" role="note">This calculator assumes a fixed-rate mortgage. ARMs have different initial payments.</div>
+
+      <div class="calc-layout">
+        <div class="card card-accent" data-animate="fadeInLeft">
+          <h3 style="margin-bottom:1rem">Loan Details</h3>
+          <div class="form-group"><label class="form-label" for="home-price">Home Price</label><div class="input-group"><span class="prefix">$</span><input type="number" id="home-price" value="400000" min="0"></div></div>
+          <div class="form-group"><label class="form-label">Down Payment: <span id="dp-display">20%</span></label><div class="range-row"><input type="range" id="down-pct" min="0" max="50" step="1" value="20"><span class="range-val" id="dp-val">20%</span></div></div>
+          <div class="form-group"><label class="form-label" for="loan-amt">Loan Amount</label><div class="input-group"><span class="prefix">$</span><input type="number" id="loan-amt" value="320000" min="0"></div></div>
+          <div class="form-group"><label class="form-label" for="rate">Interest Rate</label><div class="input-group has-suffix"><input type="number" id="rate" value="6.75" min="0" max="30" step="0.01"><span class="suffix">%</span></div></div>
+          <div class="form-group"><label class="form-label" for="term">Loan Term</label><select id="term"><option value="30" selected>30 Years</option><option value="20">20 Years</option><option value="15">15 Years</option></select></div>
+
+          <h3 style="margin:1.5rem 0 1rem">Taxes & Insurance</h3>
+          <div class="form-group"><label class="form-label">Property Tax: <span id="tax-display">1.2%</span>/yr</label><div class="range-row"><input type="range" id="prop-tax" min="0" max="5" step="0.1" value="1.2"><span class="range-val" id="tax-val">1.2%</span></div></div>
+          <div class="form-group"><label class="form-label" for="insurance">Annual Insurance</label><div class="input-group"><span class="prefix">$</span><input type="number" id="insurance" value="1500" min="0"></div></div>
+          <div class="form-group"><label class="form-label" for="hoa">Monthly HOA</label><div class="input-group"><span class="prefix">$</span><input type="number" id="hoa" value="0" min="0"></div></div>
+
+          <button class="btn btn-primary btn-block" id="calc-btn" style="margin-top:1rem">Calculate Payment</button>
+        </div>
+
+        <div data-animate="fadeInRight">
+          <div class="result-hero" style="margin-bottom:16px">
+            <div class="result-label">Monthly Payment</div>
+            <div class="result-big" id="r-monthly">—</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+            <div class="card card-stat card-accent"><div class="stat-label">P&I</div><div class="stat-value" id="r-pi">—</div></div>
+            <div class="card card-stat card-success"><div class="stat-label">Tax & Ins</div><div class="stat-value" id="r-ti">—</div></div>
+            <div class="card card-stat card-gold"><div class="stat-label">PMI</div><div class="stat-value" id="r-pmi">—</div></div>
+          </div>
+
+          <div class="card" style="margin-bottom:16px">
+            <div class="result-row"><span class="result-label">Total Interest</span><span class="result-value" id="r-interest">—</span></div>
+            <div class="result-row"><span class="result-label">Total Cost</span><span class="result-value" id="r-total">—</span></div>
+            <div class="result-row"><span class="result-label">Payoff Date</span><span class="result-value" id="r-payoff">—</span></div>
+          </div>
+
+          <div class="card" style="margin-bottom:16px">
+            <h4 style="margin-bottom:12px;font-size:0.9rem;color:var(--text-secondary)">Payment Breakdown</h4>
+            <div class="breakdown-chart"><canvas id="pie-chart" width="220" height="220"></canvas></div>
+          </div>
+
+          <div class="card" style="margin-bottom:16px">
+            <h4 style="margin-bottom:12px;font-size:0.9rem;color:var(--text-secondary)">Amortization</h4>
+            <canvas id="amort-chart"></canvas>
+          </div>
+
+          <div class="disclaimer"><strong>Disclaimer:</strong> Estimates only. NOT financial advice. Consult a licensed mortgage professional.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo"><div class="footer-inner"><div class="footer-grid"><div class="footer-section"><h4>Mortgage &amp; Loans</h4><p>Free mortgage calculators.</p></div><div class="footer-section"><h4>Tools</h4><a href="mortgage-calculator.html">Mortgage</a><a href="refinance-calculator.html">Refinance</a><a href="rent-vs-buy-calculator.html">Rent vs Buy</a></div><div class="footer-section"><h4>More</h4><a href="extra-payment-calculator.html">Extra Payment</a><a href="biweekly-payment-calculator.html">Biweekly</a></div><div class="footer-section"><h4>Legal</h4><a href="#">Privacy</a><a href="#">NMLS# 000000</a></div></div><div class="footer-bottom"><p>&copy; 2026 Mortgage &amp; Loans. NOT financial advice.</p></div></div></footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const $ = id => document.getElementById(id);
+  let pieChart = null, amortChart = null;
+
+  // Down payment slider sync
+  $('down-pct').addEventListener('input', () => {
+    const v = parseFloat($('down-pct').value);
+    $('dp-val').textContent = v + '%';
+    $('dp-display').textContent = v + '%';
+    const price = safeParamNumber($('home-price').value, 0) || 0;
+    $('loan-amt').value = Math.round(price * (1 - v / 100));
+    debouncedCompute();
+  });
+
+  // Property tax slider sync
+  $('prop-tax').addEventListener('input', () => {
+    const v = parseFloat($('prop-tax').value);
+    $('tax-val').textContent = v + '%';
+    $('tax-display').textContent = v + '%';
+    debouncedCompute();
+  });
+
+  // Home price change -> update loan amount
+  $('home-price').addEventListener('input', () => {
+    const price = safeParamNumber($('home-price').value, 0) || 0;
+    const dp = parseFloat($('down-pct').value) || 20;
+    $('loan-amt').value = Math.round(price * (1 - dp / 100));
+    debouncedCompute();
+  });
+
+  function compute() {
+    const homePrice = safeParamNumber($('home-price').value, 0) || 0;
+    const loanAmt = safeParamNumber($('loan-amt').value, 0) || 0;
+    const rate = safeParamNumber($('rate').value, 0, 30) || 0;
+    const termYears = parseInt($('term').value) || 30;
+    const propTaxRate = parseFloat($('prop-tax').value) || 0;
+    const annualIns = safeParamNumber($('insurance').value, 0) || 0;
+    const hoa = safeParamNumber($('hoa').value, 0) || 0;
+
+    const mortgage = calculateMortgage(loanAmt, rate, termYears);
+    const mTax = homePrice * (propTaxRate / 100) / 12;
+    const mIns = annualIns / 12;
+
+    // PMI calculation
+    const ltv = homePrice > 0 ? (loanAmt / homePrice * 100) : 100;
+    let pmi = 0;
+    if (ltv > 80) pmi = loanAmt * 0.005 / 12;
+
+    const totalMonthly = mortgage.monthlyPayment + mTax + mIns + pmi + hoa;
+
+    // Results
+    $('r-monthly').textContent = formatCurrencyDecimal(totalMonthly);
+    $('r-pi').textContent = formatCurrencyDecimal(mortgage.monthlyPayment);
+    $('r-ti').textContent = formatCurrencyDecimal(mTax + mIns + hoa);
+    $('r-pmi').textContent = pmi > 0 ? formatCurrencyDecimal(pmi) : '$0';
+    $('r-interest').textContent = formatCurrency(mortgage.totalInterest);
+    $('r-total').textContent = formatCurrency(mortgage.totalPayment + (mTax + mIns + pmi + hoa) * termYears * 12);
+
+    const now = new Date();
+    const payoffDate = new Date(now.getFullYear() + termYears, now.getMonth());
+    $('r-payoff').textContent = payoffDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+    // Pie chart
+    if (typeof Chart !== 'undefined') {
+      if (pieChart) pieChart.destroy();
+      pieChart = new Chart($('pie-chart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: ['P&I', 'Tax', 'Insurance', 'PMI', 'HOA'],
+          datasets: [{
+            data: [mortgage.monthlyPayment, mTax, mIns, pmi, hoa].filter(v => v > 0),
+            backgroundColor: ['#2D7EFF', '#10B981', '#F5A623', '#EF4444', '#8B5CF6'].slice(0, [mortgage.monthlyPayment, mTax, mIns, pmi, hoa].filter(v => v > 0).length),
+            borderWidth: 0
+          }]
+        },
+        options: { responsive: true, cutout: '65%', plugins: { legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 } } } } }
+      });
+
+      // Amortization chart
+      if (amortChart) amortChart.destroy();
+      const schedule = generateAmortization(loanAmt, rate, termYears, 0);
+      const labels = [], principal = [], interest = [];
+      const step = Math.max(1, Math.floor(schedule.schedule.length / 50));
+      let cumP = 0, cumI = 0;
+      for (let m = 0; m < schedule.schedule.length; m += step) {
+        labels.push('Yr ' + Math.floor(m / 12));
+        cumP += schedule.schedule[m].principal;
+        cumI += schedule.schedule[m].interest;
+        principal.push(Math.round(cumP));
+        interest.push(Math.round(cumI));
+      }
+      amortChart = new Chart($('amort-chart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Principal Paid', data: principal, borderColor: '#2D7EFF', backgroundColor: 'rgba(45,126,255,0.08)', fill: true, tension: 0.3, pointRadius: 0 },
+            { label: 'Interest Paid', data: interest, borderColor: '#EF4444', backgroundColor: 'rgba(239,68,68,0.08)', fill: true, tension: 0.3, pointRadius: 0 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { ticks: { callback: v => '$' + (v / 1000).toFixed(0) + 'K' } } } }
+      });
+    }
+    track('calculator_used', { tool: 'mortgage' });
+  }
+
+  const debouncedCompute = debounce(compute, 300);
+  ['home-price', 'loan-amt', 'rate', 'insurance', 'hoa'].forEach(id => $(id).addEventListener('input', debouncedCompute));
+  $('term').addEventListener('change', compute);
+  $('calc-btn').addEventListener('click', compute);
+  compute();
+
+  // ═══ Card Glow Effect ═══
+  document.querySelectorAll('.card, .loan-type-card, .result-hero').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left, y = e.clientY - rect.top;
+      card.style.setProperty('--mx', x + 'px');
+      card.style.setProperty('--my', y + 'px');
+    });
+  });
+});
+</script>
+<script src="analytics.js" defer></script>
+</body>
+</html>

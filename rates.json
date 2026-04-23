@@ -1,0 +1,161 @@
+{
+  "_meta": {
+    "lastUpdated": "2026-01-16",
+    "updatedBy": "weekly-sync",
+    "nextReviewDate": "2026-01-23",
+    "version": "2026.01.16.v1",
+    "schemaVersion": "1.0",
+    "breakingChange": false,
+    "updateFrequency": {
+      "mortgageRates": "Weekly — Freddie Mac PMMS, every Thursday",
+      "homePrices": "Monthly — NAR Existing Home Sales, 3rd week of month",
+      "loanLimits": "Annual — FHFA, announced each November",
+      "fhaMip": "Event-based — HUD Mortgagee Letters",
+      "vaFundingFee": "Event-based — VA Lenders Handbook updates",
+      "taxData": "Annual — IRS, announced October/November",
+      "pmiRates": "Quarterly review"
+    }
+  },
+  "mortgageRates": {
+    "rate30yr": 6.75,
+    "rate15yr": 6.10,
+    "rate5_1arm": 6.20,
+    "weekOf": "2026-01-16",
+    "source": "Freddie Mac PMMS",
+    "sourceUrl": "https://www.freddiemac.com/pmms",
+    "trend": "flat",
+    "trendNote": "Rates stable for 3 consecutive weeks",
+    "disclaimer": "National average. Your rate depends on credit score, LTV, and lender."
+  },
+  "loanLimits": {
+    "year": 2026,
+    "conformingStandard": 806500,
+    "conformingHighCost": 1209750,
+    "fhaFloor": 524225,
+    "fhaCeiling": 1209750,
+    "source": "FHFA / HUD"
+  },
+  "fhaMip": {
+    "upfrontPercent": 1.75,
+    "upfrontNote": "Can be financed into the loan amount",
+    "annual": {
+      "term_30yr": {
+        "ltv_over_95": 0.85,
+        "ltv_90_to_95": 0.80,
+        "ltv_85_to_90": 0.80,
+        "ltv_under_85": 0.55
+      },
+      "term_15yr": {
+        "ltv_over_90": 0.70,
+        "ltv_78_to_90": 0.50,
+        "ltv_under_78": 0.15
+      }
+    },
+    "cancellationRules": {
+      "down_10_percent_plus": "Cancels after 11 years",
+      "down_under_10_percent": "Life of loan — never cancels"
+    },
+    "source": "HUD Mortgagee Letter 2023-05"
+  },
+  "vaFundingFee": {
+    "note": "As of 2024–2025. Verify annually.",
+    "firstUse": {
+      "down_0_to_5_percent": 2.15,
+      "down_5_to_10_percent": 1.50,
+      "down_10_percent_plus": 1.25
+    },
+    "subsequentUse": {
+      "down_0_to_5_percent": 3.30,
+      "down_5_to_10_percent": 1.50,
+      "down_10_percent_plus": 1.50
+    },
+    "reservistFirstUse": {
+      "down_0_to_5_percent": 2.40,
+      "down_5_to_10_percent": 1.75,
+      "down_10_percent_plus": 1.50
+    },
+    "exemptions": "Service-connected disability of 10%+",
+    "canFinanceIntoLoan": true
+  },
+  "usdaFees": {
+    "upfrontGuaranteeFeePercent": 1.00,
+    "annualFeePercent": 0.35,
+    "eligibilityCheckUrl": "https://eligibility.sc.egov.usda.gov"
+  },
+  "taxData": {
+    "year": 2026,
+    "tcjaStatus": "extended",
+    "tcjaNote": "TCJA provisions extended. Monitor irs.gov.",
+    "standardDeduction": {
+      "single": 15750,
+      "marriedFilingJointly": 31500,
+      "marriedFilingSeparately": 15750,
+      "headOfHousehold": 23625,
+      "percentageWhoItemize": 13
+    },
+    "capitalGainsExclusion": {
+      "single": 250000,
+      "marriedFilingJointly": 500000,
+      "requirementNote": "IRS Section 121: 2 of 5 years primary residence requirement",
+      "longTermCapGainsRate_typical": 0.15
+    }
+  },
+  "homePrices": {
+    "nationalMedian": 407200,
+    "asOf": "2025-11",
+    "source": "NAR Existing Home Sales",
+    "yoyChangePercent": 4.8
+  },
+  "pmiRates": {
+    "note": "BPMI approximate annual rate ranges as percent of loan amount.",
+    "lastReviewed": "2026-01",
+    "cancellationRules": {
+      "automatic": "When LTV reaches 78% based on original amortization schedule",
+      "requested": "When LTV reaches 80% based on current appraised value"
+    },
+    "table": {
+      "ltv_80_to_85": {
+        "score_760plus": 0.19,
+        "score_720_759": 0.22,
+        "score_700_719": 0.25,
+        "score_680_699": 0.30,
+        "score_660_679": 0.42,
+        "score_640_659": 0.48,
+        "score_below_640": 0.55
+      },
+      "ltv_85_to_90": {
+        "score_760plus": 0.30,
+        "score_720_759": 0.38,
+        "score_700_719": 0.45,
+        "score_680_699": 0.60,
+        "score_660_679": 0.68,
+        "score_640_659": 0.72,
+        "score_below_640": 0.78
+      },
+      "ltv_90_to_95": {
+        "score_760plus": 0.45,
+        "score_720_759": 0.58,
+        "score_700_719": 0.65,
+        "score_680_699": 0.78,
+        "score_660_679": 0.88,
+        "score_640_659": 0.95,
+        "score_below_640": 1.00
+      },
+      "ltv_95_plus": {
+        "score_760plus": 0.58,
+        "score_720_759": 0.70,
+        "score_700_719": 0.80,
+        "score_680_699": 1.00,
+        "score_660_679": 1.20,
+        "score_640_659": 1.35,
+        "score_below_640": 1.50
+      }
+    }
+  },
+  "studentLoanDTI": {
+    "fannieMae_2023plus": "Use actual monthly payment; if $0, count as $0",
+    "freddieMac": "Use actual monthly payment; if $0 or income-based, use 0.5% of outstanding balance",
+    "fha": "Always use 0.5% of outstanding balance — regardless of actual payment amount",
+    "va": "Use actual monthly payment; if $0, count as $0"
+  }
+}
