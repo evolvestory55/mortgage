@@ -2,13 +2,12 @@
 (function() {
   'use strict';
 
-  // Firebase config — kendi bilgilerinle değiştir
   const firebaseConfig = {
     apiKey: "AIzaSyCL_9MOOGKYxh56s1tA9vDFru64dUqH54Q",
-    authDomain: "mortgage-tools-counter.firebaseapp.com",
-    databaseURL: "https://mortgage-tools-counter-default-rtdb.firebaseio.com",
-    projectId: "mortgage-tools-counter",
-    storageBucket: "mortgage-tools-counter.appspot.com",
+    authDomain: "mortgage-loans-finance.firebaseapp.com",
+    databaseURL: "https://mortgage-loans-finance-default-rtdb.firebaseio.com",
+    projectId: "mortgage-loans-finance",
+    storageBucket: "mortgage-loans-finance.appspot.com",
     messagingSenderId: "163299541630",
     appId: "1:163299541630:web:de01fb43267cffd5658e2f"
   };
@@ -35,7 +34,6 @@
       localStorage.setItem('mt_vid', vid);
     }
 
-    // Online tracking — bağlantı durumu
     const onlineRef = db.ref('online/' + vid);
     const statsRef = db.ref('stats');
 
@@ -43,13 +41,10 @@
     const connectedRef = db.ref('.info/connected');
     connectedRef.on('value', function(snap) {
       if (snap.val() === true) {
-        // Çevrimiçi olarak işaretle
         onlineRef.set({
           page: location.pathname.split('/').pop() || 'index.html',
           time: firebase.database.ServerValue.TIMESTAMP
         });
-
-        // Bağlantı kesilince otomatik sil
         onlineRef.onDisconnect().remove();
       }
     });
@@ -68,7 +63,7 @@
       localStorage.setItem(visitedKey, '1');
     }
 
-    // Sayaç widget'ını göster
+    // Sayaç widget'ını güncelle
     statsRef.on('value', function(snap) {
       const stats = snap.val() || {};
       updateCounterWidget(stats.views || 0, stats.visitors || 0);
