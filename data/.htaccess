@@ -1,0 +1,8 @@
+# ===========================================
+# DATA KLASÖRÜ KORUMASI
+# Konum: public_html/data/.htaccess
+# ===========================================
+
+# Bu klasöre web tarayýcýsýndan doðrudan
+# eriþimi tamamen engelle
+Deny from all
