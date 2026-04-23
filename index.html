@@ -414,6 +414,49 @@
       <li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li>
     </ul>
   </nav>
+<div id="counter-widget" style="
+  position:fixed;
+  bottom:14px;
+  left:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:7px 14px;
+  background:rgba(14,14,22,0.92);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:50px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  color:#8B9DC3;
+  backdrop-filter:blur(16px);
+  z-index:999;
+  box-shadow:0 6px 24px rgba(0,0,0,0.35);
+">
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse 2s infinite;"></span>
+    <span class="cw-online" style="color:#10B981;font-weight:600;">0</span>
+    <span>Online</span>
+  </div>
+  <span style="color:rgba(255,255,255,0.12);">|</span>
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="color:#2D7EFF;">●</span>
+    <span class="cw-views" style="color:#2D7EFF;font-weight:600;">0</span>
+    <span>Views</span>
+  </div>
+  <span style="color:rgba(255,255,255,0.12);">|</span>
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="color:#F5A623;">●</span>
+    <span class="cw-visitors" style="color:#F5A623;font-weight:600;">0</span>
+    <span>Visitors</span>
+  </div>
+</div>
+
+<style>
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+</style>
 
   <main class="page-content">
     <div class="container">
@@ -661,5 +704,6 @@
   })();
   </script>
   <script src="analytics.js" defer></script>
+  <script src="counter.js" defer></script>
 </body>
 </html>

@@ -418,3 +418,4 @@ select option {
   background-color: #0e2142;
   color: #ffffff;
 }
+#mt-counter-widget { display: none !important; }

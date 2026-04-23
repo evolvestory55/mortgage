@@ -25,6 +25,50 @@
 </head>
 <body>
   <nav class="navbar" role="navigation"><a href="index.html" class="navbar-brand"><span class="logo-3d"><svg width="38" height="38" viewBox="0 0 48 48" fill="none"><defs><linearGradient id="houseGrad" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#2D7EFF"/><stop offset="50%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#F5A623"/></linearGradient><linearGradient id="roofGrad" x1="8" y1="8" x2="40" y2="24"><stop offset="0%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#2D7EFF"/></linearGradient><linearGradient id="bodyGrad" x1="12" y1="22" x2="36" y2="44"><stop offset="0%" stop-color="rgba(45,126,255,0.25)"/><stop offset="100%" stop-color="rgba(45,126,255,0.08)"/></linearGradient><filter id="glow3d"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><ellipse cx="24" cy="43" rx="14" ry="3" fill="rgba(0,0,0,0.2)" class="house-body"/><g class="house-body" filter="url(#glow3d)"><rect x="10" y="22" width="28" height="20" rx="2" fill="url(#bodyGrad)" stroke="url(#houseGrad)" stroke-width="1.5"/><path d="M6 24L24 8L42 24" stroke="url(#roofGrad)" stroke-width="2.5" fill="rgba(45,126,255,0.1)" stroke-linejoin="round"/><path d="M14 20L24 10L28 14" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-linecap="round" class="roof-shine"/><rect x="20" y="30" width="8" height="12" rx="1" fill="rgba(245,166,35,0.2)" stroke="#F5A623" stroke-width="1" class="door-glow"/><circle cx="26" cy="36" r="1" fill="#F5A623" opacity="0.8"/><rect x="13" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/><line x1="15.5" y1="26" x2="15.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><line x1="13" y1="28.5" x2="18" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><rect x="13.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint"/><rect x="30" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/><line x1="32.5" y1="26" x2="32.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><line x1="30" y1="28.5" x2="35" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/><rect x="30.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint" style="animation-delay:1s"/><rect x="32" y="12" width="5" height="12" rx="1" fill="rgba(45,126,255,0.1)" stroke="url(#houseGrad)" stroke-width="1"/><circle cx="34.5" cy="10" r="2" fill="rgba(139,157,195,0.2)" class="dollar-float"/><circle cx="36" cy="7" r="1.5" fill="rgba(139,157,195,0.15)" class="dollar-float" style="animation-delay:0.5s"/></g><text x="4" y="18" font-family="JetBrains Mono" font-size="10" fill="#10B981" class="dollar-float" style="animation-delay:0.3s">$</text><text x="40" y="38" font-family="JetBrains Mono" font-size="8" fill="#F5A623" class="dollar-float" style="animation-delay:1.2s">$</text></svg></span>Mortgage &amp; Loans</a><button class="navbar-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button><ul class="navbar-nav"><li><a href="index.html" class="nav-link">Home</a></li><li><a href="mortgage-calculator.html" class="nav-link">Mortgage</a></li><li><a href="how-much-house-can-i-afford.html" class="nav-link">Affordability</a></li><li><a href="refinance-calculator.html" class="nav-link">Refinance</a></li><li><a href="rent-vs-buy-calculator.html" class="nav-link">Rent vs Buy</a></li><li><a href="loan-comparison.html" class="nav-link">Compare</a></li><li><a href="debt-to-income-calculator.html" class="nav-link">DTI</a></li><li><a href="extra-payment-calculator.html" class="nav-link">Extra Payment</a></li><li><a href="biweekly-payment-calculator.html" class="nav-link">Biweekly</a></li><li><a href="interest-rate-impact.html" class="nav-link active">Rates</a></li><li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li></ul></nav>
+<div id="counter-widget" style="
+  position:fixed;
+  bottom:14px;
+  left:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:7px 14px;
+  background:rgba(14,14,22,0.92);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:50px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.68rem;
+  color:#8B9DC3;
+  backdrop-filter:blur(16px);
+  z-index:999;
+  box-shadow:0 6px 24px rgba(0,0,0,0.35);
+">
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse 2s infinite;"></span>
+    <span class="cw-online" style="color:#10B981;font-weight:600;">0</span>
+    <span>Online</span>
+  </div>
+  <span style="color:rgba(255,255,255,0.12);">|</span>
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="color:#2D7EFF;">●</span>
+    <span class="cw-views" style="color:#2D7EFF;font-weight:600;">0</span>
+    <span>Views</span>
+  </div>
+  <span style="color:rgba(255,255,255,0.12);">|</span>
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="color:#F5A623;">●</span>
+    <span class="cw-visitors" style="color:#F5A623;font-weight:600;">0</span>
+    <span>Visitors</span>
+  </div>
+</div>
+
+<style>
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+</style>
+
   <main class="page-content"><div class="container">
     <section class="page-hero" data-animate="fadeInUp"><div class="hero-text"><div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span>Rate Impact</span></div><h1 class="gradient-text">Interest Rate Impact</h1><p class="hero-desc">See how rate changes affect your monthly payment and total interest.</p></div><div class="hero-visual"><img src="images/image10.png" alt="Interest Rate Impact" style="width:100%;max-width:280px;height:auto;border-radius:14px;box-shadow:0 8px 40px rgba(45,126,255,0.2);animation:float 6s ease-in-out infinite;"></div></section>
     <div class="calc-layout">
@@ -37,5 +81,6 @@
 document.addEventListener('DOMContentLoaded',()=>{const $=id=>document.getElementById(id);let chart=null;$('use-market').addEventListener('click',()=>{$('base-rate').value=MT_CONFIG.currentMarketRate;compute()});function compute(){const amt=safeParamNumber($('amount').value,0)||0;const term=parseInt($('term').value)||30;const base=safeParamNumber($('base-rate').value,0,30)||6.75;const baseCalc=calculateMortgage(amt,base,term);const tbody=$('rate-body');tbody.innerHTML='';const rates=[],pays=[],ints=[];for(let r=Math.max(0.5,base-2);r<=base+2;r+=0.25){const rate=Math.round(r*100)/100;const c=calculateMortgage(amt,rate,term);const diff=c.monthlyPayment-baseCalc.monthlyPayment;rates.push(rate);pays.push(Math.round(c.monthlyPayment));ints.push(Math.round(c.totalInterest));const isBase=Math.abs(rate-base)<0.01;const tr=document.createElement('tr');tr.style.fontWeight=isBase?'700':'400';if(isBase)tr.style.background='rgba(45,126,255,0.08)';tr.innerHTML='<td>'+rate.toFixed(2)+'%'+(isBase?' (base)':'')+'</td><td>'+formatCurrencyDecimal(c.monthlyPayment)+'</td><td>'+formatCurrency(c.totalInterest)+'</td><td style="color:'+(diff>0?'var(--danger)':diff<0?'var(--success)':'inherit')+'">'+(diff===0?'—':(diff>0?'+':'')+formatCurrencyDecimal(diff)+'/mo')+'</td>';tbody.appendChild(tr)}if(typeof Chart!=='undefined'&&amt>0){if(chart)chart.destroy();chart=new Chart($('chart').getContext('2d'),{type:'bar',data:{labels:rates.map(r=>r.toFixed(2)+'%'),datasets:[{label:'Total Interest',data:ints,backgroundColor:rates.map(r=>Math.abs(r-base)<0.01?'#2D7EFF':'rgba(45,126,255,0.4)'),borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}})}track('calculator_used',{tool:'rate_impact'})}const d=debounce(compute,300);$('amount').addEventListener('input',d);$('base-rate').addEventListener('input',d);$('term').addEventListener('change',compute);$('calc-btn').addEventListener('click',compute);compute();document.querySelectorAll('.card,.loan-type-card,.result-hero').forEach(card=>{card.addEventListener('mousemove',e=>{const rect=card.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;card.style.setProperty('--mx',x+'px');card.style.setProperty('--my',y+'px')})})});
 </script>
 <script src="analytics.js" defer></script>
+<script src="counter.js" defer></script>
 </body>
 </html>

@@ -40,6 +40,50 @@
       <li><a href="index.html" class="nav-link">Home</a></li><li><a href="mortgage-calculator.html" class="nav-link">Mortgage</a></li><li><a href="how-much-house-can-i-afford.html" class="nav-link">Affordability</a></li><li><a href="refinance-calculator.html" class="nav-link">Refinance</a></li><li><a href="rent-vs-buy-calculator.html" class="nav-link">Rent vs Buy</a></li><li><a href="loan-comparison.html" class="nav-link">Compare</a></li><li><a href="debt-to-income-calculator.html" class="nav-link">DTI</a></li><li><a href="extra-payment-calculator.html" class="nav-link">Extra Payment</a></li><li><a href="biweekly-payment-calculator.html" class="nav-link active">Biweekly</a></li><li><a href="interest-rate-impact.html" class="nav-link">Rates</a></li><li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li>
     </ul>
   </nav>
+<div id="counter-widget" style="
+  position:fixed;
+  bottom:14px;
+  left:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:7px 14px;
+  background:rgba(14,14,22,0.92);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:50px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.68rem;
+  color:#8B9DC3;
+  backdrop-filter:blur(16px);
+  z-index:999;
+  box-shadow:0 6px 24px rgba(0,0,0,0.35);
+">
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse 2s infinite;"></span>
+    <span class="cw-online" style="color:#10B981;font-weight:600;">0</span>
+    <span>Online</span>
+  </div>
+  <span style="color:rgba(255,255,255,0.12);">|</span>
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="color:#2D7EFF;">●</span>
+    <span class="cw-views" style="color:#2D7EFF;font-weight:600;">0</span>
+    <span>Views</span>
+  </div>
+  <span style="color:rgba(255,255,255,0.12);">|</span>
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="color:#F5A623;">●</span>
+    <span class="cw-visitors" style="color:#F5A623;font-weight:600;">0</span>
+    <span>Visitors</span>
+  </div>
+</div>
+
+<style>
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+</style>
+
   <main class="page-content"><div class="container">
     <section class="page-hero" data-animate="fadeInUp"><div class="hero-text"><div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span>Biweekly</span></div><h1 class="gradient-text">Biweekly Payment Calculator</h1><p class="hero-desc">See savings from biweekly payments plus a free DIY alternative.</p></div><div class="hero-visual"><img src="images/image9.png" alt="Biweekly Payment Calculator" style="width:100%;max-width:280px;height:auto;border-radius:14px;box-shadow:0 8px 40px rgba(45,126,255,0.2);animation:float 6s ease-in-out infinite;"></div></section>
     <div class="alert-banner warning" role="note">⚠️ Verify no prepayment penalty.</div>
@@ -53,5 +97,6 @@
 document.addEventListener('DOMContentLoaded',()=>{const $=id=>document.getElementById(id);let chart=null;function compute(){const bal=safeParamNumber($('balance').value,0)||0;const rate=safeParamNumber($('rate').value,0,30)||0;const termYears=parseInt($('term').value)||30;const method=document.querySelector('input[name="method"]:checked').value;const monthly=calculateMortgage(bal,rate,termYears);const orig=generateAmortization(bal,rate,termYears,0);let bInterest,bMonths;if(method==='true'){const pRate=rate/100/26;let bBal=bal,bInt=0,periods=0;while(bBal>0.01&&periods<termYears*52){periods++;const int=bBal*pRate;let prin=monthly.monthlyPayment/2-int;if(prin>bBal)prin=bBal;bBal=Math.max(0,bBal-prin);bInt+=int}bInterest=bInt;bMonths=Math.round(periods*12/26)}else{const diy=generateAmortization(bal,rate,termYears,monthly.monthlyPayment/12);bInterest=diy.totalInterest;bMonths=diy.months}const saved=orig.totalInterest-bInterest;const monthsSaved=orig.months-bMonths;$('r-saved').textContent=formatCurrency(saved);$('r-monthly').textContent=formatCurrencyDecimal(monthly.monthlyPayment);$('r-biweekly').textContent=method==='true'?formatCurrencyDecimal(monthly.monthlyPayment/2)+'/2wk':formatCurrencyDecimal(monthly.monthlyPayment+monthly.monthlyPayment/12)+'/mo';$('r-orig-payoff').textContent=Math.floor(orig.months/12)+'yr '+(orig.months%12)+'mo';$('r-new-payoff').textContent=Math.floor(bMonths/12)+'yr '+(bMonths%12)+'mo';$('r-time').textContent=Math.floor(monthsSaved/12)+' years, '+(monthsSaved%12)+' months';const diyExtra=monthly.monthlyPayment/12;const diyRes=generateAmortization(bal,rate,termYears,diyExtra);const diySaved=orig.totalInterest-diyRes.totalInterest;$('diy-box').innerHTML='<strong>DIY Alternative:</strong> Add '+formatCurrencyDecimal(diyExtra)+'/mo extra to save ~'+formatCurrency(diySaved)+' — no program fee.';if(typeof Chart!=='undefined'&&bal>0){if(chart)chart.destroy();const labels=[],d1=[],d2=[];const maxM=Math.max(orig.months,bMonths);const step=Math.max(1,Math.floor(maxM/40));for(let m=0;m<=maxM;m+=step){labels.push('Yr '+Math.floor(m/12));d1.push(m<orig.schedule.length?Math.round(orig.schedule[m].balance):0);d2.push(m<orig.schedule.length?Math.round(orig.schedule[m].balance):0)}chart=new Chart($('chart').getContext('2d'),{type:'line',data:{labels,datasets:[{label:'Monthly',data:d1,borderColor:'#EF4444',tension:0.3,pointRadius:0},{label:'Biweekly',data:d2,borderColor:'#10B981',tension:0.3,pointRadius:0}]},options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}})}track('calculator_used',{tool:'biweekly',method})}const d=debounce(compute,300);['balance','rate'].forEach(id=>$(id).addEventListener('input',d));$('term').addEventListener('change',compute);document.querySelectorAll('input[name="method"]').forEach(r=>r.addEventListener('change',compute));$('calc-btn').addEventListener('click',compute);compute();document.querySelectorAll('.card,.loan-type-card,.result-hero').forEach(card=>{card.addEventListener('mousemove',e=>{const rect=card.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;card.style.setProperty('--mx',x+'px');card.style.setProperty('--my',y+'px')})})});
 </script>
 <script src="analytics.js" defer></script>
+<script src="counter.js" defer></script>
 </body>
 </html>
