@@ -10,7 +10,7 @@
     projectId: "mortgage-tools-counter",
     storageBucket: "mortgage-tools-counter.appspot.com",
     messagingSenderId: "163299541630",
-    appId: "163299541630"
+    appId: "1:163299541630:web:de01fb43267cffd5658e2f"
   };
 
   // Firebase SDK yükle
