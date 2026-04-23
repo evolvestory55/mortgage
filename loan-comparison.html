@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loan Comparison — Mortgage &amp; Loans</title>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1SP0BQFNBT"></script>
-  <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-1SP0BQFNBT');
-  </script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wgaihdkccq");
+</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -75,7 +75,47 @@
     <div class="card" style="margin-top:20px" data-animate="fadeInUp"><h3 style="margin-bottom:1rem">Results</h3><div style="overflow-x:auto"><table class="data-table" id="res-table"><thead><tr><th></th><th>Loan A</th><th>Loan B</th><th>Loan C</th></tr></thead><tbody id="res-body"></tbody></table></div><div class="chart-container" style="margin-top:16px"><canvas id="chart"></canvas></div></div>
     <div class="disclaimer" style="margin-top:16px"><strong>Disclaimer:</strong> Fixed-rate only. Estimates, NOT financial advice.</div>
   </div></main>
-  <footer class="site-footer" role="contentinfo"><div class="footer-inner"><div class="footer-grid"><div class="footer-section"><h4>Mortgage &amp; Loans</h4><p>Free mortgage calculators.</p></div><div class="footer-section"><h4>Tools</h4><a href="mortgage-calculator.html">Mortgage</a><a href="refinance-calculator.html">Refinance</a><a href="rent-vs-buy-calculator.html">Rent vs Buy</a></div><div class="footer-section"><h4>More</h4><a href="extra-payment-calculator.html">Extra Payment</a><a href="biweekly-payment-calculator.html">Biweekly</a></div><div class="footer-section"><h4>Legal</h4><a href="#">Privacy</a><a href="#">NMLS# 000000</a></div></div><div class="footer-bottom"><p>&copy; 2026 Mortgage &amp; Loans. NOT financial advice.</p></div></div></footer>
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-section">
+        <h4>Mortgage &amp; Loans</h4>
+        <p>Free, professional-grade mortgage calculators. Standard formulas, transparent methodology.</p>
+        <p style="margin-top:8px;font-size:0.78rem;color:var(--text-muted)">Equal Housing Opportunity</p>
+      </div>
+      <div class="footer-section">
+        <h4>Calculators</h4>
+        <a href="mortgage-calculator.html">Mortgage Calculator</a>
+        <a href="how-much-house-can-i-afford.html">Affordability</a>
+        <a href="refinance-calculator.html">Refinance</a>
+        <a href="rent-vs-buy-calculator.html">Rent vs Buy</a>
+        <a href="loan-comparison.html">Loan Comparison</a>
+        <a href="debt-to-income-calculator.html">DTI Calculator</a>
+      </div>
+      <div class="footer-section">
+        <h4>More Tools</h4>
+        <a href="extra-payment-calculator.html">Extra Payments</a>
+        <a href="biweekly-payment-calculator.html">Biweekly Payments</a>
+        <a href="interest-rate-impact.html">Rate Impact</a>
+        <a href="construction-loan-calculator.html">Construction Loan</a>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="#">NMLS# 000000</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Mortgage &amp; Loans. All rights reserved.</p>
+      <p style="margin-top:6px;font-size:0.75rem;color:var(--text-muted);line-height:1.6">
+        <strong>NMLS:</strong> This website does not originate mortgage loans. Educational calculators only.<br>
+        <strong>Fair Housing Act:</strong> We comply with 42 USC 3601. <strong>ECOA:</strong> We comply with 15 USC 1691.<br>
+        All results are estimates only and are <strong>NOT financial advice</strong>.
+      </p>
+    </div>
+  </div>
+</footer>
 <script>
 document.addEventListener('DOMContentLoaded',()=>{let chart=null;function getData(){const loans=[{},{},{}];document.querySelectorAll('.ci').forEach(el=>{const i=parseInt(el.dataset.i),f=el.dataset.f;loans[i][f]=el.tagName==='SELECT'?parseInt(el.value):parseFloat(el.value)||0});return loans}function compute(){const loans=getData();const results=loans.map(l=>{const m=calculateMortgage(l.amount,l.rate,l.term);return{...m,totalCost:m.totalPayment+l.points+l.fees,points:l.points,fees:l.fees,jumbo:l.amount>MT_CONFIG.conformingLimit}});const tbody=document.getElementById('res-body');tbody.innerHTML='';const rows=[{l:'Monthly P&I',k:'monthlyPayment',f:v=>formatCurrencyDecimal(v),best:'min'},{l:'Total Interest',k:'totalInterest',f:v=>formatCurrency(v),best:'min'},{l:'Total Cost',k:'totalCost',f:v=>formatCurrency(v),best:'min'},{l:'Points',k:'points',f:v=>formatCurrency(v),best:null},{l:'Fees',k:'fees',f:v=>formatCurrency(v),best:null}];rows.forEach(row=>{const vals=results.map(r=>r[row.k]);const bestIdx=row.best==='min'?vals.indexOf(Math.min(...vals)):-1;const tr=document.createElement('tr');tr.innerHTML='<td>'+row.l+'</td>'+results.map((r,i)=>{const cls=i===bestIdx?'winner-cell':(bestIdx>=0?'looser-cell':'');return '<td class="'+cls+'">'+row.f(r[row.k])+'</td>'}).join('');tbody.appendChild(tr)});const jtr=document.createElement('tr');jtr.innerHTML='<td>Jumbo?</td>'+results.map(r=>'<td>'+(r.jumbo?'<span class="jumbo-badge">JUMBO</span>':'No')+'</td>').join('');tbody.appendChild(jtr);if(typeof Chart!=='undefined'){if(chart)chart.destroy();chart=new Chart(document.getElementById('chart').getContext('2d'),{type:'bar',data:{labels:['Loan A','Loan B','Loan C'],datasets:[{label:'Principal',data:results.map(r=>r.totalPayment-r.totalInterest),backgroundColor:'#2D7EFF'},{label:'Interest',data:results.map(r=>r.totalInterest),backgroundColor:'#10B981'},{label:'Points & Fees',data:results.map(r=>r.points+r.fees),backgroundColor:'#F5A623'}]},options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'}}}}})}track('calculator_used',{tool:'loan_comparison'})}const d=debounce(compute,300);document.querySelectorAll('.ci').forEach(el=>{el.addEventListener('input',d);el.addEventListener('change',compute)});compute();document.querySelectorAll('.card,.loan-type-card,.result-hero').forEach(card=>{card.addEventListener('mousemove',e=>{const rect=card.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;card.style.setProperty('--mx',x+'px');card.style.setProperty('--my',y+'px')})})});
 </script>

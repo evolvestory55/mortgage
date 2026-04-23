@@ -332,7 +332,7 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .accordion { border: 1px solid var(--glass-border); border-radius: var(--radius-md); margin: 1rem 0; overflow: hidden; }
 .accordion-header { padding: 14px 18px; background: var(--glass); cursor: pointer; font-weight: 600; font-size: 0.9rem; color: var(--text-primary); display: flex; align-items: center; justify-content: space-between; user-select: none; transition: background 0.2s ease; }
 .accordion-header:hover { background: var(--glass-hover); }
-.accordion-header::after { content: '▸'; transition: transform 0.3s ease; color: var(--text-muted); }
+.accordion-header::after { content: '\25B8'; transition: transform 0.3s ease; color: var(--text-muted); }
 .accordion-header.open::after { transform: rotate(90deg); }
 .accordion-body { padding: 0 18px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
 .accordion-body.open { padding: 14px 18px; max-height: 800px; }

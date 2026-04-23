@@ -2,6 +2,13 @@
    MORTGAGE & LOANS — SHARED JAVASCRIPT
    ============================================================ */
 
+/* ---- Microsoft Clarity ---- */
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "wgaihdkccq");
+
 window.MT_CONFIG = {
   webhookUrl: "",
   emailGateEnabled: false,
@@ -45,7 +52,23 @@ function saveState(toolName, stateObj) { try { sessionStorage.setItem(STATE_KEY_
 function loadState(toolName) { try { const s = sessionStorage.getItem(STATE_KEY_PREFIX + toolName); return s ? JSON.parse(s) : null; } catch(e) { return null; } }
 function safeParamNumber(value, min, max) { const n = parseFloat(value); if (isNaN(n) || !isFinite(n)) return null; if (min !== undefined && n < min) return null; if (max !== undefined && n > max) return null; return n; }
 function getUrlParam(name) { return new URLSearchParams(window.location.search).get(name); }
-function track(event, props) { if (typeof gtag !== 'undefined') { gtag('event', event, props); } if (location.hostname === 'localhost') { console.log('[Analytics]', event, props); } }
+
+/* ---- Analytics: Microsoft Clarity ---- */
+function track(event, props) {
+  try {
+    if (typeof clarity === 'function') {
+      if (props && typeof props === 'object') {
+        Object.keys(props).forEach(function(key) {
+          clarity('set', key, String(props[key]));
+        });
+      }
+      clarity('event', event);
+    }
+  } catch(e) {}
+  if (location.hostname === 'localhost') {
+    console.log('[Clarity]', event, props);
+  }
+}
 
 function getRate(path) { if (!window.MT_RATES) return null; const parts = path.split('.'); let obj = window.MT_RATES; for (const p of parts) { if (obj == null) return null; obj = obj[p]; } return obj; }
 
