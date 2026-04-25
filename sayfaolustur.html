@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>düzey görevlere odaklanma — Mortgage &amp; Loans</title>
+  <meta name="description" content="Yapay zeka araçları (GitHub Copilot, Claude, ChatGPT vb.) artık yalnızca basit kod tamamlama değil, karmaşık algoritmalar yazma, hata ayıklama ve dokümantasyon oluşturma konularında da ciddi başarı gösteriyor. Bu durum, özellikle junior geliştiriciler arasında "yapay zeka işimizi elimizden alacak mı?" sorusunu gündeme taşıdı.
+Ancak uzmanlar farklı bir tablo çiziyor: Yapay zeka, geliştiricileri ortadan kaldırmıyor; aksine onların daha stratejik, yaratıcı ve üst düzey görevlere odaklanmasını sağlıyor. Tekrarlayan ve zaman alan işler otomatikleşirken, problem çözme, mimari tasarım ve kullanıcı odaklı düşünme becerileri daha da değer kazanıyor.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <script src="shared.js" defer></script>
+  <style>
+    .card,.result-hero{position:relative;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,0.06);transition:box-shadow .4s ease}
+    .card::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(650px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.18) 0%,transparent 50%);opacity:0;transition:opacity .5s;pointer-events:none;z-index:0}
+    .card:hover::before{opacity:1}
+    .card::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:radial-gradient(450px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.7) 0%,transparent 55%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .5s;pointer-events:none;z-index:2}
+    .card:hover::after{opacity:1}
+    .card:hover{box-shadow:0 0 1px 1px rgba(45,126,255,.35),0 0 40px rgba(45,126,255,.12),0 25px 60px rgba(0,0,0,.35)}
+    .card>*{position:relative;z-index:3}
+    .post-layout{max-width:820px;margin:0 auto;padding:0 24px}
+    .post-hero{padding:56px 0 0;animation:fadeInUp .7s ease forwards;opacity:0}
+    .post-cat{display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:50px;background:rgba(45,126,255,.12);color:#2D7EFF;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+    .post-cat .dot{width:6px;height:6px;border-radius:50%;background:#2D7EFF}
+    .post-title{font-family:"Syne",sans-serif;font-size:2.6rem;font-weight:800;line-height:1.2;margin-bottom:16px}
+    .post-sub{font-size:1.1rem;color:#a0a0b0;line-height:1.8;margin-bottom:28px;max-width:680px}
+    .post-meta{display:flex;align-items:center;gap:16px;padding:18px 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);font-size:.82rem;color:#6b6880;flex-wrap:wrap}
+    .author-chip{display:flex;align-items:center;gap:10px}
+    .author-chip .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#2D7EFF,#5A9AFF);display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono";font-size:.78rem;font-weight:600;color:#fff}
+    .author-chip .name{color:#f0ece4;font-weight:600}
+    .meta-sep{color:rgba(255,255,255,.1)}
+    .read-time{display:flex;align-items:center;gap:5px;color:#2D7EFF;font-weight:600}
+    .hero-img{margin-top:28px;height:340px;border-radius:16px;background:linear-gradient(135deg,rgba(45,126,255,.08),rgba(245,166,35,.04),rgba(90,154,255,.06));border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;animation:fadeInUp .8s ease forwards;opacity:0;animation-delay:.1s}
+    .hero-img svg{width:100px;height:100px;opacity:.12}
+    .post-body{padding:40px 0 60px;display:flex;flex-direction:column;gap:24px;animation:fadeInUp .8s ease forwards;opacity:0;animation-delay:.2s}
+    .card-inner{padding:32px 36px}
+    .card-inner h2{font-family:"Syne";font-size:1.45rem;font-weight:700;margin-bottom:16px;line-height:1.3;color:#f0ece4}
+    .card-inner p{font-size:.96rem;color:#a0a0b0;line-height:1.85;margin-bottom:14px}
+    .card-inner strong{color:#f0ece4;font-weight:600}
+    .card-inner em{color:#5A9AFF;font-style:italic}
+    .card-inner ul{margin:12px 0;padding-left:24px}
+    .card-inner li{font-size:.92rem;color:#a0a0b0;line-height:1.8;margin-bottom:6px}
+    .card-stripe{height:3px;border-radius:16px 16px 0 0;position:absolute;top:0;left:0;right:0;z-index:4}
+    .stripe-blue{background:linear-gradient(90deg,#2D7EFF,#5A9AFF)}.stripe-green{background:linear-gradient(90deg,#10B981,#34D399)}.stripe-gold{background:linear-gradient(90deg,#F5A623,#FCD34D)}.stripe-purple{background:linear-gradient(90deg,#6C5CE7,#A29BFE)}.stripe-red{background:linear-gradient(90deg,#EF4444,#F87171)}.stripe-teal{background:linear-gradient(90deg,#00CEC9,#00B4D8)}
+    .card-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+    .card-icon svg{width:20px;height:20px;stroke-width:2;fill:none;stroke:currentColor}
+    .ic-blue{background:rgba(45,126,255,.12);color:#5A9AFF}.ic-green{background:rgba(16,185,129,.12);color:#34D399}.ic-gold{background:rgba(245,166,35,.12);color:#FCD34D}.ic-purple{background:rgba(108,92,231,.12);color:#A29BFE}.ic-red{background:rgba(239,68,68,.10);color:#F87171}.ic-teal{background:rgba(0,206,201,.10);color:#00CEC9}
+    .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .stat-card{text-align:center;padding:22px 12px;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);border-radius:16px}
+    .stat-num{font-family:"JetBrains Mono";font-size:1.5rem;font-weight:600;color:#2D7EFF;margin-bottom:4px}
+    .stat-lbl{font-size:.75rem;color:#6b6880;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+    .takeaway{padding:24px 28px;border-radius:14px;background:rgba(45,126,255,.06);border:1px solid rgba(45,126,255,.12);border-left:3px solid #2D7EFF}
+    .takeaway p{font-size:.92rem;color:#a0a0b0;line-height:1.75;margin:0}
+    .takeaway strong{color:#2D7EFF}
+    .tags{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{padding:6px 16px;border-radius:50px;font-size:.78rem;font-weight:600;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:#6b6880;text-decoration:none}
+    .tag:hover{color:#2D7EFF;border-color:rgba(45,126,255,.25);background:rgba(45,126,255,.06)}
+    .share-row{display:flex;align-items:center;gap:14px}
+    .share-row span{font-size:.82rem;color:#6b6880;font-weight:600}
+    .share-btn{width:40px;height:40px;border-radius:12px;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .share-btn svg{width:17px;height:17px;stroke:#6b6880;fill:none;stroke-width:2}
+    .share-btn:hover svg{stroke:#2D7EFF}
+    .author-box{padding:32px;border-radius:16px;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);display:flex;gap:24px;align-items:center}
+    .ab-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2D7EFF,#5A9AFF);display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono";font-size:1rem;font-weight:600;color:#fff}
+    .ab-info h4{font-family:"Syne";font-size:1rem;font-weight:700;margin-bottom:4px;color:#f0ece4}
+    .ab-info p{font-size:.84rem;color:#6b6880;line-height:1.65}
+    .related{padding:0 0 40px}
+    .related h3{font-family:"Syne";font-size:1.4rem;font-weight:700;margin-bottom:24px}
+    .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .rel-card{background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;display:block}
+    .rel-img{height:110px;background:linear-gradient(135deg,rgba(45,126,255,.06),rgba(90,154,255,.03));display:flex;align-items:center;justify-content:center}
+    .rel-img svg{width:36px;height:36px;opacity:.12}
+    .rel-body{padding:16px 20px}
+    .rel-body h4{font-size:.92rem;font-weight:700;line-height:1.4;margin-bottom:6px;color:#f0ece4}
+    .rel-body span{font-size:.75rem;color:#6b6880}
+    .nl-card{background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:48px 40px;text-align:center}
+    .nl-card h2{font-size:1.5rem;font-weight:800;margin-bottom:.75rem;font-family:"Syne"}
+    .nl-card p{font-size:.92rem;color:#a0a0b0;max-width:400px;margin:0 auto 2rem;line-height:1.7}
+    .nl-form{display:flex;gap:12px;max-width:440px;margin:0 auto}
+    .nl-form input{flex:1;padding:13px 20px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#f0ece4;font-family:"DM Sans";font-size:.88rem;outline:none}
+    .nl-form .btn{padding:13px 26px;border-radius:12px;border:none;background:#2D7EFF;color:#fff;font-family:"DM Sans";font-size:.88rem;font-weight:600;cursor:pointer}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:768px){.post-title{font-size:1.8rem}.hero-img{height:220px}.card-inner{padding:24px 22px}.author-box{flex-direction:column;text-align:center}.related-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:1fr 1fr}}
+    @media(max-width:480px){.post-title{font-size:1.5rem}.stat-row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <nav class="navbar" role="navigation"><a href="index.html" class="navbar-brand"><span class="logo-3d"><svg width="38" height="38" viewBox="0 0 48 48" fill="none"><defs><linearGradient id="houseGrad" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#2D7EFF"/><stop offset="50%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#F5A623"/></linearGradient><linearGradient id="roofGrad" x1="8" y1="8" x2="40" y2="24"><stop offset="0%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#2D7EFF"/></linearGradient><linearGradient id="bodyGrad" x1="12" y1="22" x2="36" y2="44"><stop offset="0%" stop-color="rgba(45,126,255,0.25)"/><stop offset="100%" stop-color="rgba(45,126,255,0.08)"/></linearGradient><filter id="glow3d"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><ellipse cx="24" cy="43" rx="14" ry="3" fill="rgba(0,0,0,0.2)"/><g filter="url(#glow3d)"><rect x="10" y="22" width="28" height="20" rx="2" fill="url(#bodyGrad)" stroke="url(#houseGrad)" stroke-width="1.5"/><path d="M6 24L24 8L42 24" stroke="url(#roofGrad)" stroke-width="2.5" fill="rgba(45,126,255,0.1)" stroke-linejoin="round"/><rect x="20" y="30" width="8" height="12" rx="1" fill="rgba(245,166,35,0.2)" stroke="#F5A623" stroke-width="1"/><circle cx="26" cy="36" r="1" fill="#F5A623" opacity="0.8"/><rect x="13" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/><rect x="30" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/></g></svg></span> Mortgage &amp; Loans</a>
+    <button class="navbar-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <ul class="navbar-nav"><li><a href="index.html" class="nav-link">Home</a></li><li><a href="mortgage-calculator.html" class="nav-link">Mortgage</a></li><li><a href="how-much-house-can-i-afford.html" class="nav-link">Affordability</a></li><li><a href="refinance-calculator.html" class="nav-link">Refinance</a></li><li><a href="rent-vs-buy-calculator.html" class="nav-link">Rent vs Buy</a></li><li><a href="loan-comparison.html" class="nav-link">Compare</a></li><li><a href="debt-to-income-calculator.html" class="nav-link">DTI</a></li><li><a href="extra-payment-calculator.html" class="nav-link">Extra Payment</a></li><li><a href="biweekly-payment-calculator.html" class="nav-link">Biweekly</a></li><li><a href="interest-rate-impact.html" class="nav-link">Rates</a></li><li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li><li><a href="blog.html" class="nav-link active">Blog</a></li></ul></nav>
+  <div id="counter-widget" style="position:fixed;bottom:14px;left:14px;display:flex;align-items:center;gap:10px;padding:7px 14px;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,0.08);border-radius:50px;font-family:JetBrains Mono,monospace;font-size:0.68rem;color:#8B9DC3;backdrop-filter:blur(16px);z-index:999;box-shadow:0 6px 24px rgba(0,0,0,0.35);"><div style="display:flex;align-items:center;gap:4px;"><span style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse 2s infinite;"></span><span class="cw-online" style="color:#10B981;font-weight:600;">0</span><span>Online</span></div><span style="color:rgba(255,255,255,0.12);">|</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:#2D7EFF;">●</span><span class="cw-views" style="color:#2D7EFF;font-weight:600;">0</span><span>Views</span></div><span style="color:rgba(255,255,255,0.12);">|</span><div style="display:flex;align-items:center;gap:4px;"><span style="color:#F5A623;">●</span><span class="cw-visitors" style="color:#F5A623;font-weight:600;">0</span><span>Visitors</span></div></div>
+  <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}</style>
+  <main class="page-content"><div class="post-layout">
+    <section class="post-hero">
+      <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><a href="blog.html">Blog</a><span class="sep">/</span><span>Finance</span></div>
+      <div class="post-cat"><span class="dot"></span> Finance</div>
+      <h1 class="post-title gradient-text">düzey görevlere odaklanma</h1>
+      <p class="post-sub">Yapay zeka araçları (GitHub Copilot, Claude, ChatGPT vb.) artık yalnızca basit kod tamamlama değil, karmaşık algoritmalar yazma, hata ayıklama ve dokümantasyon oluşturma konularında da ciddi başarı gösteriyor. Bu durum, özellikle junior geliştiriciler arasında "yapay zeka işimizi elimizden alacak mı?" sorusunu gündeme taşıdı.
+Ancak uzmanlar farklı bir tablo çiziyor: Yapay zeka, geliştiricileri ortadan kaldırmıyor; aksine onların daha stratejik, yaratıcı ve üst düzey görevlere odaklanmasını sağlıyor. Tekrarlayan ve zaman alan işler otomatikleşirken, problem çözme, mimari tasarım ve kullanıcı odaklı düşünme becerileri daha da değer kazanıyor.</p>
+      <div class="post-meta"><div class="author-chip"><div class="avatar">S</div><span class="name">sarah</span></div><span class="meta-sep">|</span><span>Apr 24, 2026</span><span class="meta-sep">|</span><span class="read-time"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 8 min read</span></div>
+        <div class="hero-img">
+          <svg viewBox="0 0 160 160" fill="none"><defs><linearGradient id="hg" x1="0" y1="0" x2="160" y2="160"><stop stop-color="#2D7EFF"/><stop offset="1" stop-color="#5A9AFF"/></linearGradient></defs><circle cx="80" cy="80" r="60" stroke="url(#hg)" stroke-width="2" fill="none" opacity=".2"/><path d="M80 40v40l24 16" stroke="url(#hg)" stroke-width="2.5" fill="none" opacity=".3"/><text x="80" y="92" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#5A9AFF" opacity=".15">%</text></svg>
+        </div>
+    </section>
+    <article class="post-body">
+
+        <div class="card">
+          <div class="card-stripe stripe-teal"></div>
+          <div class="card-inner">
+            <div class="card-icon ic-teal"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+            <h2>düzey görevlere odaklanma</h2>
+            <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Understanding Mortgage Rates — Mortgage &amp; Loans</title>
+  <meta name="description" content="Understanding mortgage rates can save you tens of thousands over the life of your loan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <script src="shared.js" defer></script>
+  <style>
+    /* ═══════════════════════════════════════════
+       CARD GLOW SYSTEM — exact copy from DTI page
+       ═══════════════════════════════════════════ */
+    .card,.loan-type-card,.result-hero{position:relative;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,0.06);transition:box-shadow .4s ease}
+    .card::before,.loan-type-card::before,.result-hero::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(650px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.18) 0%,rgba(90,154,255,.08) 20%,rgba(245,166,35,.04) 35%,transparent 50%);opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:0}
+    .card:hover::before,.loan-type-card:hover::before,.result-hero:hover::before{opacity:1}
+    .card::after,.loan-type-card::after,.result-hero::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:radial-gradient(450px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.7) 0%,rgba(90,154,255,.3) 20%,rgba(245,166,35,.1) 40%,transparent 55%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:2}
+    .card:hover::after,.loan-type-card:hover::after,.result-hero:hover::after{opacity:1}
+    .card:hover,.loan-type-card:hover,.result-hero:hover{box-shadow:0 0 1px 1px rgba(45,126,255,.35),0 0 40px rgba(45,126,255,.12),0 25px 60px rgba(0,0,0,.35)}
+    .card>*,.loan-type-card>*,.result-hero>*{position:relative;z-index:3}
+
+    /* ═══ POST LAYOUT ═══ */
+    .post-layout{max-width:1100px;margin:0 auto;padding:0 24px}
+
+    /* ═══ POST HERO ═══ */
+    .post-hero{padding:56px 0 0;animation:fadeInUp .7s ease forwards;opacity:0}
+    .post-hero .breadcrumb{margin-bottom:20px}
+    .post-cat{display:inline-flex;align-items:center;gap:6px;padding:5px 16px;border-radius:50px;background:rgba(45,126,255,.12);color:var(--accent,#2D7EFF);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+    .post-cat .dot{width:6px;height:6px;border-radius:50%;background:var(--accent,#2D7EFF)}
+    .post-title{font-family:var(--font-display,'Syne',sans-serif);font-size:2.6rem;font-weight:800;line-height:1.2;margin-bottom:16px}
+    .post-sub{font-size:1.1rem;color:var(--text-secondary,#a0a0b0);line-height:1.8;margin-bottom:28px;max-width:680px}
+    .post-meta{display:flex;align-items:center;gap:16px;padding:18px 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);font-size:.82rem;color:var(--text-muted,#6b6880);flex-wrap:wrap}
+    .author-chip{display:flex;align-items:center;gap:10px}
+    .author-chip .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent,#2D7EFF),#5A9AFF);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:.78rem;font-weight:600;color:#fff}
+    .author-chip .name{color:var(--text-primary,#f0ece4);font-weight:600}
+    .meta-sep{color:rgba(255,255,255,.1)}
+    .read-time{display:flex;align-items:center;gap:5px;color:var(--accent,#2D7EFF);font-weight:600}
+
+    /* ═══ HERO IMAGE ═══ */
+    .hero-img{margin-top:28px;height:340px;border-radius:var(--radius-md,16px);background:linear-gradient(135deg,rgba(45,126,255,.08) 0%,rgba(245,166,35,.04) 50%,rgba(90,154,255,.06) 100%);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;animation:fadeInUp .8s ease forwards;opacity:0;animation-delay:.1s}
+    .hero-img svg{width:100px;height:100px;opacity:.12}
+    .hero-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,18,.5) 0%,transparent 50%)}
+
+    /* ═══ POST BODY ═══ */
+    .post-body{padding:40px 0 60px;display:flex;flex-direction:column;gap:24px;animation:fadeInUp .8s ease forwards;opacity:0;animation-delay:.2s}
+
+    /* ═══ CARD INNER ═══ */
+    .card-inner{padding:32px 36px}
+    .card-inner h2{font-family:var(--font-display,'Syne',sans-serif);font-size:1.45rem;font-weight:700;margin-bottom:16px;line-height:1.3;color:var(--text-primary,#f0ece4)}
+    .card-inner h3{font-family:var(--font-display,'Syne',sans-serif);font-size:1.1rem;font-weight:700;margin-bottom:12px;line-height:1.3;color:var(--text-primary,#f0ece4)}
+    .card-inner p{font-size:.96rem;color:var(--text-secondary,#a0a0b0);line-height:1.85;margin-bottom:14px}
+    .card-inner p:last-child{margin-bottom:0}
+    .card-inner strong{color:var(--text-primary,#f0ece4);font-weight:600}
+    .card-inner em{color:#5A9AFF;font-style:italic}
+    .card-inner ul{margin:12px 0;padding-left:24px}
+    .card-inner ul li{font-size:.92rem;color:var(--text-secondary,#a0a0b0);line-height:1.8;margin-bottom:6px}
+    .card-inner ul li strong{color:var(--text-primary,#f0ece4)}
+
+    /* Card stripe */
+    .card-stripe{height:3px;border-radius:var(--radius-md,16px) var(--radius-md,16px) 0 0;position:absolute;top:0;left:0;right:0;z-index:4}
+    .stripe-blue{background:linear-gradient(90deg,#2D7EFF,#5A9AFF)}
+    .stripe-green{background:linear-gradient(90deg,#10B981,#34D399)}
+    .stripe-gold{background:linear-gradient(90deg,#F5A623,#FCD34D)}
+    .stripe-purple{background:linear-gradient(90deg,#6C5CE7,#A29BFE)}
+    .stripe-red{background:linear-gradient(90deg,#EF4444,#F87171)}
+    .stripe-teal{background:linear-gradient(90deg,#00CEC9,#00B4D8)}
+
+    /* Card icon */
+    .card-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+    .card-icon svg{width:20px;height:20px;stroke-width:2;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+    .ic-blue{background:rgba(45,126,255,.12);color:#5A9AFF}
+    .ic-green{background:rgba(16,185,129,.12);color:#34D399}
+    .ic-gold{background:rgba(245,166,35,.12);color:#FCD34D}
+    .ic-purple{background:rgba(108,92,231,.12);color:#A29BFE}
+    .ic-red{background:rgba(239,68,68,.10);color:#F87171}
+    .ic-teal{background:rgba(0,206,201,.10);color:#00CEC9}
+
+    /* ═══ STAT ROW ═══ */
+    .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .stat-card{text-align:center;padding:22px 12px;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-md,16px);position:relative;overflow:hidden;transition:box-shadow .4s ease}
+    .stat-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.15) 0%,transparent 50%);opacity:0;transition:opacity .4s ease;pointer-events:none;z-index:0}
+    .stat-card:hover::before{opacity:1}
+    .stat-card:hover{box-shadow:0 0 1px 1px rgba(45,126,255,.25),0 0 30px rgba(45,126,255,.08),0 15px 40px rgba(0,0,0,.3)}
+    .stat-card>*{position:relative;z-index:3}
+    .stat-num{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:1.5rem;font-weight:600;color:var(--accent,#2D7EFF);margin-bottom:4px}
+    .stat-lbl{font-size:.75rem;color:var(--text-muted,#6b6880);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+
+    /* ═══ TAKEAWAY BOX ═══ */
+    .takeaway{padding:24px 28px;border-radius:14px;background:rgba(45,126,255,.06);border:1px solid rgba(45,126,255,.12);border-left:3px solid var(--accent,#2D7EFF)}
+    .takeaway p{font-size:.92rem;color:var(--text-secondary,#a0a0b0);line-height:1.75;margin:0}
+    .takeaway strong{color:var(--accent,#2D7EFF)}
+
+    /* ═══ IMG PLACEHOLDER ═══ */
+    .img-ph{height:240px;border-radius:var(--radius-md,16px);background:linear-gradient(135deg,rgba(45,126,255,.06) 0%,rgba(0,206,201,.04) 100%);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;position:relative}
+    .img-ph svg{width:44px;height:44px;opacity:.1}
+    .img-ph .cap{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:4px}
+    .img-ph .cap span{width:36px;height:7px;border-radius:4px;background:rgba(255,255,255,.04)}
+
+    /* ═══ TAGS ═══ */
+    .tags{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{padding:6px 16px;border-radius:50px;font-size:.78rem;font-weight:600;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:var(--text-muted,#6b6880);text-decoration:none;transition:all .3s ease}
+    .tag:hover{color:var(--accent,#2D7EFF);border-color:rgba(45,126,255,.25);background:rgba(45,126,255,.06)}
+
+    /* ═══ SHARE ═══ */
+    .share-row{display:flex;align-items:center;gap:14px}
+    .share-row span{font-size:.82rem;color:var(--text-muted,#6b6880);font-weight:600}
+    .share-btn{width:40px;height:40px;border-radius:12px;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow .4s ease;position:relative;overflow:hidden}
+    .share-btn::before{content:'';position:absolute;inset:0;border-radius:12px;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.2) 0%,transparent 70%);opacity:0;transition:opacity .3s ease;z-index:1;pointer-events:none}
+    .share-btn:hover::before{opacity:1}
+    .share-btn:hover{box-shadow:0 0 1px 1px rgba(45,126,255,.25),0 0 20px rgba(45,126,255,.08)}
+    .share-btn svg{width:17px;height:17px;stroke:var(--text-muted,#6b6880);fill:none;stroke-width:2;position:relative;z-index:2;transition:stroke .3s ease}
+    .share-btn:hover svg{stroke:var(--accent,#2D7EFF)}
+
+    /* ═══ AUTHOR BOX ═══ */
+    .author-box{padding:32px;border-radius:var(--radius-md,16px);background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);display:flex;gap:24px;align-items:center;transition:box-shadow .4s ease;position:relative;overflow:hidden}
+    .author-box::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(650px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.14) 0%,transparent 50%);opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:0}
+    .author-box:hover::before{opacity:1}
+    .author-box::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:radial-gradient(450px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.6) 0%,transparent 55%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:2}
+    .author-box:hover::after{opacity:1}
+    .author-box:hover{box-shadow:0 0 1px 1px rgba(45,126,255,.30),0 0 30px rgba(45,126,255,.10),0 20px 50px rgba(0,0,0,.30)}
+    .author-box>*{position:relative;z-index:3}
+    .ab-avatar{width:60px;height:60px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--accent,#2D7EFF),#5A9AFF);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:1rem;font-weight:600;color:#fff}
+    .ab-info h4{font-family:var(--font-display,'Syne',sans-serif);font-size:1rem;font-weight:700;margin-bottom:4px;color:var(--text-primary,#f0ece4)}
+    .ab-info p{font-size:.84rem;color:var(--text-muted,#6b6880);line-height:1.65}
+
+    /* ═══ RELATED ═══ */
+    .related{padding:0 0 40px;animation:fadeInUp .8s ease forwards;opacity:0;animation-delay:.3s}
+    .related h3{font-family:var(--font-display,'Syne',sans-serif);font-size:1.4rem;font-weight:700;margin-bottom:24px}
+    .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .rel-card{position:relative;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-md,16px);overflow:hidden;text-decoration:none;color:inherit;transition:box-shadow .4s ease;cursor:pointer;display:block}
+    .rel-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(500px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.15) 0%,transparent 50%);opacity:0;transition:opacity .4s ease;pointer-events:none;z-index:0}
+    .rel-card:hover::before{opacity:1}
+    .rel-card::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:radial-gradient(350px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.6) 0%,transparent 55%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s ease;pointer-events:none;z-index:2}
+    .rel-card:hover::after{opacity:1}
+    .rel-card:hover{box-shadow:0 0 1px 1px rgba(45,126,255,.30),0 0 30px rgba(45,126,255,.10),0 20px 50px rgba(0,0,0,.30)}
+    .rel-img{height:110px;background:linear-gradient(135deg,rgba(45,126,255,.06) 0%,rgba(90,154,255,.03) 100%);display:flex;align-items:center;justify-content:center}
+    .rel-img svg{width:36px;height:36px;opacity:.12}
+    .rel-body{padding:16px 20px;position:relative;z-index:3}
+    .rel-body h4{font-size:.92rem;font-weight:700;line-height:1.4;margin-bottom:6px;color:var(--text-primary,#f0ece4)}
+    .rel-body span{font-size:.75rem;color:var(--text-muted,#6b6880)}
+
+    /* ═══ NEWSLETTER ═══ */
+    .nl-wrap{animation:fadeInUp .8s ease forwards;opacity:0;animation-delay:.35s}
+    .nl-card{position:relative;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-md,16px);padding:48px 40px;text-align:center;transition:box-shadow .4s ease;cursor:default;overflow:hidden}
+    .nl-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(650px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.16) 0%,transparent 50%);opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:0}
+    .nl-card:hover::before{opacity:1}
+    .nl-card::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:radial-gradient(450px circle at var(--mx,50%) var(--my,50%),rgba(45,126,255,.6) 0%,transparent 55%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:2}
+    .nl-card:hover::after{opacity:1}
+    .nl-card:hover{box-shadow:0 0 1px 1px rgba(45,126,255,.30),0 0 30px rgba(45,126,255,.10),0 20px 50px rgba(0,0,0,.30)}
+    .nl-card>*{position:relative;z-index:3}
+    .nl-card h2{font-size:1.5rem;font-weight:800;margin-bottom:.75rem;font-family:var(--font-display,'Syne',sans-serif)}
+    .nl-card p{font-size:.92rem;color:var(--text-secondary,#a0a0b0);max-width:400px;margin:0 auto 2rem;line-height:1.7}
+    .nl-form{display:flex;gap:12px;max-width:440px;margin:0 auto}
+    .nl-form input{flex:1;padding:13px 20px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:var(--text-primary,#f0ece4);font-family:var(--font-body,'DM Sans',sans-serif);font-size:.88rem;outline:none;transition:border-color .3s ease,box-shadow .3s ease}
+    .nl-form input::placeholder{color:var(--text-muted,#6b6880)}
+    .nl-form input:focus{border-color:rgba(45,126,255,.5);box-shadow:0 0 20px rgba(45,126,255,.1)}
+    .nl-form .btn{padding:13px 26px;border-radius:12px;border:none;background:var(--accent,#2D7EFF);color:#fff;font-family:var(--font-body,'DM Sans',sans-serif);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .3s ease}
+    .nl-form .btn:hover{background:#5A9AFF;box-shadow:0 4px 20px rgba(45,126,255,.4)}
+    .nl-dots{position:absolute;bottom:20px;left:20px;display:flex;gap:6px;pointer-events:none;z-index:3}
+    .nl-dots span{width:4px;height:4px;border-radius:50%;background:var(--accent,#2D7EFF);opacity:.25}
+    .nl-dots span:nth-child(2){opacity:.15}
+    .nl-dots span:nth-child(3){opacity:.08}
+
+    /* ═══ ANIM ═══ */
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ═══ RESPONSIVE ═══ */
+    @media(max-width:768px){
+      .post-title{font-size:1.8rem}
+      .post-sub{font-size:1rem}
+      .hero-img{height:220px}
+      .card-inner{padding:24px 22px}
+      .author-box{flex-direction:column;text-align:center}
+      .related-grid{grid-template-columns:1fr}
+      .nl-card{padding:32px 20px}
+      .nl-form{flex-direction:column}
+      .stat-row{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:480px){
+      .post-title{font-size:1.5rem}
+      .post-hero{padding:36px 0 0}
+      .post-layout{padding:0 16px}
+      .stat-row{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAVBAR — identical to DTI page ═══ -->
+  <nav class="navbar" role="navigation">
+    <a href="index.html" class="navbar-brand">
+      <span class="logo-3d">
+        <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
+          <defs>
+            <linearGradient id="houseGrad" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#2D7EFF"/><stop offset="50%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#F5A623"/></linearGradient>
+            <linearGradient id="roofGrad" x1="8" y1="8" x2="40" y2="24"><stop offset="0%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#2D7EFF"/></linearGradient>
+            <linearGradient id="bodyGrad" x1="12" y1="22" x2="36" y2="44"><stop offset="0%" stop-color="rgba(45,126,255,0.25)"/><stop offset="100%" stop-color="rgba(45,126,255,0.08)"/></linearGradient>
+            <filter id="glow3d"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <ellipse cx="24" cy="43" rx="14" ry="3" fill="rgba(0,0,0,0.2)"/>
+          <g filter="url(#glow3d)">
+            <rect x="10" y="22" width="28" height="20" rx="2" fill="url(#bodyGrad)" stroke="url(#houseGrad)" stroke-width="1.5"/>
+            <path d="M6 24L24 8L42 24" stroke="url(#roofGrad)" stroke-width="2.5" fill="rgba(45,126,255,0.1)" stroke-linejoin="round"/>
+            <path d="M14 20L24 10L28 14" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-linecap="round"/>
+            <rect x="20" y="30" width="8" height="12" rx="1" fill="rgba(245,166,35,0.2)" stroke="#F5A623" stroke-width="1"/>
+            <circle cx="26" cy="36" r="1" fill="#F5A623" opacity="0.8"/>
+            <rect x="13" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/>
+            <rect x="30" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/>
+          </g>
+        </svg>
+      </span>
+      Mortgage &amp; Loans
+    </a>
+    <button class="navbar-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="mortgage-calculator.html" class="nav-link">Mortgage</a></li>
+      <li><a href="how-much-house-can-i-afford.html" class="nav-link">Affordability</a></li>
+      <li><a href="refinance-calculator.html" class="nav-link">Refinance</a></li>
+      <li><a href="rent-vs-buy-calculator.html" class="nav-link">Rent vs Buy</a></li>
+      <li><a href="loan-comparison.html" class="nav-link">Compare</a></li>
+      <li><a href="debt-to-income-calculator.html" class="nav-link">DTI</a></li>
+      <li><a href="extra-payment-calculator.html" class="nav-link">Extra Payment</a></li>
+      <li><a href="biweekly-payment-calculator.html" class="nav-link">Biweekly</a></li>
+      <li><a href="interest-rate-impact.html" class="nav-link">Rates</a></li>
+      <li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li>
+      <li><a href="blog.html" class="nav-link active">Blog</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══ COUNTER WIDGET — identical to DTI page ═══ -->
+  <div id="counter-widget" style="position:fixed;bottom:14px;left:14px;display:flex;align-items:center;gap:10px;padding:7px 14px;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,0.08);border-radius:50px;font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:#8B9DC3;backdrop-filter:blur(16px);z-index:999;box-shadow:0 6px 24px rgba(0,0,0,0.35);">
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse 2s infinite;"></span>
+      <span class="cw-online" style="color:#10B981;font-weight:600;">0</span>
+      <span>Online</span>
+    </div>
+    <span style="color:rgba(255,255,255,0.12);">|</span>
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span style="color:#2D7EFF;">●</span>
+      <span class="cw-views" style="color:#2D7EFF;font-weight:600;">0</span>
+      <span>Views</span>
+    </div>
+    <span style="color:rgba(255,255,255,0.12);">|</span>
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span style="color:#F5A623;">●</span>
+      <span class="cw-visitors" style="color:#F5A623;font-weight:600;">0</span>
+      <span>Visitors</span>
+    </div>
+  </div>
+  <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}</style>
+
+  <main class="page-content">
+    <div class="post-layout">
+
+      <!-- ═══ POST HERO ═══ -->
+      <section class="post-hero">
+        <div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><a href="blog.html">Blog</a><span class="sep">/</span><span>Mortgage Rates</span></div>
+        <div class="post-cat"><span class="dot"></span> Mortgage</div>
+        <h1 class="post-title gradient-text">Understanding How Mortgage Rates Work</h1>
+        <p class="post-sub">Understanding mortgage rates can save you tens of thousands over the life of your loan.</p>
+        <div class="post-meta">
+          <div class="author-chip">
+            <div class="avatar">SM</div>
+            <span class="name">Sarah Mitchell</span>
+          </div>
+          <span class="meta-sep">|</span>
+          <span>Apr 20, 2026</span>
+          <span class="meta-sep">|</span>
+          <span class="read-time">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            8 min read
+          </span>
+        </div>
+        <div class="hero-img">
+          <svg viewBox="0 0 160 160" fill="none"><defs><linearGradient id="hg" x1="0" y1="0" x2="160" y2="160"><stop stop-color="#2D7EFF"/><stop offset="1" stop-color="#5A9AFF"/></linearGradient></defs><circle cx="80" cy="80" r="60" stroke="url(#hg)" stroke-width="2" fill="none" opacity=".2"/><path d="M80 40v40l24 16" stroke="url(#hg)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".3"/><text x="80" y="92" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#5A9AFF" opacity=".15">%</text></svg>
+        </div>
+      </section>
+
+      <!-- ═══ POST BODY ═══ -->
+      <article class="post-body">
+
+        <div class="card">
+            <div class="card-inner">
+            <div class="card-icon ic-blue"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></div>
+            <h2>Introduction</h2>
+            <p>Mortgage rates are influenced by a complex web of economic factors, from the Federal Reserve's monetary policy to global bond market movements. Understanding these forces can help you <strong>time your application strategically</strong> and potentially save thousands of dollars over the life of your loan.</p>
+            <p>The most closely watched benchmark is the <em>10-year Treasury yield</em>, which historically correlates strongly with 30-year fixed mortgage rates. When Treasury yields rise, mortgage rates typically follow, and vice versa.</p>
+          </div>
+        </div>
+
+        <div class="card">
+            <div class="card-inner">
+            <div class="card-icon ic-green"><svg viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg></div>
+            <h2>Key Factors That Influence Mortgage Rates</h2>
+            <p>Several interconnected forces determine where mortgage rates stand at any given time. While borrowers cannot control these macroeconomic factors, understanding them helps in making informed decisions about when to lock in a rate.</p>
+            <ul>
+              <li><strong>Federal Reserve Policy</strong> — The Fed's federal funds rate indirectly influences mortgage rates through its effect on short-term borrowing costs and market expectations.</li>
+              <li><strong>Inflation</strong> — Higher inflation erodes the purchasing power of future mortgage payments, leading lenders to demand higher rates as compensation.</li>
+              <li><strong>Economic Growth</strong> — Strong GDP growth typically pushes rates higher as demand for credit increases across the economy.</li>
+              <li><strong>Bond Market</strong> — Mortgage-backed securities compete with Treasury bonds for investor capital, creating a direct link between bond yields and mortgage rates.</li>
+              <li><strong>Housing Market Conditions</strong> — Local supply and demand dynamics can affect the spread between benchmark rates and actual mortgage rates offered to consumers.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-num">6.75%</div><div class="stat-lbl">Avg 30-Yr Rate</div></div>
+          <div class="stat-card"><div class="stat-num">$4.2K</div><div class="stat-lbl">Savings per 0.5%</div></div>
+          <div class="stat-card"><div class="stat-num">740+</div><div class="stat-lbl">Best Rate Score</div></div>
+          <div class="stat-card"><div class="stat-num">30 Yr</div><div class="stat-lbl">Most Popular Term</div></div>
+        </div>
+
+        <div class="card">
+            <div class="card-inner">
+            <div class="card-icon ic-gold"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8l-4 4-4-4"/><path d="M16 16l-4-4-4 4"/></svg></div>
+            <h2>How Lenders Set Your Rate</h2>
+            <p>While macroeconomic factors set the baseline, your individual rate depends on several personal financial factors. Lenders assess risk at the borrower level, which means two people applying on the same day could receive very different rate quotes.</p>
+            <ul>
+              <li><strong>Credit Score</strong> — Borrowers with scores above 740 typically receive the best rates. Each 20-point improvement can lower your rate by 0.125% to 0.25%.</li>
+              <li><strong>Down Payment</strong> — A larger down payment reduces the lender's risk. Putting 20% or more down often unlocks better rates and eliminates PMI.</li>
+              <li><strong>Loan-to-Value Ratio (LTV)</strong> — Lower LTV ratios signal less risk. An LTV below 80% is the threshold for avoiding private mortgage insurance.</li>
+              <li><strong>Debt-to-Income Ratio (DTI)</strong> — Lenders prefer DTI below 43%. Lower DTI demonstrates stronger ability to manage monthly payments.</li>
+              <li><strong>Loan Type and Term</strong> — 15-year terms carry lower rates than 30-year terms. FHA, VA, and conventional loans each have different rate structures.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+            <div class="card-inner">
+            <div class="card-icon ic-purple"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+            <h2>Rate Lock Strategy</h2>
+            <p>Once you've found a favorable rate, a <strong>rate lock</strong> guarantees that rate for a set period — typically 30 to 60 days. This protects you from rate increases while your loan is being processed and underwritten.</p>
+            <p>Consider these strategies when deciding to lock:</p>
+            <ul>
+              <li>Lock when rates are at or near recent lows, even if you think they might drop slightly further.</li>
+              <li>Extended locks (90+ days) are available but usually come with a fee or slightly higher rate.</li>
+              <li>Some lenders offer a "float-down" option that lets you capture a lower rate if rates drop after you lock.</li>
+              <li>Monitor the <em>10-year Treasury yield</em> daily during your lock period for early signals of rate movements.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="img-ph">
+          <svg viewBox="0 0 80 80" fill="none"><rect x="10" y="15" width="60" height="50" rx="6" stroke="#5A9AFF" stroke-width="1.5" fill="none" opacity=".3"/><circle cx="30" cy="35" r="8" stroke="#5A9AFF" stroke-width="1" fill="none" opacity=".2"/><path d="M10 55l18-15 12 10 15-18 15 13" stroke="#5A9AFF" stroke-width="1.5" fill="none" opacity=".2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="cap"><span></span><span></span><span></span></div>
+        </div>
+
+        <div class="card">
+            <div class="card-inner">
+            <div class="card-icon ic-red"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <h2>Common Mistakes to Avoid</h2>
+            <p>Many borrowers unknowingly cost themselves money by making avoidable mistakes during the mortgage process. Being aware of these pitfalls can save you significant amounts over the life of your loan.</p>
+            <ul>
+              <li><strong>Shopping with only one lender</strong> — Rates can vary by 0.25% to 0.5% between lenders. Always compare at least three quotes.</li>
+              <li><strong>Making major purchases before closing</strong> — New debt changes your DTI and credit score, potentially disqualifying you or raising your rate.</li>
+              <li><strong>Ignoring points</strong> — Paying discount points upfront can lower your rate significantly if you plan to stay in the home beyond the break-even period.</li>
+              <li><strong>Focusing only on the rate</strong> — The APR includes fees and gives a more complete picture of the loan's true cost.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">         
+          <div class="card-inner">
+            <div class="card-icon ic-teal"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+            <h2>Key Takeaways</h2>
+            <p>Understanding mortgage rates empowers you to make smarter financial decisions. Here are the most important points to remember:</p>
+            <ul>
+              <li>The <em>10-year Treasury yield</em> is the strongest predictor of where 30-year fixed mortgage rates are heading.</li>
+              <li>Your personal financial profile — credit score, down payment, DTI — has a significant impact on the rate you receive.</li>
+              <li>Timing matters, but trying to perfectly time the market is nearly impossible. Focus on what you can control.</li>
+              <li>Always compare multiple lenders and consider the full APR, not just the advertised rate.</li>
+              <li>A rate lock provides valuable protection during the closing process, especially in volatile markets.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="takeaway">
+          <p><strong>Pro Tip:</strong> Even a 0.5% difference in your mortgage rate can save you over $30,000 in interest on a $400,000 loan over 30 years. Taking the time to improve your credit and shop around is one of the highest-return investments you can make.</p>
+        </div>
+
+        <div class="tags">
+          <a href="#" class="tag">Mortgage Rates</a>
+          <a href="#" class="tag">Home Buying</a>
+          <a href="#" class="tag">Interest Rates</a>
+          <a href="#" class="tag">Financial Planning</a>
+          <a href="#" class="tag">2026 Market</a>
+        </div>
+
+        <div class="share-row">
+          <span>Share:</span>
+          <button class="share-btn" aria-label="Share on Twitter"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></button>
+          <button class="share-btn" aria-label="Share on LinkedIn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></button>
+          <button class="share-btn" aria-label="Copy link"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+        </div>
+
+        <div class="author-box">
+          <div class="ab-avatar">SM</div>
+          <div class="ab-info">
+            <h4>Sarah Mitchell</h4>
+            <p>Financial writer specializing in mortgage markets and personal finance. With over 10 years of experience covering housing economics, Sarah helps borrowers navigate the complexities of home financing with clarity and confidence.</p>
+          </div>
+        </div>
+
+      </article>
+  </main>
+
+  <!-- ═══ FOOTER — identical to DTI page ═══ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>Mortgage &amp; Loans</h4>
+          <p>Free, professional-grade mortgage calculators. Standard formulas, transparent methodology.</p>
+          <p style="margin-top:8px;font-size:0.78rem;color:var(--text-muted)">Equal Housing Opportunity</p>
+        </div>
+        <div class="footer-section">
+          <h4>Calculators</h4>
+          <a href="mortgage-calculator.html">Mortgage Calculator</a>
+          <a href="how-much-house-can-i-afford.html">Affordability</a>
+          <a href="refinance-calculator.html">Refinance</a>
+          <a href="rent-vs-buy-calculator.html">Rent vs Buy</a>
+          <a href="loan-comparison.html">Loan Comparison</a>
+          <a href="debt-to-income-calculator.html">DTI Calculator</a>
+        </div>
+        <div class="footer-section">
+          <h4>More Tools</h4>
+          <a href="extra-payment-calculator.html">Extra Payments</a>
+          <a href="biweekly-payment-calculator.html">Biweekly Payments</a>
+          <a href="interest-rate-impact.html">Rate Impact</a>
+          <a href="construction-loan-calculator.html">Construction Loan</a>
+          <a href="blog.html">Blog</a>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-of-use.html">Terms of Use</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mortgage &amp; Loans. All rights reserved.</p>
+        <p style="margin-top:6px;font-size:0.75rem;color:var(--text-muted);line-height:1.6">
+          <strong>Mortgage Loans:</strong> This website does not originate mortgage loans. Educational free calculators only.<br>
+          <strong>Fair Housing Act:</strong> We comply with 42 USC 3601. <strong>ECOA:</strong> We comply with 15 USC 1691.<br>
+          All results are estimates only and are <strong>NOT financial advice</strong>.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══ JS — card glow identical to DTI page ═══ -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    function initDynamicCards() {
+      document.querySelectorAll('.card,.stat-card,.rel-card,.nl-card,.share-btn,.author-box').forEach(card => {
+        if (card._dcInit) return;
+        card._dcInit = true;
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left, y = e.clientY - rect.top;
+          card.style.setProperty('--mx', x + 'px');
+          card.style.setProperty('--my', y + 'px');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.setProperty('--mx', '50%');
+          card.style.setProperty('--my', '50%');
+        });
+      });
+    }
+    initDynamicCards();
+  });
+  </script>
+  <script src="analytics.js" defer></script>
+  <script src="counter.js" defer></script>
+</body>
+</html>
+          </div>
+        </div>
+
+        <div class="tags">
+          <a href="#" class="tag">n daha strat</a>
+        </div>
+
+      <div class="share-row"><span>Share:</span><button class="share-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></button><button class="share-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></button><button class="share-btn"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button></div>
+      <div class="author-box"><div class="ab-avatar">S</div><div class="ab-info"><h4>sarah</h4><p>Content writer specializing in mortgage markets.</p></div></div>
+    </article>
+
+    <div class="nl-wrap"><div class="nl-card"><h2 class="gradient-text">Stay Informed</h2><p>Get weekly mortgage tips and rate updates.</p><form class="nl-form" onsubmit="event.preventDefault()"><input type="email" placeholder="Your email"><button type="submit" class="btn">Subscribe</button></form></div></div>
+  </div></main>
+  <footer class="site-footer" role="contentinfo"><div class="footer-inner"><div class="footer-grid"><div class="footer-section"><h4>Mortgage &amp; Loans</h4><p>Free mortgage calculators.</p></div><div class="footer-section"><h4>Calculators</h4><a href="mortgage-calculator.html">Mortgage</a><a href="how-much-house-can-i-afford.html">Affordability</a><a href="refinance-calculator.html">Refinance</a></div><div class="footer-section"><h4>Tools</h4><a href="extra-payment-calculator.html">Extra Payments</a><a href="biweekly-payment-calculator.html">Biweekly</a><a href="blog.html">Blog</a></div><div class="footer-section"><h4>Legal</h4><a href="privacy-policy.html">Privacy</a><a href="terms-of-use.html">Terms</a><a href="contact.html">Contact</a></div></div><div class="footer-bottom"><p>&copy; 2026 Mortgage &amp; Loans.</p><p style="margin-top:6px;font-size:.75rem;color:var(--text-muted)">NOT financial advice. Educational calculators only.</p></div></div></footer>
+  <script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".card,.stat-card,.rel-card,.nl-card,.share-btn,.author-box").forEach(function(c){c.addEventListener("mousemove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-r.left)+"px");c.style.setProperty("--my",(e.clientY-r.top)+"px");});c.addEventListener("mouseleave",function(){c.style.setProperty("--mx","50%");c.style.setProperty("--my","50%");});});});</script>
+  <script src="analytics.js" defer></script>
+  <script src="counter.js" defer></script>
+</body>
+</html>

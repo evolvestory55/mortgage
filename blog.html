@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Mortgage & Loans</title>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wgaihdkccq");
+</script>
+  <meta name="description" content="Mortgage tips, loan guides, and financial insights. Expert articles to help you make smarter home financing decisions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <script src="shared.js" defer></script>
+  <style>
+    :root {
+      --accent-1:#6C5CE7;--accent-2:#00CEC9;--accent-3:#FD79A8;--accent-4:#FDCB6E;
+      --accent-5:#55EFC4;--accent-6:#A29BFE;--accent-7:#FF7675;--accent-8:#E17055;
+      --accent-9:#74B9FF;--accent-10:#DFE6E9;
+      --card-radius:20px;--glow-spread:80px;
+    }
+
+    body::after {
+      content:'';
+      position:fixed;inset:0;z-index:9999;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity:.03;
+    }
+
+    .orb{position:fixed;border-radius:50%;filter:blur(80px);z-index:0;pointer-events:none;animation:orbFloat 20s ease-in-out infinite}
+    .orb-1{width:300px;height:300px;background:rgba(108,92,231,.12);top:-100px;left:-50px;animation-delay:0s}
+    .orb-2{width:250px;height:250px;background:rgba(0,206,201,.08);bottom:-80px;right:-60px;animation-delay:-7s}
+    .orb-3{width:200px;height:200px;background:rgba(253,121,168,.06);top:40%;left:60%;animation-delay:-14s}
+    @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,15px) scale(.95)}}
+
+    .blog-card[data-accent="1"],.featured-card[data-accent="1"],.newsletter-card{--card-accent:var(--accent-1)}
+    .blog-card[data-accent="2"],.featured-card[data-accent="2"]{--card-accent:var(--accent-2)}
+    .blog-card[data-accent="3"],.featured-card[data-accent="3"]{--card-accent:var(--accent-3)}
+    .blog-card[data-accent="4"],.featured-card[data-accent="4"]{--card-accent:var(--accent-4)}
+    .blog-card[data-accent="5"],.featured-card[data-accent="5"]{--card-accent:var(--accent-5)}
+    .blog-card[data-accent="6"],.featured-card[data-accent="6"]{--card-accent:var(--accent-6)}
+    .blog-card[data-accent="7"]{--card-accent:var(--accent-7)}
+    .blog-card[data-accent="8"]{--card-accent:var(--accent-8)}
+    .blog-card[data-accent="9"]{--card-accent:var(--accent-9)}
+
+    .page-hero{text-align:center;padding:80px 0 40px;max-width:700px;margin:0 auto}
+    .page-hero h1{font-size:2.6rem;font-weight:800;margin-bottom:1rem;line-height:1.15}
+    .page-hero p{font-size:1.1rem;color:var(--text-secondary,#a0a0b0);line-height:1.8;max-width:540px;margin:0 auto}
+
+    .filter-bar{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:2rem 0 3rem}
+    .filter-tab{
+      padding:10px 22px;border-radius:50px;font-size:.85rem;font-weight:600;
+      font-family:'DM Sans',sans-serif;border:1px solid rgba(255,255,255,.06);
+      background:var(--surface,#111118);color:var(--text-muted,#6b6880);
+      cursor:pointer;transition:all .3s ease;text-decoration:none;display:inline-block;
+    }
+    .filter-tab:hover{color:var(--accent-6);border-color:rgba(108,92,231,.25);background:rgba(108,92,231,.06)}
+    .filter-tab.active{color:#fff;background:var(--accent-1);border-color:var(--accent-1);box-shadow:0 2px 16px rgba(108,92,231,.3)}
+
+    @keyframes cardReveal{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+    /* ===== Featured Post ===== */
+    .featured-wrapper{
+      margin-bottom:3rem;
+      animation:cardReveal .7s ease forwards;opacity:0;
+    }
+    .featured-card{
+      position:relative;background:var(--surface,#111118);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--card-radius);overflow:hidden;
+      transition:transform .35s cubic-bezier(.23,1,.32,1), box-shadow .35s ease;
+      cursor:pointer;text-decoration:none;color:inherit;display:grid;
+      grid-template-columns:1fr 1fr;min-height:380px;
+    }
+    .featured-card:hover{transform:translateY(-4px) scale(1.01)}
+    .featured-card::before{
+      content:'';position:absolute;inset:0;border-radius:var(--card-radius);
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.1) 0%, transparent 55%);
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .featured-card:hover::before{opacity:1}
+    .featured-card::after{
+      content:'';position:absolute;inset:-1px;border-radius:var(--card-radius);padding:1px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--card-accent) 0%, transparent 55%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .featured-card:hover::after{opacity:.7}
+    .featured-image{
+      background:linear-gradient(135deg, rgba(108,92,231,.12) 0%, rgba(162,155,254,.06) 100%);
+      display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+    }
+    .featured-image svg{width:160px;height:160px;opacity:.3}
+    .featured-image::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg, rgba(108,92,231,.05) 0%, transparent 60%);
+    }
+    .featured-body{padding:48px 40px;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1}
+    .featured-badge{
+      display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:50px;
+      background:rgba(108,92,231,.12);color:var(--accent-6);
+      font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+      margin-bottom:16px;width:fit-content;
+    }
+    .featured-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-6)}
+    .featured-body h2{
+      font-size:1.6rem;font-weight:800;margin-bottom:12px;line-height:1.3;
+      color:var(--text-primary,#f0ece4);
+    }
+    .featured-body p{
+      font-size:.95rem;color:var(--text-secondary,#a0a0b0);line-height:1.7;
+      margin-bottom:24px;
+    }
+    .featured-meta{
+      display:flex;align-items:center;gap:16px;font-size:.78rem;
+      color:var(--text-muted,#6b6880);
+    }
+    .featured-meta .read-time{display:flex;align-items:center;gap:4px;color:var(--accent-6);font-weight:600}
+    .featured-card .card-shadow{
+      position:absolute;bottom:-8px;left:15%;right:15%;height:20px;
+      background:var(--card-accent);filter:blur(var(--glow-spread));
+      opacity:0;transition:opacity .3s ease;border-radius:50%;z-index:-1;
+    }
+    .featured-card:hover .card-shadow{opacity:.15}
+
+    /* ===== Blog Grid ===== */
+    .blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:28px;margin:0 0 2.5rem}
+
+    /* ===== Blog Card ===== */
+    .blog-card-wrapper{animation:cardReveal .7s ease forwards;opacity:0}
+    .blog-card-wrapper:nth-child(1){animation-delay:.05s}
+    .blog-card-wrapper:nth-child(2){animation-delay:.1s}
+    .blog-card-wrapper:nth-child(3){animation-delay:.15s}
+    .blog-card-wrapper:nth-child(4){animation-delay:.2s}
+    .blog-card-wrapper:nth-child(5){animation-delay:.25s}
+    .blog-card-wrapper:nth-child(6){animation-delay:.3s}
+
+    .blog-card{
+      position:relative;background:var(--surface,#111118);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--card-radius);overflow:hidden;
+      transition:transform .35s cubic-bezier(.23,1,.32,1), box-shadow .35s ease;
+      cursor:pointer;text-decoration:none;color:inherit;display:block;
+    }
+    .blog-card:hover{transform:translateY(-4px) scale(1.01)}
+    .blog-card::before{
+      content:'';position:absolute;inset:0;border-radius:var(--card-radius);
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.1) 0%, transparent 60%);
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .blog-card:hover::before{opacity:1}
+    .blog-card::after{
+      content:'';position:absolute;inset:-1px;border-radius:var(--card-radius);padding:1px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--card-accent) 0%, transparent 60%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .blog-card:hover::after{opacity:.7}
+    .blog-card-image{
+      height:180px;
+      background:linear-gradient(135deg, rgba(108,92,231,.10) 0%, rgba(162,155,254,.05) 100%);
+      display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+    }
+    .blog-card-image svg{width:80px;height:80px;opacity:.25}
+    .blog-card-image::after{
+      content:'';position:absolute;bottom:0;left:0;right:0;height:60px;
+      background:linear-gradient(to top, var(--surface,#111118) 0%, transparent 100%);
+    }
+    .blog-card-image .category-tag{
+      position:absolute;top:16px;left:16px;padding:4px 12px;border-radius:50px;
+      background:rgba(108,92,231,.2);backdrop-filter:blur(8px);color:var(--accent-6);
+      font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;z-index:1;
+    }
+    .blog-card-body{padding:24px 28px 28px;position:relative;z-index:1}
+    .blog-card-body h3{
+      font-size:1.1rem;font-weight:700;margin-bottom:10px;line-height:1.4;
+      color:var(--text-primary,#f0ece4);transition:color .3s ease;
+    }
+    .blog-card:hover .blog-card-body h3{color:var(--card-accent)}
+    .blog-card-body p{font-size:.84rem;color:var(--text-muted,#6b6880);line-height:1.65;margin-bottom:20px}
+    .blog-card-meta{display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:var(--text-muted,#6b6880)}
+    .blog-card-meta .read-time{color:var(--card-accent);font-weight:600;display:flex;align-items:center;gap:4px}
+    .blog-card .card-shadow{
+      position:absolute;bottom:-8px;left:10%;right:10%;height:20px;
+      background:var(--card-accent);filter:blur(var(--glow-spread));
+      opacity:0;transition:opacity .3s ease;border-radius:50%;z-index:-1;
+    }
+    .blog-card:hover .card-shadow{opacity:.15}
+
+    /* ===== PAGINATION ===== */
+    .pagination-wrapper{
+      display:flex;justify-content:center;align-items:center;gap:10px;
+      padding:1rem 0 2rem;
+      animation:cardReveal .7s ease forwards;opacity:0;animation-delay:.35s;
+    }
+    .page-btn{
+      position:relative;
+      width:52px;height:52px;
+      border-radius:14px;
+      background:var(--surface,#111118);
+      border:1px solid rgba(255,255,255,.06);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      transition:transform .3s cubic-bezier(.23,1,.32,1), box-shadow .3s ease, border-color .3s ease;
+      overflow:hidden;
+      text-decoration:none;
+    }
+    .page-btn:hover{
+      transform:translateY(-3px) scale(1.08);
+      border-color:rgba(108,92,231,.4);
+    }
+
+    /* Glow overlay follows mouse */
+    .page-btn::before{
+      content:'';position:absolute;inset:0;border-radius:14px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(108,92,231,.25) 0%, transparent 70%);
+      opacity:0;transition:opacity .3s ease;z-index:1;pointer-events:none;
+    }
+    .page-btn:hover::before{opacity:1}
+
+    /* Border glow on hover */
+    .page-btn::after{
+      content:'';position:absolute;inset:-1px;border-radius:14px;padding:1px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--accent-1) 0%, transparent 70%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      opacity:0;transition:opacity .3s ease;z-index:1;pointer-events:none;
+    }
+    .page-btn:hover::after{opacity:.8}
+
+    /* Bottom shadow glow */
+    .page-btn .btn-shadow{
+      position:absolute;bottom:-6px;left:20%;right:20%;height:16px;
+      background:var(--accent-1);filter:blur(var(--glow-spread));
+      opacity:0;transition:opacity .3s ease;border-radius:50%;z-index:-1;
+    }
+    .page-btn:hover .btn-shadow{opacity:.2}
+
+    /* SVG icon inside button */
+    .page-btn .page-icon{
+      position:relative;z-index:2;
+      width:22px;height:22px;
+      transition:filter .3s ease, transform .3s ease;
+    }
+    .page-btn:hover .page-icon{
+      filter:drop-shadow(0 0 8px var(--accent-1)) drop-shadow(0 0 16px rgba(108,92,231,.3));
+      transform:scale(1.15);
+    }
+
+    /* Number text inside SVG */
+    .page-btn .page-num{
+      position:relative;z-index:2;
+      font-family:'JetBrains Mono',monospace;
+      font-size:.82rem;font-weight:600;
+      color:var(--text-muted,#6b6880);
+      transition:color .3s ease, text-shadow .3s ease;
+    }
+    .page-btn:hover .page-num{
+      color:#fff;
+      text-shadow:0 0 12px rgba(108,92,231,.6), 0 0 24px rgba(108,92,231,.3);
+    }
+
+    /* Active page */
+    .page-btn.active{
+      background:var(--accent-1);
+      border-color:var(--accent-1);
+      box-shadow:0 4px 20px rgba(108,92,231,.35);
+    }
+    .page-btn.active .page-num{
+      color:#fff;
+      text-shadow:0 0 8px rgba(255,255,255,.3);
+    }
+    .page-btn.active:hover{
+      transform:translateY(-3px) scale(1.08);
+      box-shadow:0 6px 28px rgba(108,92,231,.5);
+    }
+
+    /* Arrow buttons (prev/next) */
+    .page-arrow{
+      width:52px;height:52px;
+      border-radius:14px;
+      background:var(--surface,#111118);
+      border:1px solid rgba(255,255,255,.06);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      transition:transform .3s cubic-bezier(.23,1,.32,1), box-shadow .3s ease, border-color .3s ease;
+      text-decoration:none;position:relative;overflow:hidden;
+    }
+    .page-arrow:hover{
+      transform:translateY(-3px) scale(1.08);
+      border-color:rgba(108,92,231,.4);
+    }
+    .page-arrow::before{
+      content:'';position:absolute;inset:0;border-radius:14px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(108,92,231,.2) 0%, transparent 70%);
+      opacity:0;transition:opacity .3s ease;z-index:1;pointer-events:none;
+    }
+    .page-arrow:hover::before{opacity:1}
+    .page-arrow svg{
+      position:relative;z-index:2;
+      width:18px;height:18px;
+      stroke:var(--text-muted,#6b6880);
+      transition:stroke .3s ease, filter .3s ease, transform .3s ease;
+    }
+    .page-arrow:hover svg{
+      stroke:var(--accent-1);
+      filter:drop-shadow(0 0 6px rgba(108,92,231,.5));
+      transform:scale(1.1);
+    }
+    .page-arrow.disabled{
+      opacity:.3;cursor:default;pointer-events:none;
+    }
+
+    /* Pagination pulse animation */
+    @keyframes pageGlow{
+      0%,100%{box-shadow:0 4px 20px rgba(108,92,231,.35)}
+      50%{box-shadow:0 4px 28px rgba(108,92,231,.55)}
+    }
+    .page-btn.active{animation:pageGlow 2.5s ease-in-out infinite}
+
+    /* ===== Newsletter CTA Card ===== */
+    .newsletter-wrapper{
+      max-width:800px;margin:3rem auto 4rem;
+      animation:cardReveal .8s ease forwards;opacity:0;animation-delay:.1s;
+    }
+    .newsletter-card{
+      position:relative;background:var(--surface,#111118);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--card-radius);padding:52px 48px;text-align:center;
+      transition:transform .35s cubic-bezier(.23,1,.32,1), box-shadow .35s ease;
+      cursor:default;overflow:hidden;
+    }
+    .newsletter-card:hover{transform:translateY(-4px) scale(1.01)}
+    .newsletter-card::before{
+      content:'';position:absolute;inset:0;border-radius:var(--card-radius);
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.12) 0%, transparent 55%);
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .newsletter-card:hover::before{opacity:1}
+    .newsletter-card::after{
+      content:'';position:absolute;inset:-1px;border-radius:var(--card-radius);padding:1px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--card-accent) 0%, transparent 55%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .newsletter-card:hover::after{opacity:.8}
+    .newsletter-card h2{
+      font-size:1.6rem;font-weight:800;margin-bottom:.75rem;
+      position:relative;z-index:1;
+    }
+    .newsletter-card p{
+      font-size:.95rem;color:var(--text-secondary,#a0a0b0);max-width:440px;
+      margin:0 auto 2rem;line-height:1.7;position:relative;z-index:1;
+    }
+    .newsletter-form{
+      display:flex;gap:12px;max-width:460px;margin:0 auto;
+      position:relative;z-index:1;
+    }
+    .newsletter-form input{
+      flex:1;padding:14px 20px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);
+      color:var(--text-primary,#f0ece4);font-family:'DM Sans',sans-serif;font-size:.9rem;
+      outline:none;transition:border-color .3s ease, box-shadow .3s ease;
+    }
+    .newsletter-form input::placeholder{color:var(--text-muted,#6b6880)}
+    .newsletter-form input:focus{border-color:rgba(108,92,231,.5);box-shadow:0 0 20px rgba(108,92,231,.1)}
+    .newsletter-card .card-shadow{
+      position:absolute;bottom:-10px;left:15%;right:15%;height:24px;
+      background:var(--card-accent);filter:blur(var(--glow-spread));
+      opacity:0;transition:opacity .3s ease;border-radius:50%;z-index:-1;
+    }
+    .newsletter-card:hover .card-shadow{opacity:.2}
+    .newsletter-card .card-bg-pattern{
+      position:absolute;top:-30px;right:-30px;width:180px;height:180px;
+      opacity:.03;pointer-events:none;
+    }
+    .newsletter-card .cta-dots{
+      position:absolute;bottom:20px;left:20px;display:flex;gap:6px;
+      pointer-events:none;z-index:1;
+    }
+    .newsletter-card .cta-dots span{width:4px;height:4px;border-radius:50%;background:var(--card-accent);opacity:.25}
+    .newsletter-card .cta-dots span:nth-child(2){opacity:.15}
+    .newsletter-card .cta-dots span:nth-child(3){opacity:.08}
+
+    @media(max-width:960px){
+      .featured-card{grid-template-columns:1fr}
+      .featured-image{height:200px}
+      .featured-body{padding:36px 32px}
+      .blog-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+    }
+    @media(max-width:600px){
+      .page-hero h1{font-size:1.8rem}
+      .page-hero{padding:50px 0 20px}
+      .blog-grid{grid-template-columns:1fr}
+      .featured-body h2{font-size:1.3rem}
+      .featured-body{padding:28px 24px}
+      .newsletter-card{padding:36px 24px}
+      .newsletter-card h2{font-size:1.3rem}
+      .newsletter-form{flex-direction:column}
+      .filter-bar{gap:8px}
+      .filter-tab{padding:8px 16px;font-size:.78rem}
+      .pagination-wrapper{gap:6px}
+      .page-btn,.page-arrow{width:44px;height:44px;border-radius:11px}
+      .page-btn .page-num{font-size:.75rem}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <nav class="navbar" role="navigation">
+    <a href="index.html" class="navbar-brand">
+      <span class="logo-3d">
+        <svg width="38" height="38" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="houseGrad" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#2D7EFF"/><stop offset="50%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#F5A623"/></linearGradient>
+            <linearGradient id="roofGrad" x1="8" y1="8" x2="40" y2="24"><stop offset="0%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#2D7EFF"/></linearGradient>
+            <linearGradient id="bodyGrad" x1="12" y1="22" x2="36" y2="44"><stop offset="0%" stop-color="rgba(45,126,255,0.25)"/><stop offset="100%" stop-color="rgba(45,126,255,0.08)"/></linearGradient>
+            <filter id="glow3d"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <ellipse cx="24" cy="43" rx="14" ry="3" fill="rgba(0,0,0,0.2)" class="house-body"/>
+          <g class="house-body" filter="url(#glow3d)">
+            <rect x="10" y="22" width="28" height="20" rx="2" fill="url(#bodyGrad)" stroke="url(#houseGrad)" stroke-width="1.5"/>
+            <path d="M6 24L24 8L42 24" stroke="url(#roofGrad)" stroke-width="2.5" fill="rgba(45,126,255,0.1)" stroke-linejoin="round"/>
+            <path d="M14 20L24 10L28 14" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-linecap="round" class="roof-shine"/>
+            <rect x="20" y="30" width="8" height="12" rx="1" fill="rgba(245,166,35,0.2)" stroke="#F5A623" stroke-width="1" class="door-glow"/>
+            <circle cx="26" cy="36" r="1" fill="#F5A623" opacity="0.8"/>
+            <rect x="13" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/>
+            <line x1="15.5" y1="26" x2="15.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <line x1="13" y1="28.5" x2="18" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <rect x="13.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint"/>
+            <rect x="30" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/>
+            <line x1="32.5" y1="26" x2="32.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <line x1="30" y1="28.5" x2="35" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <rect x="30.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint" style="animation-delay:1s"/>
+            <rect x="32" y="12" width="5" height="12" rx="1" fill="rgba(45,126,255,0.1)" stroke="url(#houseGrad)" stroke-width="1"/>
+            <circle cx="34.5" cy="10" r="2" fill="rgba(139,157,195,0.2)" class="dollar-float"/>
+            <circle cx="36" cy="7" r="1.5" fill="rgba(139,157,195,0.15)" class="dollar-float" style="animation-delay:0.5s"/>
+          </g>
+          <text x="4" y="18" font-family="JetBrains Mono" font-size="10" fill="#10B981" class="dollar-float" style="animation-delay:0.3s">$</text>
+          <text x="40" y="38" font-family="JetBrains Mono" font-size="8" fill="#F5A623" class="dollar-float" style="animation-delay:1.2s">$</text>
+        </svg>
+      </span>
+      Mortgage &amp; Loans
+    </a>
+    <button class="navbar-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="mortgage-calculator.html" class="nav-link">Mortgage</a></li>
+      <li><a href="how-much-house-can-i-afford.html" class="nav-link">Affordability</a></li>
+      <li><a href="refinance-calculator.html" class="nav-link">Refinance</a></li>
+      <li><a href="rent-vs-buy-calculator.html" class="nav-link">Rent vs Buy</a></li>
+      <li><a href="loan-comparison.html" class="nav-link">Compare</a></li>
+      <li><a href="debt-to-income-calculator.html" class="nav-link">DTI</a></li>
+      <li><a href="extra-payment-calculator.html" class="nav-link">Extra Payment</a></li>
+      <li><a href="biweekly-payment-calculator.html" class="nav-link">Biweekly</a></li>
+      <li><a href="interest-rate-impact.html" class="nav-link">Rates</a></li>
+      <li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li>
+      <li><a href="blog.html" class="nav-link active">Blog</a></li>
+    </ul>
+  </nav>
+
+<div id="counter-widget" style="
+  position:fixed;bottom:14px;left:14px;display:flex;align-items:center;gap:10px;
+  padding:7px 14px;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,0.08);
+  border-radius:50px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B9DC3;
+  backdrop-filter:blur(16px);z-index:999;box-shadow:0 6px 24px rgba(0,0,0,0.35);
+">
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse 2s infinite;"></span>
+    <span class="cw-online" style="color:#10B981;font-weight:600;">0</span>
+    <span>Online</span>
+  </div>
+  <span style="color:rgba(255,255,255,0.12);">|</span>
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="color:#2D7EFF;">●</span>
+    <span class="cw-views" style="color:#2D7EFF;font-weight:600;">0</span>
+    <span>Views</span>
+  </div>
+  <span style="color:rgba(255,255,255,0.12);">|</span>
+  <div style="display:flex;align-items:center;gap:4px;">
+    <span style="color:#F5A623;">●</span>
+    <span class="cw-visitors" style="color:#F5A623;font-weight:600;">0</span>
+    <span>Visitors</span>
+  </div>
+</div>
+
+<style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}</style>
+
+  <main class="page-content">
+    <div class="container">
+
+      <section class="page-hero" data-animate="fadeInUp">
+        <h1 class="gradient-text">Blog &amp; Insights</h1>
+        <p>Expert mortgage tips, loan guides, and financial insights to help you make smarter home financing decisions.</p>
+      </section>
+
+      <div class="filter-bar" data-animate="fadeInUp">
+        <button class="filter-tab active" data-filter="all">All Posts</button>
+        <button class="filter-tab" data-filter="mortgage">Mortgage</button>
+        <button class="filter-tab" data-filter="refinance">Refinance</button>
+        <button class="filter-tab" data-filter="tips">Tips &amp; Guides</button>
+        <button class="filter-tab" data-filter="market">Market</button>
+      </div>
+
+      <div class="featured-wrapper" data-animate="fadeInUp">
+        <a href="#" class="featured-card" data-accent="1">
+          <div class="card-shadow"></div>
+          <div class="featured-image">
+            <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="featGrad" x1="0" y1="0" x2="160" y2="160"><stop stop-color="#6C5CE7"/><stop offset="1" stop-color="#A29BFE"/></linearGradient></defs>
+              <circle cx="80" cy="80" r="70" stroke="url(#featGrad)" stroke-width="2" fill="none" opacity=".3"/>
+              <circle cx="80" cy="80" r="50" stroke="url(#featGrad)" stroke-width="1.5" fill="none" opacity=".2"/>
+              <path d="M80 30L50 55v50h60V55L80 30z" stroke="url(#featGrad)" stroke-width="2.5" fill="url(#featGrad)" fill-opacity=".08" stroke-linejoin="round"/>
+              <rect x="70" y="72" width="20" height="33" rx="2" fill="url(#featGrad)" fill-opacity=".15" stroke="url(#featGrad)" stroke-width="1.5"/>
+              <circle cx="87" cy="89" r="1.5" fill="#A29BFE"/>
+              <rect x="58" y="62" width="12" height="12" rx="2" fill="none" stroke="#A29BFE" stroke-width="1" opacity=".4"/>
+              <rect x="90" y="62" width="12" height="12" rx="2" fill="none" stroke="#A29BFE" stroke-width="1" opacity=".4"/>
+              <text x="80" y="130" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#A29BFE" opacity=".3">$</text>
+            </svg>
+          </div>
+          <div class="featured-body">
+            <div class="featured-badge"><span class="dot"></span> Featured</div>
+            <h2>The Complete Guide to Mortgage Rates in 2026</h2>
+            <p>Everything you need to know about current mortgage rates, how they're determined, and strategies to lock in the best rate for your home purchase or refinance.</p>
+            <div class="featured-meta">
+              <span>Apr 20, 2026</span>
+              <span class="read-time">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                8 min read
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="blog-grid" data-animate="fadeInUp">
+
+        <div class="blog-card-wrapper">
+          <a href="#" class="blog-card" data-accent="1">
+            <div class="card-shadow"></div>
+            <div class="blog-card-image">
+              <span class="category-tag">Mortgage</span>
+              <svg viewBox="0 0 80 80" fill="none"><rect x="15" y="30" width="50" height="35" rx="3" stroke="#A29BFE" stroke-width="2" fill="#A29BFE" fill-opacity=".06"/><path d="M10 32L40 10L70 32" stroke="#A29BFE" stroke-width="2.5" fill="none" stroke-linejoin="round"/><rect x="33" y="45" width="14" height="20" rx="2" fill="#A29BFE" fill-opacity=".15" stroke="#A29BFE" stroke-width="1"/></svg>
+            </div>
+            <div class="blog-card-body">
+              <h3>First-Time Home Buyer Checklist: 10 Steps to Your Dream Home</h3>
+              <p>A step-by-step guide covering everything from pre-approval to closing day, designed for first-time buyers navigating the mortgage process.</p>
+              <div class="blog-card-meta"><span>Apr 18, 2026</span><span class="read-time">6 min</span></div>
+            </div>
+          </a>
+        </div>
+
+        <div class="blog-card-wrapper">
+          <a href="#" class="blog-card" data-accent="3">
+            <div class="card-shadow"></div>
+            <div class="blog-card-image">
+              <span class="category-tag">Refinance</span>
+              <svg viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="28" stroke="#FD79A8" stroke-width="2" fill="#FD79A8" fill-opacity=".05"/><path d="M28 40a12 12 0 0124 0" stroke="#FD79A8" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M52 40a12 12 0 01-24 0" stroke="#FD79A8" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="40" y="45" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#FD79A8" font-weight="bold">%</text></svg>
+            </div>
+            <div class="blog-card-body">
+              <h3>When Does Refinancing Actually Make Sense?</h3>
+              <p>The break-even rule, rate thresholds, and hidden costs most borrowers overlook when considering a mortgage refinance.</p>
+              <div class="blog-card-meta"><span>Apr 14, 2026</span><span class="read-time">5 min</span></div>
+            </div>
+          </a>
+        </div>
+
+        <div class="blog-card-wrapper">
+          <a href="#" class="blog-card" data-accent="2">
+            <div class="card-shadow"></div>
+            <div class="blog-card-image">
+              <span class="category-tag">Tips</span>
+              <svg viewBox="0 0 80 80" fill="none"><rect x="20" y="15" width="40" height="55" rx="4" stroke="#00CEC9" stroke-width="2" fill="#00CEC9" fill-opacity=".05"/><line x1="28" y1="28" x2="52" y2="28" stroke="#00CEC9" stroke-width="1.5" opacity=".4"/><line x1="28" y1="36" x2="48" y2="36" stroke="#00CEC9" stroke-width="1.5" opacity=".3"/><line x1="28" y1="44" x2="50" y2="44" stroke="#00CEC9" stroke-width="1.5" opacity=".3"/><path d="M30 55l5 5 10-12" stroke="#55EFC4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="blog-card-body">
+              <h3>How to Improve Your Credit Score Before Applying for a Mortgage</h3>
+              <p>Practical strategies to boost your credit score by 50-100 points in 3-6 months, potentially saving you thousands over the life of your loan.</p>
+              <div class="blog-card-meta"><span>Apr 10, 2026</span><span class="read-time">7 min</span></div>
+            </div>
+          </a>
+        </div>
+
+        <div class="blog-card-wrapper">
+          <a href="#" class="blog-card" data-accent="9">
+            <div class="card-shadow"></div>
+            <div class="blog-card-image">
+              <span class="category-tag">Market</span>
+              <svg viewBox="0 0 80 80" fill="none"><line x1="10" y1="65" x2="70" y2="65" stroke="#74B9FF" stroke-width="1.5" opacity=".3"/><rect x="15" y="40" width="10" height="25" rx="2" fill="#74B9FF" fill-opacity=".15" stroke="#74B9FF" stroke-width="1"/><rect x="30" y="28" width="10" height="37" rx="2" fill="#74B9FF" fill-opacity=".2" stroke="#74B9FF" stroke-width="1"/><rect x="45" y="35" width="10" height="30" rx="2" fill="#74B9FF" fill-opacity=".15" stroke="#74B9FF" stroke-width="1"/><rect x="60" y="20" width="10" height="45" rx="2" fill="#74B9FF" fill-opacity=".25" stroke="#74B9FF" stroke-width="1"/><polyline points="15,38 30,26 45,33 60,18" stroke="#74B9FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+            </div>
+            <div class="blog-card-body">
+              <h3>April 2026 Housing Market Update: What Buyers Need to Know</h3>
+              <p>Current inventory levels, median home prices, and rate trends shaping the spring buying season across major metro areas.</p>
+              <div class="blog-card-meta"><span>Apr 8, 2026</span><span class="read-time">4 min</span></div>
+            </div>
+          </a>
+        </div>
+
+        <div class="blog-card-wrapper">
+          <a href="#" class="blog-card" data-accent="4">
+            <div class="card-shadow"></div>
+            <div class="blog-card-image">
+              <span class="category-tag">Mortgage</span>
+              <svg viewBox="0 0 80 80" fill="none"><circle cx="40" cy="35" r="20" stroke="#FDCB6E" stroke-width="2" fill="#FDCB6E" fill-opacity=".05"/><text x="40" y="40" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#FDCB6E" font-weight="bold">$</text><path d="M25 60h30" stroke="#FDCB6E" stroke-width="2" stroke-linecap="round"/><path d="M30 68h20" stroke="#FDCB6E" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg>
+            </div>
+            <div class="blog-card-body">
+              <h3>FHA vs Conventional Loans: Which One Saves You More Money?</h3>
+              <p>A detailed comparison of down payments, PMI/MIP costs, credit requirements, and total cost over 5, 10, and 30 years.</p>
+              <div class="blog-card-meta"><span>Apr 4, 2026</span><span class="read-time">9 min</span></div>
+            </div>
+          </a>
+        </div>
+
+        <div class="blog-card-wrapper">
+          <a href="#" class="blog-card" data-accent="5">
+            <div class="card-shadow"></div>
+            <div class="blog-card-image">
+              <span class="category-tag">Tips</span>
+              <svg viewBox="0 0 80 80" fill="none"><rect x="12" y="25" width="56" height="35" rx="4" stroke="#55EFC4" stroke-width="2" fill="#55EFC4" fill-opacity=".05"/><line x1="12" y1="35" x2="68" y2="35" stroke="#55EFC4" stroke-width="1.5" opacity=".3"/><rect x="18" y="40" width="16" height="6" rx="2" fill="#55EFC4" fill-opacity=".15"/><rect x="18" y="50" width="24" height="4" rx="1.5" fill="#55EFC4" fill-opacity=".1"/><circle cx="58" cy="48" r="8" fill="#55EFC4" fill-opacity=".1" stroke="#55EFC4" stroke-width="1.5"/><path d="M55 48l3 3 6-6" stroke="#55EFC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="blog-card-body">
+              <h3>PMI Explained: How to Avoid or Remove Private Mortgage Insurance</h3>
+              <p>Understand when PMI is required, how much it costs, and the four proven methods to eliminate it and lower your monthly payment.</p>
+              <div class="blog-card-meta"><span>Mar 30, 2026</span><span class="read-time">6 min</span></div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- ===== PAGINATION ===== -->
+      <nav class="pagination-wrapper" data-animate="fadeInUp" aria-label="Blog pagination">
+
+        <!-- Prev Arrow -->
+        <a href="#" class="page-arrow disabled" aria-label="Previous page">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </a>
+
+        <!-- Page 1 — Active -->
+        <a href="#" class="page-btn active" aria-label="Page 1" aria-current="page">
+          <div class="btn-shadow"></div>
+          <svg class="page-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="24" height="24" rx="7" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".15"/>
+            <rect x="5" y="5" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1" fill="none" opacity=".08"/>
+            <circle cx="14" cy="14" r="3" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".2"/>
+          </svg>
+          <span class="page-num">1</span>
+        </a>
+
+        <!-- Page 2 -->
+        <a href="#" class="page-btn" aria-label="Page 2">
+          <div class="btn-shadow"></div>
+          <svg class="page-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="24" height="24" rx="7" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".15"/>
+            <rect x="5" y="5" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1" fill="none" opacity=".08"/>
+            <path d="M9 18l3-3 3 3 3-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity=".2"/>
+          </svg>
+          <span class="page-num">2</span>
+        </a>
+
+        <!-- Page 3 -->
+        <a href="#" class="page-btn" aria-label="Page 3">
+          <div class="btn-shadow"></div>
+          <svg class="page-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="24" height="24" rx="7" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".15"/>
+            <rect x="5" y="5" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1" fill="none" opacity=".08"/>
+            <circle cx="14" cy="14" r="5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-dasharray="3 3" opacity=".2"/>
+          </svg>
+          <span class="page-num">3</span>
+        </a>
+
+        <!-- Page 4 -->
+        <a href="#" class="page-btn" aria-label="Page 4">
+          <div class="btn-shadow"></div>
+          <svg class="page-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="24" height="24" rx="7" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".15"/>
+            <rect x="5" y="5" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1" fill="none" opacity=".08"/>
+            <path d="M10 10h8v8h-8z" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".2" rx="1"/>
+          </svg>
+          <span class="page-num">4</span>
+        </a>
+
+        <!-- Page 5 -->
+        <a href="#" class="page-btn" aria-label="Page 5">
+          <div class="btn-shadow"></div>
+          <svg class="page-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="24" height="24" rx="7" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".15"/>
+            <rect x="5" y="5" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1" fill="none" opacity=".08"/>
+            <polygon points="14,8 16.5,13 22,13.5 18,17.5 19,22.5 14,20 9,22.5 10,17.5 6,13.5 11.5,13" stroke="currentColor" stroke-width="1" fill="none" opacity=".2"/>
+          </svg>
+          <span class="page-num">5</span>
+        </a>
+
+        <!-- Next Arrow -->
+        <a href="#" class="page-arrow" aria-label="Next page">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+
+      </nav>
+
+  </main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-section">
+        <h4>Mortgage &amp; Loans</h4>
+        <p>Free, professional-grade mortgage calculators. Standard formulas, transparent methodology.</p>
+        <p style="margin-top:8px;font-size:0.78rem;color:var(--text-muted)">Equal Housing Opportunity</p>
+      </div>
+      <div class="footer-section">
+        <h4>Calculators</h4>
+        <a href="mortgage-calculator.html">Mortgage Calculator</a>
+        <a href="how-much-house-can-i-afford.html">Affordability</a>
+        <a href="refinance-calculator.html">Refinance</a>
+        <a href="rent-vs-buy-calculator.html">Rent vs Buy</a>
+        <a href="loan-comparison.html">Loan Comparison</a>
+        <a href="debt-to-income-calculator.html">DTI Calculator</a>
+      </div>
+      <div class="footer-section">
+        <h4>More Tools</h4>
+        <a href="extra-payment-calculator.html">Extra Payments</a>
+        <a href="biweekly-payment-calculator.html">Biweekly Payments</a>
+        <a href="interest-rate-impact.html">Rate Impact</a>
+        <a href="construction-loan-calculator.html">Construction Loan</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-use.html">Terms of Use</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Mortgage &amp; Loans. All rights reserved.</p>
+      <p style="margin-top:6px;font-size:0.75rem;color:var(--text-muted);line-height:1.6">
+        <strong>Mortgage Loans:</strong> This website does not originate mortgage loans. Educational free calculators only.<br>
+        <strong>Fair Housing Act:</strong> We comply with 42 USC 3601. <strong>ECOA:</strong> We comply with 15 USC 1691.<br>
+        All results are estimates only and are <strong>NOT financial advice</strong>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+  <script>
+  (function(){
+    // Glow tracking only — no tilt rotation
+    document.querySelectorAll('.blog-card, .featured-card, .newsletter-card, .page-btn, .page-arrow').forEach(card => {
+      let rect;
+      function updateRect(){ rect = card.getBoundingClientRect(); }
+      card.addEventListener('mouseenter', () => { updateRect(); });
+      card.addEventListener('mousemove', (e) => {
+        const mx = ((e.clientX - rect.left) / rect.width) * 100;
+        const my = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mx', mx + '%');
+        card.style.setProperty('--my', my + '%');
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--mx', '50%');
+        card.style.setProperty('--my', '50%');
+      });
+      card.addEventListener('touchmove', (e) => {
+        e.preventDefault(); updateRect();
+        const touch = e.touches[0];
+        const mx = ((touch.clientX - rect.left) / rect.width) * 100;
+        const my = ((touch.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mx', mx + '%');
+        card.style.setProperty('--my', my + '%');
+      }, {passive:false});
+      card.addEventListener('touchend', () => {
+        card.style.setProperty('--mx', '50%');
+        card.style.setProperty('--my', '50%');
+      });
+    });
+
+    // Pagination click
+    document.querySelectorAll('.page-btn').forEach(btn => {
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        document.querySelectorAll('.page-btn').forEach(b => {
+          b.classList.remove('active');
+          b.removeAttribute('aria-current');
+        });
+        this.classList.add('active');
+        this.setAttribute('aria-current','page');
+      });
+    });
+
+    // Filter tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', function(){
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Parallax orbs
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      document.querySelectorAll('.orb').forEach((orb, i) => {
+        const speed = (i + 1) * 8;
+        orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+      });
+    });
+  })();
+  </script>
+  <script src="analytics.js" defer></script>
+  <script src="counter.js" defer></script>
+</body>
+</html>

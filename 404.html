@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found — Mortgage & Loans</title>
+  <meta name="description" content="The page you are looking for could not be found. Return to our mortgage calculators.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <script src="shared.js" defer></script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wgaihdkccq");
+  </script>
+  <style>
+    :root{
+      --accent-1:#6C5CE7;--accent-2:#2D7EFF;--accent-3:#FD79A8;--accent-4:#FDCB6E;
+      --accent-5:#55EFC4;--accent-6:#A29BFE;--accent-7:#FF7675;--accent-8:#E17055;
+      --accent-9:#74B9FF;--accent-10:#DFE6E9;
+      --card-radius:20px;--glow-spread:80px;
+    }
+
+    body::after{
+      content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity:.03;
+    }
+
+    .orb{position:fixed;border-radius:50%;filter:blur(80px);z-index:0;pointer-events:none;animation:orbFloat 20s ease-in-out infinite}
+    .orb-1{width:300px;height:300px;background:rgba(108,92,231,.12);top:-100px;left:-50px;animation-delay:0s}
+    .orb-2{width:250px;height:250px;background:rgba(0,206,201,.08);bottom:-80px;right:-60px;animation-delay:-7s}
+    .orb-3{width:200px;height:200px;background:rgba(253,121,168,.06);top:40%;left:60%;animation-delay:-14s}
+    @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,15px) scale(.95)}}
+
+    .page-content{position:relative;z-index:1}
+
+    @keyframes cardReveal{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes glitch{0%,100%{text-shadow:2px 0 var(--accent-3),-2px 0 var(--accent-2)}25%{text-shadow:-2px 0 var(--accent-3),2px 0 var(--accent-2)}50%{text-shadow:2px 2px var(--accent-1),-2px -2px var(--accent-5)}75%{text-shadow:-2px 2px var(--accent-7),2px -2px var(--accent-4)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    @keyframes scanline{0%{top:-100%}100%{top:100%}}
+
+    .error-section{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      min-height:70vh;text-align:center;padding:80px 20px 60px;
+      animation:cardReveal .8s ease forwards;
+    }
+    .error-code{
+      font-family:'JetBrains Mono',monospace;font-size:clamp(6rem,18vw,14rem);
+      font-weight:800;line-height:1;margin-bottom:1rem;position:relative;
+      background:linear-gradient(135deg,var(--accent-1),var(--accent-6),var(--accent-2),var(--accent-3));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      animation:glitch 4s ease-in-out infinite;
+    }
+    .error-code::after{
+      content:'404';position:absolute;inset:0;
+      background:linear-gradient(135deg,var(--accent-3),var(--accent-7),var(--accent-4));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      opacity:0;animation:glitch 3s ease-in-out infinite reverse;
+    }
+    .error-label{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 20px;border-radius:50px;font-size:.82rem;font-weight:600;
+      background:rgba(255,118,117,.08);color:var(--accent-7,#FF7675);
+      border:1px solid rgba(255,118,117,.15);margin-bottom:1.5rem;
+      font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.5px;
+    }
+    .error-label span{width:6px;height:6px;border-radius:50%;background:var(--accent-7);animation:pulse 2s infinite}
+    .error-title{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;margin-bottom:1rem;font-family:var(--font-heading,'Syne',sans-serif)}
+    .error-desc{font-size:1.05rem;color:var(--text-secondary,#a0a0b0);line-height:1.8;max-width:520px;margin:0 auto 2.5rem}
+    .error-buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:3rem}
+
+    /* ===== QUICK LINKS — 5 Hover Efektli, 3D Tilt Yok ===== */
+    .quick-links{
+      max-width:900px;margin:0 auto;padding:0 20px 4rem;
+      animation:cardReveal .8s ease forwards;animation-delay:.15s;opacity:0;
+    }
+    .quick-links h3{text-align:center;font-size:1.2rem;margin-bottom:2rem;font-family:var(--font-heading,'Syne',sans-serif)}
+    .quick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+
+    .quick-card{
+      position:relative;background:var(--surface,#111118);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--card-radius);padding:28px 24px;overflow:hidden;
+      text-decoration:none;color:inherit;display:block;
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .quick-card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(255,255,255,.12);
+      box-shadow:0 8px 30px rgba(0,0,0,.3), 0 0 60px rgba(108,92,231,.06);
+    }
+
+    /* 1. Işık parlaması — fare pozisyonunu takip eder */
+    .quick-card::before{
+      content:'';position:absolute;inset:0;border-radius:var(--card-radius);
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.1) 0%, transparent 60%);
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .quick-card:hover::before{opacity:1}
+
+    /* 2. Kenarlık glow halkası — accent renkli border parlaması */
+    .quick-card::after{
+      content:'';position:absolute;inset:-1px;border-radius:var(--card-radius);padding:1px;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), var(--card-accent) 0%, transparent 60%);
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;
+      opacity:0;transition:opacity .3s ease;z-index:2;pointer-events:none;
+    }
+    .quick-card:hover::after{opacity:.7}
+
+    .quick-card .card-icon{width:48px;height:48px;margin-bottom:16px;position:relative;z-index:1}
+    .quick-card .card-icon svg{width:100%;height:100%;transition:filter .3s ease}
+
+    /* 4. İkon drop-shadow parlaması */
+    .quick-card:hover .card-icon svg{filter:drop-shadow(0 0 12px var(--card-accent))}
+
+    .quick-card h4{font-size:1rem;font-weight:600;margin-bottom:6px;position:relative;z-index:1}
+    .quick-card p{font-size:.82rem;color:var(--text-muted,#6b6880);line-height:1.5;margin:0;position:relative;z-index:1}
+
+    /* 5. CTA ok hareketi */
+    .quick-card .card-cta{
+      display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;
+      color:var(--card-accent);margin-top:14px;position:relative;z-index:1;transition:gap .25s ease;
+    }
+    .quick-card:hover .card-cta{gap:10px}
+    .quick-card .card-cta .arrow{display:inline-block;transition:transform .2s ease}
+    .quick-card:hover .card-cta .arrow{transform:translateX(3px)}
+
+    /* 3. Alt gölge */
+    .quick-card .card-shadow{
+      position:absolute;bottom:-8px;left:15%;right:15%;height:20px;
+      background:var(--card-accent);filter:blur(var(--glow-spread));
+      opacity:0;transition:opacity .3s ease;border-radius:50%;z-index:-1;
+    }
+    .quick-card:hover .card-shadow{opacity:.15}
+
+    .quick-card[data-accent="1"]{--card-accent:var(--accent-1)}
+    .quick-card[data-accent="2"]{--card-accent:var(--accent-2)}
+    .quick-card[data-accent="3"]{--card-accent:var(--accent-3)}
+    .quick-card[data-accent="6"]{--card-accent:var(--accent-6)}
+
+    .scanline{
+      position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,rgba(108,92,231,.15),transparent);
+      animation:scanline 3s linear infinite;pointer-events:none;z-index:0;
+    }
+
+    #counter-widget{
+      position:fixed;bottom:14px;left:14px;display:flex;align-items:center;gap:10px;
+      padding:7px 14px;background:rgba(14,14,22,0.92);border:1px solid rgba(255,255,255,0.08);
+      border-radius:50px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8B9DC3;
+      backdrop-filter:blur(16px);z-index:999;box-shadow:0 6px 24px rgba(0,0,0,0.35);
+    }
+
+    .site-footer{position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.05);padding:60px 0 30px;background:rgba(10,10,18,.6)}
+    .footer-inner{max-width:1200px;margin:0 auto;padding:0 24px}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+    .footer-section h4{font-family:var(--font-heading,'Syne',sans-serif);font-size:1rem;margin-bottom:16px;color:var(--text-primary,#f0ece4)}
+    .footer-section p{font-size:.85rem;color:var(--text-muted,#6b6880);line-height:1.7}
+    .footer-section a{display:block;font-size:.82rem;color:var(--text-muted,#6b6880);padding:4px 0;transition:color .2s}
+    .footer-section a:hover{color:var(--accent-2)}
+    .footer-bottom{text-align:center;padding-top:24px;border-top:1px solid rgba(255,255,255,.05);font-size:.82rem;color:var(--text-muted,#6b6880)}
+
+    @media(max-width:960px){
+      .navbar-toggle{display:block}
+      .navbar-nav{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,10,18,.97);backdrop-filter:blur(20px);flex-direction:column;padding:16px;border-bottom:1px solid rgba(255,255,255,.06)}
+      .navbar-nav.open{display:flex}
+      .nav-link{padding:12px 20px}
+      .footer-grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:600px){
+      .error-section{padding:50px 16px 40px;min-height:60vh}
+      .quick-grid{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <nav class="navbar" role="navigation">
+    <a href="index.html" class="navbar-brand">
+      <span class="logo-3d">
+        <svg width="38" height="38" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="houseGrad" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#2D7EFF"/><stop offset="50%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#F5A623"/></linearGradient>
+            <linearGradient id="roofGrad" x1="8" y1="8" x2="40" y2="24"><stop offset="0%" stop-color="#5A9AFF"/><stop offset="100%" stop-color="#2D7EFF"/></linearGradient>
+            <linearGradient id="bodyGrad" x1="12" y1="22" x2="36" y2="44"><stop offset="0%" stop-color="rgba(45,126,255,0.25)"/><stop offset="100%" stop-color="rgba(45,126,255,0.08)"/></linearGradient>
+            <filter id="glow3d"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <ellipse cx="24" cy="43" rx="14" ry="3" fill="rgba(0,0,0,0.2)" class="house-body"/>
+          <g class="house-body" filter="url(#glow3d)">
+            <rect x="10" y="22" width="28" height="20" rx="2" fill="url(#bodyGrad)" stroke="url(#houseGrad)" stroke-width="1.5"/>
+            <path d="M6 24L24 8L42 24" stroke="url(#roofGrad)" stroke-width="2.5" fill="rgba(45,126,255,0.1)" stroke-linejoin="round"/>
+            <path d="M14 20L24 10L28 14" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" stroke-linecap="round" class="roof-shine"/>
+            <rect x="20" y="30" width="8" height="12" rx="1" fill="rgba(245,166,35,0.2)" stroke="#F5A623" stroke-width="1" class="door-glow"/>
+            <circle cx="26" cy="36" r="1" fill="#F5A623" opacity="0.8"/>
+            <rect x="13" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/>
+            <line x1="15.5" y1="26" x2="15.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <line x1="13" y1="28.5" x2="18" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <rect x="13.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint"/>
+            <rect x="30" y="26" width="5" height="5" rx="1" fill="rgba(45,126,255,0.15)" stroke="rgba(45,126,255,0.5)" stroke-width="0.8"/>
+            <line x1="32.5" y1="26" x2="32.5" y2="31" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <line x1="30" y1="28.5" x2="35" y2="28.5" stroke="rgba(45,126,255,0.3)" stroke-width="0.5"/>
+            <rect x="30.5" y="26.5" width="2" height="2" rx="0.5" fill="rgba(255,255,255,0.6)" class="window-glint" style="animation-delay:1s"/>
+            <rect x="32" y="12" width="5" height="12" rx="1" fill="rgba(45,126,255,0.1)" stroke="url(#houseGrad)" stroke-width="1"/>
+            <circle cx="34.5" cy="10" r="2" fill="rgba(139,157,195,0.2)" class="dollar-float"/>
+            <circle cx="36" cy="7" r="1.5" fill="rgba(139,157,195,0.15)" class="dollar-float" style="animation-delay:0.5s"/>
+          </g>
+          <text x="4" y="18" font-family="JetBrains Mono" font-size="10" fill="#10B981" class="dollar-float" style="animation-delay:0.3s">$</text>
+          <text x="40" y="38" font-family="JetBrains Mono" font-size="8" fill="#F5A623" class="dollar-float" style="animation-delay:1.2s">$</text>
+        </svg>
+      </span>
+      Mortgage &amp; Loans
+    </a>
+    <button class="navbar-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="mortgage-calculator.html" class="nav-link">Mortgage</a></li>
+      <li><a href="how-much-house-can-i-afford.html" class="nav-link">Affordability</a></li>
+      <li><a href="refinance-calculator.html" class="nav-link">Refinance</a></li>
+      <li><a href="rent-vs-buy-calculator.html" class="nav-link">Rent vs Buy</a></li>
+      <li><a href="loan-comparison.html" class="nav-link">Compare</a></li>
+      <li><a href="debt-to-income-calculator.html" class="nav-link">DTI</a></li>
+      <li><a href="extra-payment-calculator.html" class="nav-link">Extra Payment</a></li>
+      <li><a href="biweekly-payment-calculator.html" class="nav-link">Biweekly</a></li>
+      <li><a href="interest-rate-impact.html" class="nav-link">Rates</a></li>
+      <li><a href="construction-loan-calculator.html" class="nav-link">Construction</a></li>
+      <li><a href="blog.html" class="nav-link">Blog</a></li>
+    </ul>
+  </nav>
+
+  <div id="counter-widget">
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:pulse 2s infinite;"></span>
+      <span class="cw-online" style="color:#10B981;font-weight:600;">0</span>
+      <span>Online</span>
+    </div>
+    <span style="color:rgba(255,255,255,0.12);">|</span>
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span style="color:#2D7EFF;">&#9679;</span>
+      <span class="cw-views" style="color:#2D7EFF;font-weight:600;">0</span>
+      <span>Views</span>
+    </div>
+    <span style="color:rgba(255,255,255,0.12);">|</span>
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span style="color:#F5A623;">&#9679;</span>
+      <span class="cw-visitors" style="color:#F5A623;font-weight:600;">0</span>
+      <span>Visitors</span>
+    </div>
+  </div>
+
+  <main class="page-content">
+    <div class="container">
+
+      <section class="error-section">
+        <div class="scanline"></div>
+        <div class="error-code">404</div>
+        <div class="error-label"><span></span>Page Not Found</div>
+        <h1 class="error-title gradient-text">Lost in the Numbers?</h1>
+        <p class="error-desc">The page you are looking for might have been moved, deleted, or does not exist. But do not worry &mdash; our calculators are still right where you left them.</p>
+        <div class="error-buttons">
+          <a href="index.html" class="btn btn-primary">Back to Home</a>
+          <a href="mortgage-calculator.html" class="btn btn-secondary">Mortgage Calculator</a>
+        </div>
+      </section>
+
+      <section class="quick-links">
+        <h3>Or Try One of These</h3>
+        <div class="quick-grid">
+          <a href="mortgage-calculator.html" class="quick-card" data-accent="1">
+            <div class="card-shadow"></div>
+            <div class="card-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 4L4 20h6v24h28V20h6L24 4z" fill="var(--accent-1)" opacity=".12" stroke="var(--accent-1)" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="20" y="28" width="8" height="16" rx="1.5" fill="var(--accent-1)" opacity=".25"/>
+              </svg>
+            </div>
+            <h4>Mortgage Calculator</h4>
+            <p>Monthly P&I, taxes, insurance, PMI, and full amortization schedule.</p>
+            <span class="card-cta">Open <span class="arrow">&rarr;</span></span>
+          </a>
+          <a href="how-much-house-can-i-afford.html" class="quick-card" data-accent="2">
+            <div class="card-shadow"></div>
+            <div class="card-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 4L8 12v12c0 12 7 20 16 24 9-4 16-12 16-24V12L24 4z" fill="var(--accent-2)" opacity=".12" stroke="var(--accent-2)" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M18 24l4 4 8-10" stroke="var(--accent-5)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h4>Affordability Calculator</h4>
+            <p>Find your max home price based on income, debts, and DTI limits.</p>
+            <span class="card-cta">Open <span class="arrow">&rarr;</span></span>
+          </a>
+          <a href="refinance-calculator.html" class="quick-card" data-accent="3">
+            <div class="card-shadow"></div>
+            <div class="card-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 6a18 18 0 0115 8" stroke="var(--accent-3)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                <path d="M24 42a18 18 0 01-15-8" stroke="var(--accent-3)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                <circle cx="24" cy="24" r="10" fill="var(--accent-3)" opacity=".1" stroke="var(--accent-3)" stroke-width="1.5"/>
+                <text x="24" y="28" text-anchor="middle" font-size="11" fill="var(--accent-3)" font-family="sans-serif" font-weight="bold">%</text>
+              </svg>
+            </div>
+            <h4>Refinance Calculator</h4>
+            <p>Break-even analysis, monthly savings, and lifetime impact.</p>
+            <span class="card-cta">Open <span class="arrow">&rarr;</span></span>
+          </a>
+          <a href="blog.html" class="quick-card" data-accent="6">
+            <div class="card-shadow"></div>
+            <div class="card-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="8" y="6" width="32" height="36" rx="4" fill="var(--accent-6)" opacity=".12" stroke="var(--accent-6)" stroke-width="1.5"/>
+                <line x1="16" y1="16" x2="32" y2="16" stroke="var(--accent-6)" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+                <line x1="16" y1="22" x2="28" y2="22" stroke="var(--accent-6)" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+                <line x1="16" y1="28" x2="30" y2="28" stroke="var(--accent-6)" stroke-width="2" stroke-linecap="round" opacity=".25"/>
+              </svg>
+            </div>
+            <h4>Mortgage Blog</h4>
+            <p>Expert insights, market updates, and practical mortgage guides.</p>
+            <span class="card-cta">Open <span class="arrow">&rarr;</span></span>
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>Mortgage &amp; Loans</h4>
+          <p>Free, professional-grade mortgage calculators. Standard formulas, transparent methodology.</p>
+          <p style="margin-top:8px;font-size:0.78rem;color:var(--text-muted)">Equal Housing Opportunity</p>
+        </div>
+        <div class="footer-section">
+          <h4>Calculators</h4>
+          <a href="mortgage-calculator.html">Mortgage Calculator</a>
+          <a href="how-much-house-can-i-afford.html">Affordability</a>
+          <a href="refinance-calculator.html">Refinance</a>
+          <a href="rent-vs-buy-calculator.html">Rent vs Buy</a>
+          <a href="loan-comparison.html">Loan Comparison</a>
+          <a href="debt-to-income-calculator.html">DTI Calculator</a>
+        </div>
+        <div class="footer-section">
+          <h4>More Tools</h4>
+          <a href="extra-payment-calculator.html">Extra Payments</a>
+          <a href="biweekly-payment-calculator.html">Biweekly Payments</a>
+          <a href="interest-rate-impact.html">Rate Impact</a>
+          <a href="construction-loan-calculator.html">Construction Loan</a>
+          <a href="blog.html">Blog</a>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-of-use.html">Terms of Use</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mortgage &amp; Loans. All rights reserved.</p>
+        <p style="margin-top:6px;font-size:0.75rem;color:var(--text-muted);line-height:1.6">
+          <strong>Mortgage Loans:</strong> This website does not originate mortgage loans. Educational free calculators only.<br>
+          <strong>Fair Housing Act:</strong> We comply with 42 USC 3601. <strong>ECOA:</strong> We comply with 15 USC 1691.<br>
+          All results are estimates only and are <strong>NOT financial advice</strong>.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelector('.navbar-toggle').addEventListener('click', function(){
+      document.querySelector('.navbar-nav').classList.toggle('open');
+    });
+
+    // Parallax orbs
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      document.querySelectorAll('.orb').forEach((orb, i) => {
+        const speed = (i + 1) * 8;
+        orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+      });
+    });
+
+    // 5 efekt: --mx/--my takibi (3D tilt YOK, sadece ışık + glow pozisyonu)
+    document.querySelectorAll('.quick-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const mx = ((e.clientX - rect.left) / rect.width) * 100;
+        const my = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mx', mx + '%');
+        card.style.setProperty('--my', my + '%');
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--mx', '50%');
+        card.style.setProperty('--my', '50%');
+      });
+    });
+  </script>
+  <script src="analytics.js" defer></script>
+  <script src="counter.js" defer></script>
+</body>
+</html>

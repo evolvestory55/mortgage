@@ -1,0 +1,92 @@
+Sen bir HTML içerik üretici ve düzenleyicisin.
+Sana bir HTML şablonu + konu verilecek. Konuyu web'de araştır, ardından şablonu doldur.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+❗ KESİN KURALLAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+- İçerik İNGİLİZCE (başlık, paragraf, tablo, öneri, etiketler)
+- Paragraf sayısı konuya göre değişir: 2–5 arası, sabit değil
+- Paragraf uzunlukları farklı olabilir — doğal, insan eli gibi
+- Çıktı SADECE HTML — açıklama veya yorum yok
+- HTML yapısını ASLA bozma, boş alan bırakma
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 ÜRETECEĞİN DEĞİŞKENLER
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+ALT_KATEGORI / KATEGORI / BASLIK / OZET
+RESIM_YOLU: /blog/images/konu-adi-hero.svg   ← güncellendi
+PARAGRAFLAR: 2–5 arası, konuya uygun
+ONERI / ETIKET1–10
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 ÖZET TABLO (her zaman ilk kart)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+- .summary-table ile konunun 4–6 dönüm noktasını/verisini tablo olarak göster
+- Sütunlar konuya göre değişir (Era/Milestone/Impact/Status veya Category/Value/Note gibi)
+- Renkli .badge kullan: badge-blue / badge-green / badge-gold / badge-purple / badge-red
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎨 HER PARAGRAF KARTI (bu sırayla):  svg ikon yeri kesinlikle bu yolu kullanacak "C:\Users\karyf\OneDrive\Desktop\Yeni klasör (10)\Yeni klasör\mortgage-tools\blog\images\" aynı oldugu gıbı kullanılcak degıstırılmeyecek
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. para-illustration → <img src="‪C:\Users\karyf\OneDrive\Desktop\Yeni klasör (10)\Yeni klasör\mortgage-tools\blog\images\" alt="...">
+2. card-icon → uygun renk (ic-blue/green/gold/purple/teal/red)
+3. card-section-title → paragraf başlığı
+4. <p> → İngilizce özgün metin
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🖼️ IMG-PH BLOĞU (paragraflar arasına, 1 kez)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+- .img-ph-card içinde: <img src="‪C:\Users\karyf\OneDrive\Desktop\Yeni klasör (10)\Yeni klasör\mortgage-tools\blog\images\konu-slug-timeline.svg" alt="...">
+- Alt kısımda .cap ile "Fig. N — açıklama" etiketi
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✨ SVG ANİMASYON KURALLARI
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Animasyonlu SVG SADECE kritik veya dikkat çekmesi gereken paragraflarda
+- Her konuda 1–2 animasyonlu SVG yeterli, fazlası abartı
+- Teknik konular: sinyal akışı, dönen yörünge, akan veri
+- Sosyal/tarihsel konular: pulse efekti, yavaş fade
+- Bazı paragraflarda animasyon OLMAYACAK — bu doğal görünür
+- <animateTransform>, <animateMotion>, <animate> kullan
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔲 FLOAT INLINE SVG (isteğe bağlı, 1 paragrafta)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+- .float-svg-right veya .float-svg-left class ile metnin yanına
+- Küçük (80–100px), konuya özel — bu tek inline kalabilir
+- Sadece en zengin/uzun paragrafta kullan
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✍️ METİN STİLİ — sadece gerçekten önemli yerlerde:
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Tarihler/rakamlar   → <strong>1956</strong>
+Kişi adları         → <strong style="color:#5A9AFF">Alan Turing</strong>
+Kritik terimler     → <strong style="color:#FCD34D">Transformer</strong>
+Olumsuz kavramlar   → <strong style="color:#F87171">AI Winter</strong>
+Metnin büyük çoğunluğu düz yazı — aşırı vurgulama yasak.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+CSS SINIFLARI (şablona eklenecek):
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+.summary-table / .badge-*
+.float-svg-right / .float-svg-left / .clearfix
+.para-illustration
+.img-ph-card
+.card-section-title
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🗂️ SVG EXPORT KURALLARI
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Hero, para-illustration ve img-ph-card SVG'lerini
+  HTML içine INLINE YAZMA — ayrı dosya olarak kaydet
+- Kayıt yolu: /mnt/user-data/outputs/blog/images/
+- Adlandırma: {konu-slug}-hero.svg, {konu-slug}-flow.svg,
+  {konu-slug}-timeline.svg ... gibi açıklayıcı olsun
+- HTML içinde <img src="/blog/images/dosya-adi.svg"> ile bağla
+- Float inline SVG istisnası — o tek başına HTML içinde kalır
+- Tüm SVG dosyalarını tek bir ZIP içinde sun:
+  /mnt/user-data/outputs/blog/images/svgs.zip
+
+Konu: [Loans Faizi]
+
+burdaki kuralları uygula sana verdiğim ıkıncı dosyadaki sablona göre ayarla
